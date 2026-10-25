@@ -1,0 +1,164 @@
+:root{
+    --bg:#f4f6fb;
+    --math:#3b82f6;
+    --english:#10b981;
+    --norwegian:#ef4444;
+    --science:#8b5cf6;
+    --social:#f59e0b;
+    --pe:#06b6d4;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:system-ui,sans-serif;
+}
+
+body{
+    background:var(--bg);
+}
+
+.weeks{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+.week{
+    width:100%;
+    height:100%;
+    display:none;
+}
+
+.week.active{
+    display:block;
+}
+
+.days{
+    display:flex;
+    width:500vw;
+    height:100%;
+    transition:transform .35s ease;
+}
+
+.day{
+    width:100vw;
+    padding:24px;
+    overflow-y:auto;
+}
+
+.header{
+    margin-bottom:22px;
+}
+
+h1{
+    font-size:2rem;
+    color:#111827;
+}
+
+.week-number{
+    color:#6b7280;
+    margin-top:6px;
+}
+
+.lesson{
+    min-height:140px;
+
+    margin-bottom:16px;
+
+    padding:22px;
+
+    border-radius:24px;
+
+    color:white;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.1);
+}
+
+.subject{
+    font-size:1.35rem;
+    font-weight:700;
+}
+
+.time{
+    margin-top:8px;
+}
+
+.homework{
+    margin-top:18px;
+    padding-top:12px;
+
+    border-top:1px solid rgba(255,255,255,.25);
+}
+
+.math{background:linear-gradient(135deg,#60a5fa,#2563eb);}
+.english{background:linear-gradient(135deg,#34d399,#059669);}
+.norwegian{background:linear-gradient(135deg,#f87171,#dc2626);}
+.science{background:linear-gradient(135deg,#a78bfa,#7c3aed);}
+.social{background:linear-gradient(135deg,#fbbf24,#d97706);}
+.pe{background:linear-gradient(135deg,#22d3ee,#0891b2);}
+
+.dots{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:8px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#d1d5db;
+}
+
+.dot.active{
+    background:#111827;
+}
+
+@media (orientation:landscape){
+
+    .day{
+        width:auto;
+        padding:12px;
+    }
+
+    .days{
+        width:auto;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:12px;
+        padding:12px;
+        transform:none !important;
+    }
+
+    .lesson{
+        min-height:110px;
+    }
+
+    h1{
+        font-size:1.2rem;
+        text-align:center;
+    }
+
+    .week-number{
+        text-align:center;
+        font-size:.8rem;
+    }
+
+    .dots{
+        display:none;
+    }
+}
