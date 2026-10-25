@@ -1,4 +1,14 @@
 import {
+    hasStudent
+}
+from "./student.js";
+
+import {
+    showRegister
+}
+from "./register.js";
+
+import {
     loadSchedule,
     listenToHomework
 }
@@ -288,7 +298,14 @@ async function init(){
         renderHomework
     );
 
+    if (!hasStudent()) {
+
+    showRegister();
+
+} else {
+
     render();
+}
 }
 
 init();
