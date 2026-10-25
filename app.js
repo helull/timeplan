@@ -1,292 +1,273 @@
-import {
-    loadSchedule,
-    listenToHomework
-}
-from "./data.js";
+import { db }
+from "./firebase.js";
 
 import {
-    renderSchedule,
-    renderHomework
-}
-from "./render.js";
 
-const weeks =
-    document.querySelectorAll(".week");
+    collection,
+    getDocs,
 
-const dots =
-    document.querySelectorAll(".dot");
+    doc,
+    getDoc,
+    setDoc,
 
-let currentWeek = 0;
-let currentDay = 0;
+    serverTimestamp
 
-let startX = 0;
-let startY = 0;
-
-let overviewMode = false;
-
-const savedWeek =
-    localStorage.getItem("week");
-
-const savedDay =
-    localStorage.getItem("day");
-
-if(savedWeek !== null){
-    currentWeek =
-        parseInt(savedWeek);
 }
 
-if(savedDay !== null){
-    currentDay =
-        parseInt(savedDay);
-}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-function updateDots(){
+const app =
+    document.getElementById("app");
 
-    dots.forEach(
-        x=>x.classList.remove(
-            "active"
-        )
+const studentName =
+    localStorage.getItem(
+        "studentName"
     );
 
-    dots[currentDay]
-        ?.classList.add(
-            "active"
-        );
-}
-
-function render(){
-
-    weeks.forEach(
-        (week,index)=>{
-
-        week.classList.remove(
-            "active",
-            "overview",
-            "preview-next",
-            "preview-prev"
-        );
-
-        if(
-            index===currentWeek
-        ){
-            week.classList.add(
-                "active"
-            );
-        }
-
-        const days =
-            week.querySelector(
-                ".days"
-            );
-
-        if(
-            window.innerWidth >
-            window.innerHeight
-        ){
-
-            days.style.transform =
-                "none";
-
-        }else{
-
-            days.style.transform =
-                `translateX(-${currentDay * 100}vw)`;
-        }
-    });
-
-    updateDots();
-
-    localStorage.setItem(
-        "week",
-        currentWeek
+const classId =
+    localStorage.getItem(
+        "classId"
     );
 
-    localStorage.setItem(
-        "day",
-        currentDay
+const studentId =
+    localStorage.getItem(
+        "studentId"
     );
+
+if (
+    studentName &&
+    classId &&
+    studentId
+) {
+
+    showHome();
+
+} else {
+
+    showRegister();
 }
 
-function nextDay(){
-    if(currentDay < 4){
-        currentDay++;
-        render();
-    }
-}
+async function showRegister() {
 
-function previousDay(){
-    if(currentDay > 0){
-        currentDay--;
-        render();
-    }
-}
+    app.innerHTML = `
 
-function nextWeek(){
-    if(currentWeek < weeks.length-1){
-        currentWeek++;
-        render();
-    }
-}
+        <div class="card">
 
-function previousWeek(){
-    if(currentWeek > 0){
-        currentWeek--;
-        render();
-    }
-}
+            <h1>Velkommen</h1>
 
-function showWeekOverview(direction){
+            <p>
 
-    if(overviewMode) return;
+                Registrer deg
+                første gang.
 
-    overviewMode=true;
+            </p>
 
-    weeks[currentWeek]
-        .classList.add(
-            "overview"
+            <input
+                id="nameInput"
+                placeholder="Ditt navn">
+
+            <select
+                id="classSelect">
+            </select>
+
+            <button
+                id="registerBtn">
+
+                Fortsett
+
+            </button>
+
+            <div
+                id="message">
+            </div>
+
+        </div>
+
+    `;
+
+    const classSelect =
+        document.getElementById(
+            "classSelect"
         );
 
-    if(
-        direction==="next" &&
-        currentWeek <
-        weeks.length-1
-    ){
-
-        weeks[currentWeek+1]
-            .classList.add(
-                "preview-next"
-            );
-    }
-
-    if(
-        direction==="prev" &&
-        currentWeek>0
-    ){
-
-        weeks[currentWeek-1]
-            .classList.add(
-                "preview-prev"
-            );
-    }
-}
-
-function hideWeekOverview(){
-
-    overviewMode=false;
-
-    weeks.forEach(
-        week=>{
-
-        week.classList.remove(
-            "overview",
-            "preview-next",
-            "preview-prev"
-        );
-
-    });
-
-    render();
-}
-
-document.addEventListener(
-    "touchstart",
-    e=>{
-
-        startX =
-            e.touches[0].clientX;
-
-        startY =
-            e.touches[0].clientY;
-
-    }
-);
-
-document.addEventListener(
-    "touchmove",
-    e=>{
-
-        const dx =
-            e.touches[0].clientX
-            - startX;
-
-        const dy =
-            e.touches[0].clientY
-            - startY;
-
-        if(
-            Math.abs(dy) > 40 &&
-            Math.abs(dy) >
-            Math.abs(dx) &&
-            !overviewMode
-        ){
-
-            showWeekOverview(
-                dy<0
-                ? "next"
-                : "prev"
-            );
-
-        }
-    }
-);
-
-document.addEventListener(
-    "touchend",
-    e=>{
-
-        const dx =
-            e.changedTouches[0]
-            .clientX - startX;
-
-        const dy =
-            e.changedTouches[0]
-            .clientY - startY;
-
-        if(
-            Math.abs(dx) >
-            Math.abs(dy)
-        ){
-
-            hideWeekOverview();
-
-            if(dx < -50)
-                nextDay();
-
-            if(dx > 50)
-                previousDay();
-
-        }else{
-
-            if(dy < -80)
-                nextWeek();
-
-            else if(
-                dy > 80
+    const classes =
+        await getDocs(
+            collection(
+                db,
+                "classes"
             )
-                previousWeek();
+        );
 
-            hideWeekOverview();
-        }
+    classes.forEach(docData => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            docData.id;
+
+        option.textContent =
+            docData.data().name;
+
+        classSelect.appendChild(
+            option
+        );
+    });
+
+    document
+        .getElementById(
+            "registerBtn"
+        )
+        .addEventListener(
+            "click",
+            registerStudent
+        );
+}
+
+async function registerStudent() {
+
+    const name =
+        document
+        .getElementById(
+            "nameInput"
+        )
+        .value
+        .trim();
+
+    const classId =
+        document
+        .getElementById(
+            "classSelect"
+        )
+        .value;
+
+    const message =
+        document
+        .getElementById(
+            "message"
+        );
+
+    if (!name) {
+
+        message.textContent =
+            "Skriv inn navn.";
+
+        return;
     }
-);
 
-window.addEventListener(
-    "resize",
-    render
-);
+    const studentId =
+        `${name}_${classId}`;
 
-async function init(){
+    const studentRef =
+        doc(
+            db,
+            "students",
+            studentId
+        );
 
-    const schedule =
-        await loadSchedule();
+    const existing =
+        await getDoc(
+            studentRef
+        );
 
-    renderSchedule(
-        schedule
+    if (
+        existing.exists()
+    ) {
+
+        message.textContent =
+            "Navnet er allerede registrert i denne klassen.";
+
+        return;
+    }
+
+    await setDoc(
+        studentRef,
+        {
+            name,
+            classId,
+
+            createdAt:
+                serverTimestamp()
+        }
     );
 
-    listenToHomework(
-        renderHomework
+    localStorage.setItem(
+        "studentName",
+        name
     );
+
+    localStorage.setItem(
+        "classId",
+        classId
+    );
+
+    localStorage.setItem(
+        "studentId",
+        studentId
+    );
+
+    location.reload();
+}
+
+function showHome() {
+
+    app.innerHTML = `
+
+        <div class="card">
+
+            <h1>
+
+                Hei
+                ${studentName}
+
+            </h1>
+
+            <p>
+
+                Klasse:
+                ${classId}
+
+            </p>
+
+            <button
+                id="switchUser">
+
+                Bytt bruker
+
+            </button>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById(
+            "switchUser"
+        )
+        .addEventListener(
+            "click",
+            switchUser
+        );
+}
+
+function switchUser() {
+
+    localStorage.removeItem(
+        "studentName"
+    );
+
+    localStorage.removeItem(
+        "classId"
+    );
+
+    localStorage.removeItem(
+        "studentId"
+    );
+
+    location.reload();
+}
 
     render();
 }
