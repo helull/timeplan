@@ -431,3 +431,148 @@ h1{
 
     font-size:1rem;
 }
+
+/* ========================
+   MENY
+======================== */
+
+.menu-button{
+
+    position:fixed;
+
+    top:16px;
+    right:16px;
+
+    width:52px;
+    height:52px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:white;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.12);
+
+    z-index:300;
+
+    font-size:1.2rem;
+}
+/* ========================
+   MODAL
+======================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.35);
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:1000;
+}
+
+.modal-card{
+
+    width:min(450px,92vw);
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:24px;
+}
+/* ========================
+   FERIE
+======================== */
+
+.holiday-card{
+
+    background:
+        linear-gradient(
+            135deg,
+            #fb7185,
+            #e11d48
+        );
+
+    color:white;
+}
+
+.dayoff-card{
+
+    background:
+        linear-gradient(
+            135deg,
+            #64748b,
+            #334155
+        );
+
+    color:white;
+}
+/* ========================
+   OPPGAVER
+======================== */
+
+.assignment{
+
+    margin-top:12px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.15);
+}
+
+.assignment-title{
+
+    font-weight:700;
+}
+
+.assignment-note{
+
+    margin-top:6px;
+
+    font-size:.9rem;
+
+    opacity:.95;
+}
+.assignment-status{
+
+    display:inline-block;
+
+    margin-top:8px;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-size:.75rem;
+
+    background:
+        rgba(255,255,255,.2);
+}
+
+.status-open{
+
+    background:#ef4444;
+}
+
+.status-started{
+
+    background:#f59e0b;
+}
+
+.status-done{
+
+    background:#10b981;
+}
