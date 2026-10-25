@@ -85,14 +85,12 @@ button.addEventListener(
             .value
             .trim();
 
-        if (!name) {
-
-            alert(
-                "Skriv inn navn"
-            );
-
-            return;
-        }
+        const selectedClass =
+            document
+            .getElementById(
+                "classSelect"
+            )
+            .value;
 
         localStorage.setItem(
             "studentName",
@@ -101,11 +99,15 @@ button.addEventListener(
 
         localStorage.setItem(
             "classId",
-            "TEST"
+            selectedClass
+        );
+
+        localStorage.setItem(
+            "studentId",
+            `${name}_${selectedClass}`
         );
 
         location.reload();
-
     }
 );
 }
