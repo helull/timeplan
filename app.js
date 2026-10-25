@@ -1,4 +1,9 @@
 import {
+    generateWeeks
+}
+from "./weekBuilder.js";
+
+import {
     getCurrentSchoolPosition
 }
 from "./calendar.js";
@@ -25,12 +30,6 @@ import {
 }
 from "./render.js";
 
-const weeks =
-    document.querySelectorAll(".week");
-
-const dots =
-    document.querySelectorAll(".dot");
-
 let currentWeek = 0;
 let currentDay = 0;
 
@@ -46,6 +45,16 @@ console.log(
     "School position",
     todayPosition
 );
+
+generateWeeks(
+    todayPosition.week
+);
+
+const weeks =
+    document.querySelectorAll(".week");
+
+const dots =
+    document.querySelectorAll(".dot");
 
 currentDay =
     todayPosition.day;
