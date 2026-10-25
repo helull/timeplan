@@ -1,97 +1,123 @@
 export function renderSchedule(schedule) {
 
-    const weekElements =
-        document.querySelectorAll(".week");
+    const weeks =
+        document.querySelectorAll(
+            ".week"
+        );
 
-    weekElements.forEach(
-        week => {
+    weeks.forEach(week => {
 
         const weekNo =
             week.dataset.week;
 
         const days =
-            week.querySelectorAll(".day");
-
-        const names = [
-
-            "monday",
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday"
-        ];
+            week.querySelectorAll(
+                ".day"
+            );
 
         days.forEach(
             (day,index) => {
 
-            const weekday =
-                names[index];
+                const weekday =
+                    index + 1;
 
-            const lessons =
-                schedule?.[weekNo]
-                ?.[weekday] || [];
+                const dayName = [
 
-            const dayName = [
-                "Mandag",
-                "Tirsdag",
-                "Onsdag",
-                "Torsdag",
-                "Fredag"
-            ][index];
+                    "Mandag",
+                    "Tirsdag",
+                    "Onsdag",
+                    "Torsdag",
+                    "Fredag"
 
-            day.innerHTML = `
+                ][index];
 
-                <div class="header">
+                const lessons =
 
-                    <h1>${dayName}</h1>
+                    schedule.lessons
+                        .filter(
 
-                    <div class="week-number">
-                        UKE ${weekNo}
-                    </div>
+                            lesson =>
 
-                </div>
+                                lesson.weekday ===
+                                weekday
 
-            `;
+                        )
+                        .sort(
 
-            lessons.forEach(
-                lesson => {
+                            (a,b) =>
 
-                day.innerHTML += `
+                                a.start.localeCompare(
+                                    b.start
+                                )
 
-                    <div class="lesson ${lesson.color}">
+                        );
 
-                        <div class="subject">
-                            ${lesson.subject}
-                        </div>
+                day.innerHTML = `
 
-                        <div class="time">
-                            ${lesson.start}
-                            -
-                            ${lesson.end}
+                    <div class="header">
+
+                        <h1>
+
+                            ${dayName}
+
+                        </h1>
+
+                        <div
+                            class="week-number">
+
+                            UKE ${weekNo}
+
                         </div>
 
                     </div>
 
                 `;
-            });
 
-        });
+                lessons.forEach(
+                    lesson => {
 
+                        day.innerHTML += `
+
+                            <div
+                                class="lesson ${lesson.color}">
+
+                                <div
+                                    class="subject">
+
+                                    ${lesson.subject}
+
+                                </div>
+
+                                <div
+                                    class="time">
+
+                                    ${lesson.start}
+                                    -
+                                    ${lesson.end}
+
+                                </div>
+
+                            </div>
+
+                        `;
+                    }
+                );
+            }
+        );
     });
-
 }
 
-export function renderHomework(items){
+export function renderHomework(homework) {
 
     document
         .querySelectorAll(
             ".homework-card"
         )
         .forEach(
-            x=>x.remove()
+            card => card.remove()
         );
 
-    items.forEach(item=>{
+    homework.forEach(item => {
 
         const selector =
 
@@ -103,7 +129,7 @@ export function renderHomework(items){
                 selector
             );
 
-        if(!day) return;
+        if (!day) return;
 
         const card =
             document.createElement(
@@ -111,22 +137,27 @@ export function renderHomework(items){
             );
 
         card.className =
+
             "lesson social homework-card";
 
         card.innerHTML = `
 
-            <div class="subject">
+            <div
+                class="subject">
+
                 📝 ${item.title}
+
             </div>
 
-            <div class="homework">
+            <div
+                class="homework">
+
                 ${item.description}
+
             </div>
 
         `;
 
         day.appendChild(card);
-
     });
-
 }
