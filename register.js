@@ -1,4 +1,9 @@
-export function showRegister() {
+import {
+    loadClasses
+}
+from "./classService.js";
+
+export async function showRegister() {
 
     document.body.insertAdjacentHTML(
 
@@ -20,6 +25,7 @@ export function showRegister() {
                 <input
                     id="nameInput"
                     placeholder="Navn">
+                    <select id="classSelect"></select>
 
                 <button
                     id="startButton">
@@ -35,6 +41,32 @@ export function showRegister() {
         `
 
     );
+
+    const classSelect =
+    document.getElementById(
+        "classSelect"
+    );
+
+const classes =
+    await loadClasses();
+
+classes.forEach(item => {
+
+    const option =
+        document.createElement(
+            "option"
+        );
+
+    option.value =
+        item.id;
+
+    option.textContent =
+        item.name;
+
+    classSelect.appendChild(
+        option
+    );
+});
 
     const button =
     document.getElementById(
