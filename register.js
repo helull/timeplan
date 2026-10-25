@@ -35,4 +35,45 @@ export function showRegister() {
         `
 
     );
+
+    const button =
+    document.getElementById(
+        "startButton"
+    );
+
+button.addEventListener(
+    "click",
+    () => {
+
+        const name =
+            document
+            .getElementById(
+                "nameInput"
+            )
+            .value
+            .trim();
+
+        if (!name) {
+
+            alert(
+                "Skriv inn navn"
+            );
+
+            return;
+        }
+
+        localStorage.setItem(
+            "studentName",
+            name
+        );
+
+        localStorage.setItem(
+            "classId",
+            "TEST"
+        );
+
+        location.reload();
+
+    }
+);
 }
