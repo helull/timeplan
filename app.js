@@ -333,6 +333,17 @@ const schedule =
         document.body.classList.add("teacher-mode");
     }
     renderTeacherButton();
+
+if (
+    localStorage.getItem(
+        "teacherMode"
+    ) === "true"
+) {
+
+    document.body.classList.add(
+        "teacher-mode"
+    );
+}
 }
 
 init();
