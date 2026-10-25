@@ -1,6 +1,5 @@
 const weeks = document.querySelectorAll(".week");
 const dots = document.querySelectorAll(".dot");
-let overviewMode = false;
 
 let currentWeek = 0;
 let currentDay = 0;
@@ -8,36 +7,38 @@ let currentDay = 0;
 let startX = 0;
 let startY = 0;
 
+let overviewMode = false;
+
 const savedWeek = localStorage.getItem("week");
 const savedDay = localStorage.getItem("day");
 
-if(savedWeek !== null){
+if (savedWeek !== null) {
     currentWeek = parseInt(savedWeek);
 }
 
-if(savedDay !== null){
+if (savedDay !== null) {
     currentDay = parseInt(savedDay);
-}else{
+} else {
 
     const today = new Date().getDay();
 
-    if(today >= 1 && today <= 5){
+    if (today >= 1 && today <= 5) {
         currentDay = today - 1;
     }
 }
 
-function updateDots(){
+function updateDots() {
 
     dots.forEach(dot => dot.classList.remove("active"));
 
-    if(dots[currentDay]){
+    if (dots[currentDay]) {
         dots[currentDay].classList.add("active");
     }
 }
 
-function render(){
+function render() {
 
-    weeks.forEach((week, index)=>{
+    weeks.forEach((week, index) => {
 
         week.classList.toggle(
             "active",
@@ -46,9 +47,14 @@ function render(){
 
         const days = week.querySelector(".days");
 
-        if(window.innerWidth > window.innerHeight){
+        if (!days) return;
+
+        if (window.innerWidth > window.innerHeight) {
+
             days.style.transform = "none";
-        }else{
+
+        } else {
+
             days.style.transform =
                 `translateX(-${currentDay * 100}vw)`;
         }
@@ -60,98 +66,43 @@ function render(){
     localStorage.setItem("day", currentDay);
 }
 
-function nextDay(){
+function nextDay() {
 
-    if(currentDay < 4){
+    if (currentDay < 4) {
         currentDay++;
         render();
     }
 }
 
-function previousDay(){
+function previousDay() {
 
-    if(currentDay > 0){
+    if (currentDay > 0) {
         currentDay--;
         render();
     }
 }
 
-function nextWeek(){
+function nextWeek() {
 
-    if(currentWeek < weeks.length - 1){
+    if (currentWeek < weeks.length - 1) {
         currentWeek++;
         render();
     }
 }
 
-function previousWeek(){
+function previousWeek() {
 
-    if(currentWeek > 0){
+    if (currentWeek > 0) {
         currentWeek--;
         render();
     }
 }
 
-document.addEventListener("touchstart",(e)=>{
-
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-
-});
-
-document.addEventListener("touchend",(e)=>{
-
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
-
-    const dx = endX - startX;
-    const dy = endY - startY;
-
-    if(Math.abs(dx) > Math.abs(dy)){
-
-        if(dx < -50){
-            nextDay();
-        }
-
-        if(dx > 50){
-            previousDay();
-        }
-
-    }else{
-
-        if(dy < -50){
-            nextWeek();
-        }
-
-        if(dy > 50){
-            previousWeek();
-        }
-    }
-});
-
-window.addEventListener("resize", render);
-
-render();
-
 function showWeekOverview(direction) {
 
+    if (overviewMode) return;
+
     overviewMode = true;
-
-    const current = weeks[currentWeek];
-
-    current.classList.add("overview");
-
-    if(direction === "next" && currentWeek < weeks.length - 1){
-        weeks[currentWeek + 1].classList.add("preview-next");
-    }
-
-    if(direction === "prev" && currentWeek > 0){
-        weeks[currentWeek - 1].classList.add("preview-prev");
-    }
-}
-function hideWeekOverview() {
-
-    overviewMode = false;
 
     weeks.forEach(week => {
         week.classList.remove(
@@ -161,22 +112,110 @@ function hideWeekOverview() {
         );
     });
 
-    showPosition();
+    const current = weeks[currentWeek];
+
+    current.classList.add("overview");
+
+    if (
+        direction === "next" &&
+        currentWeek < weeks.length - 1
+    ) {
+        weeks[currentWeek + 1]
+            .classList.add("preview-next");
+    }
+
+    if (
+        direction === "prev" &&
+        currentWeek > 0
+    ) {
+        weeks[currentWeek - 1]
+            .classList.add("preview-prev");
+    }
 }
-if (Math.abs(diffY) > Math.abs(diffX)) {
 
-    if (diffY < -80) {
+function hideWeekOverview() {
+
+    overviewMode = false;
+
+    weeks.forEach(week => {
+
+        week.classList.remove(
+            "overview",
+            "preview-next",
+            "preview-prev"
+        );
+    });
+
+    render();
+}
+
+document.addEventListener("touchstart", (e) => {
+
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchmove", (e) => {
+
+    const moveX = e.touches[0].clientX;
+    const moveY = e.touches[0].clientY;
+
+    const dx = moveX - startX;
+    const dy = moveY - startY;
+
+    if (
+        Math.abs(dy) > 40 &&
+        Math.abs(dy) > Math.abs(dx) &&
+        !overviewMode
+    ) {
+
+        if (dy < 0) {
+            showWeekOverview("next");
+        } else {
+            showWeekOverview("prev");
+        }
+    }
+});
+
+document.addEventListener("touchend", (e) => {
+
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+
+    const dx = endX - startX;
+    const dy = endY - startY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
 
         hideWeekOverview();
-        nextWeek();
 
-    } else if (diffY > 80) {
+        if (dx < -50) {
+            nextDay();
+        }
 
-        hideWeekOverview();
-        previousWeek();
+        if (dx > 50) {
+            previousDay();
+        }
 
     } else {
 
-        hideWeekOverview();
+        if (dy < -80) {
+
+            hideWeekOverview();
+            nextWeek();
+
+        } else if (dy > 80) {
+
+            hideWeekOverview();
+            previousWeek();
+
+        } else {
+
+            hideWeekOverview();
+        }
     }
-}
+});
+
+window.addEventListener("resize", render);
+
+render();
