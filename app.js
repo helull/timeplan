@@ -106,20 +106,6 @@ function render(){
 
     updateDots();
 
-    const selectedClass =
-    document.getElementById(
-        "classSelect"
-    ).value;
-
-localStorage.setItem(
-    "studentName",
-    name
-);
-
-localStorage.setItem(
-    "classId",
-    selectedClass
-);
 
 localStorage.setItem(
     "studentId",
