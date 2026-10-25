@@ -132,6 +132,12 @@ button.addEventListener(
             return;
         }
 
+        console.log("Oppretter student", {
+    studentId,
+    name,
+    selectedClass
+});
+        
         await createStudent(
 
             studentId,
@@ -140,6 +146,9 @@ button.addEventListener(
 
         );
 
+console.log("Student opprettet");        
+        
+        
         localStorage.setItem(
 
             "studentName",
