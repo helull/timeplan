@@ -30,7 +30,7 @@ import {
 }
 from "./render.js";
 
-let currentWeek = 0;
+let currentWeek = 1;
 let currentDay = 0;
 
 let startX = 0;
@@ -48,6 +48,11 @@ console.log(
 
 generateWeeks(
     todayPosition.week
+);
+
+console.log(
+    "Genererte uker:",
+    document.querySelectorAll(".week").length
 );
 
 const weeks =
