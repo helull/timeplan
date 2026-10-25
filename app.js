@@ -106,11 +106,6 @@ function render(){
 
     updateDots();
 
-
-localStorage.setItem(
-    "studentId",
-    `${name}_${selectedClass}`
-);
 }
 
 function nextDay(){
