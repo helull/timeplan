@@ -327,3 +327,15 @@ const schedule =
 }
 
 init();
+
+document
+    .getElementById(
+        "menuButton"
+    )
+    ?.addEventListener(
+
+        "click",
+
+        loginTeacher
+
+    );
