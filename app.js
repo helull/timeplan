@@ -288,11 +288,6 @@ const classId =
         "classId"
     );
 
-const classId =
-    localStorage.getItem(
-        "classId"
-    );
-
 const schedule =
     await loadSchedule(
         classId
