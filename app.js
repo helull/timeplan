@@ -324,6 +324,9 @@ const schedule =
     ); */
 
     render();
+    if (localStorage.getItem("teacherMode") === "true") {
+        document.body.classList.add("teacher-mode");
+    }
 }
 
 init();
