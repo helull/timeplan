@@ -6,28 +6,47 @@ export function getCurrentSchoolPosition() {
     const weekday =
         today.getDay();
 
-    let schoolDay;
+    let schoolDay = 0;
 
-    if (weekday >= 1 && weekday <= 5) {
+    let targetDate =
+        new Date(today);
+
+    if (
+        weekday >= 1 &&
+        weekday <= 5
+    ) {
 
         schoolDay =
             weekday - 1;
 
     } else {
 
-        schoolDay = 0;
+        // Lørdag eller søndag:
+        // finn neste mandag
+
+        const daysUntilMonday =
+
+            weekday === 6
+                ? 2
+                : 1;
+
+        targetDate.setDate(
+            targetDate.getDate() +
+            daysUntilMonday
+        );
     }
 
     return {
 
         week:
-            getWeekNumber(today),
+            getWeekNumber(
+                targetDate
+            ),
 
         day:
             schoolDay
     };
 }
-
 function getWeekNumber(date) {
 
     const target =
