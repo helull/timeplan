@@ -1,5 +1,6 @@
 const weeks = document.querySelectorAll(".week");
 const dots = document.querySelectorAll(".dot");
+let overviewMode = false;
 
 let currentWeek = 0;
 let currentDay = 0;
@@ -131,3 +132,51 @@ document.addEventListener("touchend",(e)=>{
 window.addEventListener("resize", render);
 
 render();
+
+function showWeekOverview(direction) {
+
+    overviewMode = true;
+
+    const current = weeks[currentWeek];
+
+    current.classList.add("overview");
+
+    if(direction === "next" && currentWeek < weeks.length - 1){
+        weeks[currentWeek + 1].classList.add("preview-next");
+    }
+
+    if(direction === "prev" && currentWeek > 0){
+        weeks[currentWeek - 1].classList.add("preview-prev");
+    }
+}
+function hideWeekOverview() {
+
+    overviewMode = false;
+
+    weeks.forEach(week => {
+        week.classList.remove(
+            "overview",
+            "preview-next",
+            "preview-prev"
+        );
+    });
+
+    showPosition();
+}
+if (Math.abs(diffY) > Math.abs(diffX)) {
+
+    if (diffY < -80) {
+
+        hideWeekOverview();
+        nextWeek();
+
+    } else if (diffY > 80) {
+
+        hideWeekOverview();
+        previousWeek();
+
+    } else {
+
+        hideWeekOverview();
+    }
+}
