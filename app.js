@@ -1,4 +1,9 @@
 import {
+    renderTeacherButton
+}
+from "./teacherPanel.js";
+
+import {
     loginTeacher
 }
 from "./teacherLogin.js";
@@ -327,6 +332,7 @@ const schedule =
     if (localStorage.getItem("teacherMode") === "true") {
         document.body.classList.add("teacher-mode");
     }
+    renderTeacherButton();
 }
 
 init();
