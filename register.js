@@ -1,4 +1,10 @@
 import {
+    studentExists,
+    createStudent
+}
+from "./studentService.js";
+
+import {
     loadClasses
 }
 from "./classService.js";
@@ -74,10 +80,13 @@ classes.forEach(item => {
     );
 
 button.addEventListener(
+
     "click",
-    () => {
+
+    async () => {
 
         const name =
+
             document
             .getElementById(
                 "nameInput"
@@ -85,26 +94,71 @@ button.addEventListener(
             .value
             .trim();
 
+        if (!name) {
+
+            alert(
+                "Skriv inn navn"
+            );
+
+            return;
+        }
+
         const selectedClass =
+
             document
             .getElementById(
                 "classSelect"
             )
             .value;
 
+        const studentId =
+
+            `${name}_${selectedClass}`;
+
+        const exists =
+
+            await studentExists(
+                studentId
+            );
+
+        if (exists) {
+
+            alert(
+
+                "Navnet finnes allerede i denne klassen."
+
+            );
+
+            return;
+        }
+
+        await createStudent(
+
+            studentId,
+            name,
+            selectedClass
+
+        );
+
         localStorage.setItem(
+
             "studentName",
             name
+
         );
 
         localStorage.setItem(
+
             "classId",
             selectedClass
+
         );
 
         localStorage.setItem(
+
             "studentId",
-            `${name}_${selectedClass}`
+            studentId
+
         );
 
         location.reload();
