@@ -23,6 +23,7 @@ export async function loadSchedule(
 
     if (!snap.exists()) {
 
+        console.warn("Fant ingen timeplan for",classId);
         return {
             lessons: []
         };
