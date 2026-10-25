@@ -9,10 +9,9 @@ import {
 from "./register.js";
 
 import {
-    loadSchedule,
-    listenToHomework
+    loadSchedule
 }
-from "./data.js";
+from "./scheduleService.js";
 
 import {
     renderSchedule,
@@ -289,18 +288,25 @@ const classId =
         "classId"
     );
 
+const classId =
+    localStorage.getItem(
+        "classId"
+    );
+
 const schedule =
     await loadSchedule(
         classId
     );
 
+    console.log("Schedule fra Firestore:", schedule);
+    
     renderSchedule(
         schedule
     );
 
-    listenToHomework(
+/*    listenToHomework(
         renderHomework
-    );
+    ); */
 
     render();
 }
