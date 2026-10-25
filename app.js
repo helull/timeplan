@@ -1,4 +1,10 @@
 import {
+    getCurrentSchoolPosition
+}
+from "./calendar.js";
+
+
+import {
     hasStudent
 }
 from "./student.js";
@@ -33,21 +39,16 @@ let startY = 0;
 
 let overviewMode = false;
 
-const savedWeek =
-    localStorage.getItem("week");
+const todayPosition =
+    getCurrentSchoolPosition();
 
-const savedDay =
-    localStorage.getItem("day");
+console.log(
+    "School position",
+    todayPosition
+);
 
-if(savedWeek !== null){
-    currentWeek =
-        parseInt(savedWeek);
-}
-
-if(savedDay !== null){
-    currentDay =
-        parseInt(savedDay);
-}
+currentDay =
+    todayPosition.day;
 
 function updateDots(){
 
