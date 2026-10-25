@@ -1,4 +1,9 @@
 import {
+    loginTeacher
+}
+from "./teacherLogin.js";
+
+import {
     generateWeeks
 }
 from "./weekBuilder.js";
