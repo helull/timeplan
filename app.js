@@ -9,6 +9,10 @@ let startY = 0;
 
 let overviewMode = false;
 
+/* ==========================
+   LASTE LAGRET POSISJON
+========================== */
+
 const savedWeek = localStorage.getItem("week");
 const savedDay = localStorage.getItem("day");
 
@@ -27,23 +31,42 @@ if (savedDay !== null) {
     }
 }
 
+/* ==========================
+   DAGINDIKATORER
+========================== */
+
 function updateDots() {
 
-    dots.forEach(dot => dot.classList.remove("active"));
+    dots.forEach(dot =>
+        dot.classList.remove("active")
+    );
 
     if (dots[currentDay]) {
         dots[currentDay].classList.add("active");
     }
 }
 
+/* ==========================
+   RENDER
+========================== */
+
 function render() {
 
     weeks.forEach((week, index) => {
 
-        week.classList.toggle(
+        week.classList.remove(
             "active",
-            index === currentWeek
+            "overview",
+            "preview-next",
+            "preview-prev"
         );
+
+        week.style.visibility = "";
+        week.style.opacity = "";
+
+        if (index === currentWeek) {
+            week.classList.add("active");
+        }
 
         const days = week.querySelector(".days");
 
@@ -62,9 +85,20 @@ function render() {
 
     updateDots();
 
-    localStorage.setItem("week", currentWeek);
-    localStorage.setItem("day", currentDay);
+    localStorage.setItem(
+        "week",
+        currentWeek
+    );
+
+    localStorage.setItem(
+        "day",
+        currentDay
+    );
 }
+
+/* ==========================
+   DAGNAVIGASJON
+========================== */
 
 function nextDay() {
 
@@ -82,35 +116,39 @@ function previousDay() {
     }
 }
 
+/* ==========================
+   UKENAVIGASJON
+========================== */
+
 function nextWeek() {
 
-    if (currentWeek < weeks.length - 1) {
-        currentWeek++;
-        render();
+    if (currentWeek >= weeks.length - 1) {
+        return;
     }
+
+    currentWeek++;
+    render();
 }
 
 function previousWeek() {
 
-    if (currentWeek > 0) {
-        currentWeek--;
-        render();
+    if (currentWeek <= 0) {
+        return;
     }
+
+    currentWeek--;
+    render();
 }
+
+/* ==========================
+   UKEOVERSIKT
+========================== */
 
 function showWeekOverview(direction) {
 
     if (overviewMode) return;
 
     overviewMode = true;
-
-    weeks.forEach(week => {
-        week.classList.remove(
-            "overview",
-            "preview-next",
-            "preview-prev"
-        );
-    });
 
     const current = weeks[currentWeek];
 
@@ -120,16 +158,38 @@ function showWeekOverview(direction) {
         direction === "next" &&
         currentWeek < weeks.length - 1
     ) {
-        weeks[currentWeek + 1]
-            .classList.add("preview-next");
+
+        const next =
+            weeks[currentWeek + 1];
+
+        next.classList.add(
+            "preview-next"
+        );
+
+        next.style.visibility =
+            "visible";
+
+        next.style.opacity =
+            ".45";
     }
 
     if (
         direction === "prev" &&
         currentWeek > 0
     ) {
-        weeks[currentWeek - 1]
-            .classList.add("preview-prev");
+
+        const prev =
+            weeks[currentWeek - 1];
+
+        prev.classList.add(
+            "preview-prev"
+        );
+
+        prev.style.visibility =
+            "visible";
+
+        prev.style.opacity =
+            ".45";
     }
 }
 
@@ -144,78 +204,141 @@ function hideWeekOverview() {
             "preview-next",
             "preview-prev"
         );
+
+        week.style.visibility = "";
+        week.style.opacity = "";
     });
 
     render();
 }
 
-document.addEventListener("touchstart", (e) => {
+/* ==========================
+   TOUCH START
+========================== */
 
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-});
+document.addEventListener(
+    "touchstart",
+    (e) => {
 
-document.addEventListener("touchmove", (e) => {
+        startX =
+            e.touches[0].clientX;
 
-    const moveX = e.touches[0].clientX;
-    const moveY = e.touches[0].clientY;
+        startY =
+            e.touches[0].clientY;
+    }
+);
 
-    const dx = moveX - startX;
-    const dy = moveY - startY;
+/* ==========================
+   TOUCH MOVE
+========================== */
 
-    if (
-        Math.abs(dy) > 40 &&
-        Math.abs(dy) > Math.abs(dx) &&
-        !overviewMode
-    ) {
+document.addEventListener(
+    "touchmove",
+    (e) => {
 
-        if (dy < 0) {
-            showWeekOverview("next");
-        } else {
-            showWeekOverview("prev");
+        const moveX =
+            e.touches[0].clientX;
+
+        const moveY =
+            e.touches[0].clientY;
+
+        const dx =
+            moveX - startX;
+
+        const dy =
+            moveY - startY;
+
+        if (
+            Math.abs(dy) > 40 &&
+            Math.abs(dy) >
+                Math.abs(dx) &&
+            !overviewMode
+        ) {
+
+            if (dy < 0) {
+
+                showWeekOverview(
+                    "next"
+                );
+
+            } else {
+
+                showWeekOverview(
+                    "prev"
+                );
+            }
         }
     }
-});
+);
 
-document.addEventListener("touchend", (e) => {
+/* ==========================
+   TOUCH END
+========================== */
 
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
+document.addEventListener(
+    "touchend",
+    (e) => {
 
-    const dx = endX - startX;
-    const dy = endY - startY;
+        const endX =
+            e.changedTouches[0].clientX;
 
-    if (Math.abs(dx) > Math.abs(dy)) {
+        const endY =
+            e.changedTouches[0].clientY;
 
-        hideWeekOverview();
+        const dx =
+            endX - startX;
 
-        if (dx < -50) {
-            nextDay();
-        }
+        const dy =
+            endY - startY;
 
-        if (dx > 50) {
-            previousDay();
-        }
-
-    } else {
-
-        if (dy < -80) {
-
-            hideWeekOverview();
-            nextWeek();
-
-        } else if (dy > 80) {
+        if (
+            Math.abs(dx) >
+            Math.abs(dy)
+        ) {
 
             hideWeekOverview();
-            previousWeek();
+
+            if (dx < -50) {
+                nextDay();
+            }
+
+            if (dx > 50) {
+                previousDay();
+            }
 
         } else {
 
-            hideWeekOverview();
+            if (dy < -80) {
+
+                hideWeekOverview();
+                nextWeek();
+
+            } else if (
+                dy > 80
+            ) {
+
+                hideWeekOverview();
+                previousWeek();
+
+            } else {
+
+                hideWeekOverview();
+            }
         }
     }
-});
+);
 
-window.addEventListener("resize", render);
+/* ==========================
+   RESIZE
+========================== */
+
+window.addEventListener(
+    "resize",
+    render
+);
+
+/* ==========================
+   START
+========================== */
 
 render();
