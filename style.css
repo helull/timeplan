@@ -576,3 +576,9 @@ h1{
 
     background:#10b981;
 }
+
+.teacher-mode{
+
+    outline:
+        6px solid #ef4444;
+}
