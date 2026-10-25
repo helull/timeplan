@@ -578,7 +578,7 @@ h1{
 }
 
 .teacher-mode{
-
+    background:#ff0000 !important;
     outline:
         6px solid #ef4444;
 }
