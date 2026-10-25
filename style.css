@@ -577,29 +577,7 @@ h1{
     background:#10b981;
 }
 
-.teacher-mode::before{
-
-    content:"LÆRERMODUS";
-
-    position:fixed;
-
-    top:12px;
-    left:12px;
-
-    padding:8px 14px;
-
-    background:#dc2626;
-    color:white;
-
-    border-radius:999px;
-
-    font-weight:700;
-
-    z-index:99999;
-}
-
 .teacher-mode .menu-button{
-
     background:#dc2626;
     color:white;
 }
