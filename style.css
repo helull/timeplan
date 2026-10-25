@@ -581,3 +581,25 @@ h1{
     background:#dc2626;
     color:white;
 }
+
+.admin-button{
+
+    position:fixed;
+
+    top:80px;
+    right:16px;
+
+    z-index:301;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 16px;
+
+    background:#dc2626;
+
+    color:white;
+
+    font-weight:600;
+}
