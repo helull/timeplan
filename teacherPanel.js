@@ -85,4 +85,3 @@ document
         openAdminPanel
 
     );
-`
