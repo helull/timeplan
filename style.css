@@ -225,7 +225,7 @@ h1{
 
     transform:
         translateY(0)
-        scale(.45);
+        scale(.35);
 
     z-index:20;
 }
@@ -235,8 +235,8 @@ h1{
     visibility:visible;
 
     transform:
-        translateY(42vh)
-        scale(.35);
+        translateY(38vh)
+        scale(.28);
 
     z-index:15;
 }
@@ -246,8 +246,8 @@ h1{
     visibility:visible;
 
     transform:
-        translateY(-42vh)
-        scale(.35);
+        translateY(-38vh)
+        scale(.28);
 
     z-index:15;
 }
