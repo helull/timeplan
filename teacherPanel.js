@@ -26,3 +26,63 @@ export function renderTeacherButton(){
         `
     );
 }
+
+export function openAdminPanel(){
+
+    document.body.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div
+            class="modal"
+            id="adminModal">
+
+            <div
+                class="modal-card">
+
+                <h2>
+
+                    Administrasjon
+
+                </h2>
+
+                <button id="newLesson">
+
+                    Ny time
+
+                </button>
+
+                <button id="newHoliday">
+
+                    Ferie
+
+                </button>
+
+                <button id="newDayOff">
+
+                    Fridag
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+}
+
+document
+    .getElementById(
+        "adminButton"
+    )
+    ?.addEventListener(
+
+        "click",
+
+        openAdminPanel
+
+    );
+`
