@@ -278,6 +278,12 @@ window.addEventListener(
 
 async function init(){
 
+    if (!hasStudent()) {
+
+        await showRegister();
+        return;
+    }
+
     const schedule =
         await loadSchedule();
 
@@ -289,14 +295,7 @@ async function init(){
         renderHomework
     );
 
-    if (!hasStudent()) {
-
-    await showRegister();
-
-} else {
-
     render();
-}
 }
 
 init();
