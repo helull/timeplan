@@ -1,8 +1,5 @@
 export function renderSchedule(schedule) {
-console.log(
-    "Render uke",
-    currentWeek
-);
+
     const weeks =
         document.querySelectorAll(
             ".week"
