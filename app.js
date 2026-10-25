@@ -284,8 +284,15 @@ async function init(){
         return;
     }
 
-    const schedule =
-        await loadSchedule();
+const classId =
+    localStorage.getItem(
+        "classId"
+    );
+
+const schedule =
+    await loadSchedule(
+        classId
+    );
 
     renderSchedule(
         schedule
