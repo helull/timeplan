@@ -225,29 +225,29 @@ h1{
 
     transform:
         translateY(0)
-        scale(.65);
+        scale(.45);
 
     z-index:20;
 }
 
 .week.preview-next{
-    opacity:.45;
+    opacity:.55;
     visibility:visible;
 
     transform:
-        translateY(55vh)
-        scale(.45);
+        translateY(42vh)
+        scale(.35);
 
     z-index:15;
 }
 
 .week.preview-prev{
-    opacity:.45;
+    opacity:.55;
     visibility:visible;
 
     transform:
-        translateY(-55vh)
-        scale(.45);
+        translateY(-42vh)
+        scale(.35);
 
     z-index:15;
 }
@@ -280,8 +280,23 @@ h1{
 .week.overview .week-number,
 .week.preview-next .week-number,
 .week.preview-prev .week-number{
-    font-size:.75rem;
+    font-size:2rem;
+    font-weight:800;
+    color:#111827;
+    text-align:center;
+    margin:12px 0 20px 0;
+    letter-spacing:.08em;
 }
+
+.week.overview .week-number{
+    background:white;
+    width:max-content;
+    margin:0 auto 20px;
+    padding:10px 20px;
+    border-radius:999px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+}
+
 
 .week.overview .time,
 .week.overview .homework,
