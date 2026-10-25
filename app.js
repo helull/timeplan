@@ -106,15 +106,25 @@ function render(){
 
     updateDots();
 
-    localStorage.setItem(
-        "week",
-        currentWeek
-    );
+    const selectedClass =
+    document.getElementById(
+        "classSelect"
+    ).value;
 
-    localStorage.setItem(
-        "day",
-        currentDay
-    );
+localStorage.setItem(
+    "studentName",
+    name
+);
+
+localStorage.setItem(
+    "classId",
+    selectedClass
+);
+
+localStorage.setItem(
+    "studentId",
+    `${name}_${selectedClass}`
+);
 }
 
 function nextDay(){
@@ -300,7 +310,7 @@ async function init(){
 
     if (!hasStudent()) {
 
-    showRegister();
+    await showRegister();
 
 } else {
 
