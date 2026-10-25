@@ -1,21 +1,32 @@
 // teacherLogin.js
 
 import {
-    enableTeacherMode
+    enableTeacherMode,
+    disableTeacherMode,
+    isTeacher
 }
 from "./teacher.js";
 
 export async function loginTeacher(){
+
+    if (isTeacher()) {
+
+        disableTeacherMode();
+
+        location.reload();
+
+        return;
+    }
 
     const password =
         prompt(
             "Lærerpassord"
         );
 
-    if(
+    if (
         password ===
         "TEMP123"
-    ){
+    ) {
 
         enableTeacherMode();
 
