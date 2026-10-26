@@ -1,4 +1,9 @@
 import {
+    openHomeworkModal
+}
+from "./homeworkModal.js";
+
+import {
     getSubjectColor
 }
 from "./colors.js";
