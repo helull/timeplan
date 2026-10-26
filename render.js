@@ -81,6 +81,13 @@ export function renderSchedule(schedule) {
                 lessons.forEach(
                     lesson => {
 
+const showTeacherNames =
+
+    localStorage.getItem(
+        "showTeacherNames"
+    ) === "true";
+                        
+                        
                         day.innerHTML += `
 
                             <div
@@ -97,9 +104,25 @@ export function renderSchedule(schedule) {
                                     📍 ${lesson.roomName || "Ukjent rom"}
                                 </div>
 
-                                <div class="teacher">
-                                    👤 ${lesson.teacherName || ""}
-                                </div>
+${
+    showTeacherNames
+    ?
+
+    `
+    <div class="teacher">
+
+        👤 ${lesson.teacherName || ""}
+
+    </div>
+    `
+
+    :
+
+    ""
+}
+
+
+                                
                                 
                                 <div
                                     class="time">
