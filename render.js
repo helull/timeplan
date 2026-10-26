@@ -82,22 +82,35 @@ export function renderSchedule(schedule) {
                     lesson => {
 
 const showTeacherNames =
-
     localStorage.getItem(
         "showTeacherNames"
     ) === "true";
+
+localStorage.setItem(
+    "showRooms",
+    (!current).toString()
+);
                         
                         
                         day.innerHTML += `
 
                             <div
                                 class="lesson ${getSubjectColor(lesson.subject)}">
-
-                                <div
-                                    class="subject">
+                                
+                                <div class="lesson-top">
+                                
+                                <div class="subject">
 
                                     ${lesson.subject}
 
+                                </div>
+                                <div class="time">
+
+                                    ${lesson.start}
+                                    -
+                                    ${lesson.end}
+
+                                </div>
                                 </div>
                                 
                                 <div class="room">
@@ -124,14 +137,7 @@ ${
 
                                 
                                 
-                                <div
-                                    class="time">
 
-                                    ${lesson.start}
-                                    -
-                                    ${lesson.end}
-
-                                </div>
 
                             </div>
 
