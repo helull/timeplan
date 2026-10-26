@@ -166,17 +166,29 @@ function previousDay(){
 }
 
 function nextWeek(){
-    if(currentWeek < weeks.length-1){
+
+    if(
+        currentWeek <
+        weeks.length - 1
+    ){
         currentWeek++;
-        render();
+    } else {
+        currentWeek = 0;
     }
+    render();
 }
 
 function previousWeek(){
-    if(currentWeek > 0){
+    if(
+        currentWeek > 0
+    ){
         currentWeek--;
-        render();
+    } else {
+        currentWeek =
+            weeks.length - 1;
     }
+
+    render();
 }
 
 function showWeekOverview(direction){
