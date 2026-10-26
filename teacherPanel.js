@@ -77,7 +77,7 @@ export function openAdminPanel(){
 
         `
     );
-    document.getElementById("importSchedule") ? .addEventListener("click",openImportModal);
+    document.getElementById("importSchedule")?.addEventListener("click",openImportModal);
 }
 
 document
