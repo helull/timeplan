@@ -70,18 +70,16 @@ export function openToolsPanel() {
                     Verktøy
                 </h2>
 
-                <button
-                    id="openAdmin">
-
-                    Administrasjon
-
+                <button id="toggleTeacherNames">
+                    Vis/skjul lærere
                 </button>
 
-                <button
-                    id="logoutUser">
-
+                <button id="logoutUser">
                     Logg ut
+                </button>
 
+                <button id="openAdmin">
+                    Lærer
                 </button>
 
             </div>
@@ -107,6 +105,14 @@ export function openToolsPanel() {
             "click",
             logoutUser
         );
+    document
+    .getElementById(
+        "toggleTeacherNames"
+    )
+    ?.addEventListener(
+        "click",
+        toggleTeacherNames
+    );
 }
 
 function adminLogin() {
@@ -176,10 +182,10 @@ export function openAdminPanel() {
                 <button id="importSchedule">
                     Importer JSON
                 </button>
+                
                 <button id="howToImport">
                     Hvordan importere fra bilde?
                 </button>
-
             </div>
 
         </div>
@@ -518,4 +524,23 @@ await setDoc(
 
     }
 
+}
+
+function toggleTeacherNames() {
+
+    const current =
+
+        localStorage.getItem(
+            "showTeacherNames"
+        ) === "true";
+
+    localStorage.setItem(
+
+        "showTeacherNames",
+
+        (!current).toString()
+
+    );
+
+    location.reload();
 }
