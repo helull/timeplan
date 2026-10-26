@@ -144,6 +144,21 @@ async function saveImportedSchedule() {
             "scheduleJson"
         ).value;
 
-    console.log(jsonText);
+    try {
+
+        const data =
+            JSON.parse(jsonText);
+
+        console.log(data);
+
+    }
+
+    catch (error) {
+
+        alert(
+            "Ugyldig JSON"
+        );
+
+    }
 
 }
