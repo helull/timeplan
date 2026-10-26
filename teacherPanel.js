@@ -546,3 +546,22 @@ function toggleTeacherNames() {
 
     location.reload();
 }
+
+function toggleRooms() {
+
+    const current =
+
+        localStorage.getItem(
+            "showRooms"
+        ) === "true";
+
+    localStorage.setItem(
+
+        "showRooms",
+
+        (!current).toString()
+
+    );
+
+    location.reload();
+}
