@@ -206,7 +206,7 @@ await setDoc(
         console.error(error);
 
         alert(
-            "Ugyldig JSON"
+            error.message
         );
 
     }
