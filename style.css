@@ -647,8 +647,19 @@ h1{
         rgba(255,255,255,.2);
 
     color:white;
-
+    font-size:.9rem;
     cursor:pointer;
+}
+
+.homework-button:hover{
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .35
+        );
 }
 
 .lesson{
