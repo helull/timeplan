@@ -20,6 +20,11 @@ import {
 from "./teacherLogin.js";
 
 import {
+    openToolsPanel
+}
+from "./teacherPanel.js";
+
+import {
     generateWeeks
 }
 from "./weekBuilder.js";
@@ -367,6 +372,6 @@ document
 
         "click",
 
-        loginTeacher
+        openToolsPanel
 
     );
