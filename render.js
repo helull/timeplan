@@ -113,9 +113,22 @@ const showRooms =
                                 </div>
                                 </div>
                                 
-                                <div class="room">
-                                    📍 ${lesson.roomName || "Ukjent rom"}
-                                </div>
+${
+    showRooms
+    ?
+
+    `
+    <div class="room">
+
+        📍 ${lesson.roomName || ""}
+
+    </div>
+    `
+
+    :
+
+    ""
+}
 
 ${
     showTeacherNames
