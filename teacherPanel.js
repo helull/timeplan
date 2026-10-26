@@ -82,6 +82,9 @@ export function openAdminPanel() {
                 <button id="importSchedule">
                     Importer JSON
                 </button>
+                <button id="howToImport">
+                    Hvordan importere fra bilde?
+                </button>
 
             </div>
 
@@ -95,6 +98,12 @@ export function openAdminPanel() {
             "click",
             openImportModal
         );
+    document
+    .getElementById("howToImport")
+    ?.addEventListener(
+        "click",
+        openImportHelpModal
+    );
 }
 
 export function openImportModal() {
@@ -147,6 +156,177 @@ export function openImportModal() {
             saveImportedSchedule
         );
     
+}
+export function openImportHelpModal() {
+
+    if (
+        document.getElementById(
+            "importHelpModal"
+        )
+    ) {
+        return;
+    }
+
+    document.body.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+        <div
+            class="modal"
+            id="importHelpModal">
+
+            <div
+                class="modal-card">
+
+                <h2>
+                    Import fra bilde
+                </h2>
+
+                <p>
+                    1. Ta skjermbilde av timeplanen.
+                </p>
+
+                <p>
+                    2. Åpne Copilot eller ChatGPT.
+                </p>
+
+                <p>
+                    3. Lim inn bildet.
+                </p>
+
+                <p>
+                    4. Kopier prompten nedenfor.
+                </p>
+
+                <textarea
+                    readonly
+                    rows="15"
+                    style="width:100%;">
+
+Les timeplanbildet.
+
+Returner KUN gyldig JSON.
+
+Format:
+
+{
+  "classId": "1STB",
+  "lessons": []
+}
+
+Regler:
+
+- Returner kun JSON
+- Ingen markdown
+- Ingen forklaringer
+- weekday:
+  Mandag=1
+  Tirsdag=2
+  Onsdag=3
+  Torsdag=4
+  Fredag=5
+- Ett objekt per undervisningsøkt
+- lessonId skal være unik
+- Ta med subject
+- Ta med teacherName hvis synlig
+- Ta med roomName hvis synlig
+- Ta med start og end
+- Ikke ta med color
+- JSON skal kunne leses direkte av JSON.parse()
+                </textarea>
+
+                <br><br>
+
+                <button
+                    id="copyPrompt">
+
+                    Kopier prompt
+
+                </button>
+
+                <button
+                    id="closeImportHelp">
+
+                    Lukk
+
+                </button>
+
+            </div>
+
+        </div>
+        `
+
+    );
+
+    document
+        .getElementById(
+            "copyPrompt"
+        )
+        ?.addEventListener(
+            "click",
+            copyImportPrompt
+        );
+
+    document
+        .getElementById(
+            "closeImportHelp"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById(
+                        "importHelpModal"
+                    )
+                    ?.remove();
+
+            }
+        );
+}
+
+async function copyImportPrompt() {
+
+    const prompt = `Les timeplanbildet.
+
+Returner KUN gyldig JSON.
+
+Format:
+
+{
+  "classId": "1STB",
+  "lessons": []
+}
+
+Regler:
+
+- Returner kun JSON
+- Ingen markdown
+- Ingen forklaringer
+- weekday:
+  Mandag=1
+  Tirsdag=2
+  Onsdag=3
+  Torsdag=4
+  Fredag=5
+- Ett objekt per undervisningsøkt
+- lessonId skal være unik
+- Ta med subject
+- Ta med teacherName hvis synlig
+- Ta med roomName hvis synlig
+- Ta med start og end
+- Ikke ta med color
+- JSON skal kunne leses direkte av JSON.parse()`;
+
+    await navigator.clipboard.writeText(
+        prompt
+    );
+
+    alert(
+        "Prompt kopiert."
+    );
+
 }
 
 async function saveImportedSchedule() {
