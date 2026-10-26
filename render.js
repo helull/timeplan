@@ -161,6 +161,30 @@ ${
                         `;
                     }
                 );
+
+
+                document
+    .querySelectorAll(
+        ".homework-button"
+    )
+    .forEach(
+        button => {
+
+            button.onclick =
+                () => {
+
+                    openHomeworkModal(
+                        button.dataset.lesson,
+                        weekNo
+                    );
+
+                };
+
+        }
+    );
+                
+
+                
             }
         );
     });
