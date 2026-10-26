@@ -65,6 +65,11 @@ export function openAdminPanel(){
                     Fridag
 
                 </button>
+                <button id="importSchedule">
+
+                    Importer JSON
+
+                </button>
 
             </div>
 
@@ -72,6 +77,7 @@ export function openAdminPanel(){
 
         `
     );
+    document.getElementById("importSchedule") ? .addEventListener("click",openImportModal);
 }
 
 document
@@ -85,3 +91,48 @@ document
         openAdminPanel
 
     );
+
+export function openImportModal() {
+
+    document.body.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <div
+            class="modal"
+            id="importModal">
+
+            <div
+                class="modal-card">
+
+                <h2>
+
+                    Importer timeplan
+
+                </h2>
+
+                <textarea
+                    id="scheduleJson"
+                    rows="20"
+                    style="width:100%;"></textarea>
+
+                <br><br>
+
+                <button
+                    id="saveSchedule">
+
+                    Lagre
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+
+    );
+
+}
