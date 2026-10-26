@@ -1,3 +1,14 @@
+import { db }
+from "./firebase.js";
+
+import {
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
 export async function studentExists(
     studentId
 ){
