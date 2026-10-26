@@ -149,11 +149,61 @@ async function saveImportedSchedule() {
         const data =
             JSON.parse(jsonText);
 
+        if (!data.classId) {
+
+            alert(
+                "Mangler classId"
+            );
+
+            return;
+
+        }
+
+       if (!Array.isArray(data.lessons)) {
+
+    alert(
+        "Mangler lessons-array"
+    );
+
+    return;
+
+}
+
+const lessons = data.lessons.map(
+    lesson => ({
+        lessonId: lesson.lessonId || "",
+        subject: lesson.subject || "",
+        teacherName: lesson.teacherName || "",
+        roomName: lesson.roomName || "",
+        start: lesson.start || "",
+        end: lesson.end || "",
+        weekday: lesson.weekday || 1,
+        color: lesson.color || "default"
+    })
+);
+
+await setDoc(
+    doc(
+        db,
+        "schedules",
+        data.classId
+    ),
+    {
+        lessons: lessons
+    }
+);
+
+        alert(
+            `Timeplan for ${data.classId} lagret`
+        );
+
         console.log(data);
 
     }
 
     catch (error) {
+
+        console.error(error);
 
         alert(
             "Ugyldig JSON"
