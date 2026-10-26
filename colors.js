@@ -17,6 +17,8 @@ export function getSubjectColor(
 
     let hash = 0;
 
+    const text = subject.toLowerCase();
+    
     for (
         let i = 0;
         i < subject.length;
@@ -24,7 +26,7 @@ export function getSubjectColor(
     ) {
 
         hash +=
-            subject.charCodeAt(i);
+            text.charCodeAt(i);
 
     }
 
