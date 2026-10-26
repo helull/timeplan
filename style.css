@@ -588,3 +588,21 @@ h1{
 
     font-weight:600;
 }
+
+.room{
+
+    margin-top:4px;
+
+    font-size:.9rem;
+
+    opacity:.95;
+}
+
+.teacher{
+
+    margin-top:2px;
+
+    font-size:.8rem;
+
+    opacity:.85;
+}
