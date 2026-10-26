@@ -298,11 +298,11 @@ document.addEventListener(
 
         }else{
 
-            if(dy < -80)
+            if(dy < -140)
                 nextWeek();
 
             else if(
-                dy > 80
+                dy > 140
             )
                 previousWeek();
 
