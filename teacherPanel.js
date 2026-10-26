@@ -87,6 +87,10 @@ export function openToolsPanel() {
                 <button id="openAdmin">
                     Lærer
                 </button>
+                
+                <button id="closeTools">    
+                    Lukk
+                </button>
 
             </div>
 
@@ -128,6 +132,15 @@ export function openToolsPanel() {
     ?.addEventListener(
         "click",
         toggleRooms
+    );
+
+    document
+    .getElementById(
+        "closeTools"
+    )
+    ?.addEventListener(
+        "click",
+        closeToolsPanel
     );
     
 }
@@ -579,4 +592,14 @@ function toggleRooms() {
     );
 
     location.reload();
+}
+
+function closeToolsPanel() {
+
+    document
+        .getElementById(
+            "toolsModal"
+        )
+        ?.remove();
+
 }
