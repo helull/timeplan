@@ -205,6 +205,25 @@ await setDoc(
     }
 );
 
+// ----------------
+// Lagre klasse hvis den ikke finnes
+// ------------------
+await setDoc(
+    doc(
+        db,
+        "classes",
+        data.classId
+    ),
+    {
+        name: data.classId
+    },
+    {
+        merge: true
+    }
+);
+
+        
+        
         alert(
             `Timeplan for ${data.classId} lagret`
         );
