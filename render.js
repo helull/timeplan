@@ -92,7 +92,11 @@ export function renderSchedule(schedule) {
                                     ${lesson.subject}
 
                                 </div>
-
+                                
+                                <div class="room">
+                                    📍 ${lesson.roomName || "Ukjent rom"}
+                                </div>
+                                
                                 <div
                                     class="time">
 
