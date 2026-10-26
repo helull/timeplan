@@ -1,3 +1,8 @@
+import {
+    getSubjectColor
+}
+from "./colors.js";
+
 export function renderSchedule(schedule) {
 
     const weeks =
@@ -79,7 +84,7 @@ export function renderSchedule(schedule) {
                         day.innerHTML += `
 
                             <div
-                                class="lesson ${lesson.color}">
+                                class="lesson ${getSubjectColor(lesson.subject)}">
 
                                 <div
                                     class="subject">
