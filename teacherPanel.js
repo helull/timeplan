@@ -3,7 +3,7 @@ import {
 }
 from "./teacher.js";
 
-export function renderTeacherButton(){
+export function renderTeacherButton() {
 
     if (!isTeacher()) {
         return;
@@ -14,7 +14,6 @@ export function renderTeacherButton(){
         "beforeend",
 
         `
-
         <button
             id="adminButton"
             class="admin-button">
@@ -22,19 +21,29 @@ export function renderTeacherButton(){
             🛠 Administrasjon
 
         </button>
-
         `
     );
+
+    document
+        .getElementById("adminButton")
+        ?.addEventListener(
+            "click",
+            openAdminPanel
+        );
 }
 
-export function openAdminPanel(){
+export function openAdminPanel() {
+
+    // Ikke åpne flere modaler samtidig
+    if (document.getElementById("adminModal")) {
+        return;
+    }
 
     document.body.insertAdjacentHTML(
 
         "beforeend",
 
         `
-
         <div
             class="modal"
             id="adminModal">
@@ -43,63 +52,50 @@ export function openAdminPanel(){
                 class="modal-card">
 
                 <h2>
-
                     Administrasjon
-
                 </h2>
 
                 <button id="newLesson">
-
                     Ny time
-
                 </button>
 
                 <button id="newHoliday">
-
                     Ferie
-
                 </button>
 
                 <button id="newDayOff">
-
                     Fridag
-
                 </button>
+
                 <button id="importSchedule">
-
                     Importer JSON
-
                 </button>
 
             </div>
 
         </div>
-
         `
     );
-    document.getElementById("importSchedule")?.addEventListener("click",openImportModal);
+
+    document
+        .getElementById("importSchedule")
+        ?.addEventListener(
+            "click",
+            openImportModal
+        );
 }
 
-document
-    .getElementById(
-        "adminButton"
-    )
-    ?.addEventListener(
-
-        "click",
-
-        openAdminPanel
-
-    );
-
 export function openImportModal() {
+
+    if (document.getElementById("importModal")) {
+        return;
+    }
 
     document.body.insertAdjacentHTML(
 
         "beforeend",
 
         `
-
         <div
             class="modal"
             id="importModal">
@@ -108,9 +104,7 @@ export function openImportModal() {
                 class="modal-card">
 
                 <h2>
-
                     Importer timeplan
-
                 </h2>
 
                 <textarea
@@ -130,9 +124,6 @@ export function openImportModal() {
             </div>
 
         </div>
-
         `
-
     );
-
 }
