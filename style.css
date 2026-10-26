@@ -110,12 +110,23 @@ h1{
 }
 
 .subject{
+
+    flex:1;
+
     font-size:1.15rem;
+
     font-weight:700;
 }
 
 .time{
-    margin-top:8px;
+
+    margin-top:0;
+
+    font-size:.9rem;
+
+    font-weight:600;
+
+    white-space:nowrap;
 }
 
 .homework{
@@ -605,4 +616,15 @@ h1{
     font-size:.8rem;
 
     opacity:.85;
+}
+
+.lesson-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:12px;
 }
