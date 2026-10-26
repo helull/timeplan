@@ -86,10 +86,10 @@ const showTeacherNames =
         "showTeacherNames"
     ) === "true";
 
-localStorage.setItem(
-    "showRooms",
-    (!current).toString()
-);
+const showRooms =
+    localStorage.getItem(
+        "showRooms"
+    ) === "true";
                         
                         
                         day.innerHTML += `
