@@ -151,7 +151,11 @@ ${
                                 
                                 
 
-
+                            <button
+                                class="homework-button"
+                                data-lesson="${lesson.lessonId}">
+                                📝
+                            </button>
                             </div>
 
                         `;
