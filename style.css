@@ -74,7 +74,7 @@ body{
 
 .day{
     width:100vw;
-    padding:24px;
+    padding:12px;
     overflow-y:auto;
 }
 
@@ -97,9 +97,9 @@ h1{
 ======================== */
 
 .lesson{
-    min-height:140px;
-    margin-bottom:16px;
-    padding:22px;
+    min-height:100px;
+    margin-bottom:8px;
+    padding:6px;
 
     border-radius:24px;
 
@@ -110,7 +110,7 @@ h1{
 }
 
 .subject{
-    font-size:1.35rem;
+    font-size:1.15rem;
     font-weight:700;
 }
 
@@ -176,7 +176,7 @@ h1{
 .dots{
     position:fixed;
 
-    bottom:20px;
+    bottom:10px;
     left:50%;
 
     transform:translateX(-50%);
