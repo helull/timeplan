@@ -1,3 +1,4 @@
+console.log("studentService.js lastet");
 import { db }
 from "./firebase.js";
 
