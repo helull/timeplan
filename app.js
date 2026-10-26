@@ -10,6 +10,11 @@ import {
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
+    loadAllHomework
+}
+from "./homeworkService.js";
+
+import {
     renderTeacherButton
 }
 from "./teacherPanel.js";
@@ -351,13 +356,14 @@ const schedule =
 
     console.log("Schedule fra Firestore:", schedule);
     
-    renderSchedule(
-        schedule
-    );
+const homeworkMap =
+    await loadAllHomework();
 
-/*    listenToHomework(
-        renderHomework
-    ); */
+renderSchedule(
+    schedule,
+    homeworkMap
+);
+
 
     render();
     if (localStorage.getItem("teacherMode") === "true") {
