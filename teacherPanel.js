@@ -407,6 +407,7 @@ Regler:
 - Ett objekt per undervisningsøkt
 - lessonId skal være unik
 - Ta med subject
+-- Hvis tekst inneholder ordet "Blokk", skal subject være "<subject> - Blokk"
 - Ta med teacherName hvis synlig
 - Ta med roomName hvis synlig
 - Ta med start og end
