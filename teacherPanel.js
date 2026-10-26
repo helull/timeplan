@@ -46,6 +46,8 @@ export function renderTeacherButton() {
 
 export function openToolsPanel() {
 
+    const enabled = localStorage.getItem("showTeacherNames") === "true";
+    
     if (
         document.getElementById(
             "toolsModal"
@@ -71,7 +73,7 @@ export function openToolsPanel() {
                 </h2>
 
                 <button id="toggleTeacherNames">
-                    Vis/skjul lærere
+                   ${enabled ? "Skjul lærere" : "Vis lærere"}
                 </button>
 
                 <button id="logoutUser">
