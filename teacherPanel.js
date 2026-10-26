@@ -75,6 +75,10 @@ export function openToolsPanel() {
                 <button id="toggleTeacherNames">
                    ${enabled ? "Skjul lærere" : "Vis lærere"}
                 </button>
+                
+                <button id="toggleRooms">
+                   ${enabled ? "Skjul rom" : "Vis rom"}
+                </button>
 
                 <button id="logoutUser">
                     Logg ut
@@ -107,6 +111,7 @@ export function openToolsPanel() {
             "click",
             logoutUser
         );
+   
     document
     .getElementById(
         "toggleTeacherNames"
@@ -115,6 +120,16 @@ export function openToolsPanel() {
         "click",
         toggleTeacherNames
     );
+
+    document
+    .getElementById(
+        "toggleRooms"
+    )
+    ?.addEventListener(
+        "click",
+        toggleRooms
+    );
+    
 }
 
 function adminLogin() {
