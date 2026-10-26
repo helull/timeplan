@@ -8,7 +8,10 @@ import {
 }
 from "./colors.js";
 
-export function renderSchedule(schedule) {
+export function renderSchedule(
+    schedule,
+    homeworkMap = {}
+) {
 
     const weeks =
         document.querySelectorAll(
@@ -95,6 +98,12 @@ const showRooms =
     localStorage.getItem(
         "showRooms"
     ) === "true";
+
+const homework =
+    homeworkMap[
+        `${lesson.lessonId}_${weekNo}`
+    ]
+    || "";
                         
                         
                         day.innerHTML += `
@@ -163,6 +172,27 @@ ${
                                 📝
                             </button>
                             </div>
+
+
+${
+    homework
+
+    ?
+
+    `
+    <div
+        class="lesson-homework">
+
+        📝 ${homework}
+
+    </div>
+    `
+
+    :
+
+    ""
+}
+                            
 
                         `;
                     }
