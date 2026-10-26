@@ -628,3 +628,30 @@ h1{
 
     gap:12px;
 }
+
+.homework-button{
+
+    position:absolute;
+
+    right:8px;
+    top:8px;
+
+    width:28px;
+    height:28px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.2);
+
+    color:white;
+
+    cursor:pointer;
+}
+
+.lesson{
+
+    position:relative;
+}
