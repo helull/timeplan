@@ -158,7 +158,8 @@ ${
 
                             <button
                                 class="homework-button"
-                                data-lesson="${lesson.lessonId}">
+                                data-lesson="${lesson.lessonId}"
+                                data-week="${weekNo}">
                                 📝
                             </button>
                             </div>
@@ -179,8 +180,13 @@ ${
                 () => {
 
                     openHomeworkModal(
+
                         button.dataset.lesson,
-                        weekNo
+
+                        Number(
+                            button.dataset.week
+                        )
+
                     );
 
                 };
