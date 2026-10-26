@@ -44,7 +44,7 @@ export function renderTeacherButton() {
         );
 }
 
-function openToolsPanel() {
+export function openToolsPanel() {
 
     if (
         document.getElementById(
