@@ -9,13 +9,20 @@ export function generateWeeks(
 
     container.innerHTML = "";
 
-    const weekNumbers = [
+    const weekNumbers = [];
 
-        centerWeek - 1,
-        centerWeek,
-        centerWeek + 1
+for (
+    let week = 1;
+    week <= 52;
+    week++
+) {
 
-    ];
+    weekNumbers.push(
+        week
+    );
+
+}
+
 
     weekNumbers.forEach(
         (weekNo,index) => {
