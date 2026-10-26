@@ -96,6 +96,10 @@ export function renderSchedule(schedule) {
                                 <div class="room">
                                     📍 ${lesson.roomName || "Ukjent rom"}
                                 </div>
+
+                                <div class="teacher">
+                                    👤 ${lesson.teacherName || ""}
+                                </div>
                                 
                                 <div
                                     class="time">
