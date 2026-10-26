@@ -126,4 +126,24 @@ export function openImportModal() {
         </div>
         `
     );
+
+
+    document
+        .getElementById("saveSchedule")
+        ?.addEventListener(
+            "click",
+            saveImportedSchedule
+        );
+    
+}
+
+async function saveImportedSchedule() {
+
+    const jsonText =
+        document.getElementById(
+            "scheduleJson"
+        ).value;
+
+    console.log(jsonText);
+
 }
