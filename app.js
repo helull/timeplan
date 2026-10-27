@@ -365,7 +365,8 @@ const examMap =
 
 renderSchedule(
     schedule,
-    homeworkMap
+    homeworkMap,
+    examMap
 );
 
 
