@@ -64,6 +64,33 @@ export function renderSchedule(
                                 )
 
                         );
+
+
+                
+                day.innerHTML = `
+
+                    <div class="header">
+
+                        <h1>
+
+                            ${dayName}
+
+                        </h1>
+
+                        <div
+                            class="week-number">
+
+                            UKE ${weekNo}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                lessons.forEach(
+                    lesson => {
+
 const duration =
 
     (
@@ -96,32 +123,7 @@ const durationClass =
     ? "lesson-short"
 
     : "lesson-long";
-
-                
-                day.innerHTML = `
-
-                    <div class="header">
-
-                        <h1>
-
-                            ${dayName}
-
-                        </h1>
-
-                        <div
-                            class="week-number">
-
-                            UKE ${weekNo}
-
-                        </div>
-
-                    </div>
-
-                `;
-
-                lessons.forEach(
-                    lesson => {
-
+                        
 const showTeacherNames =
     localStorage.getItem(
         "showTeacherNames"
