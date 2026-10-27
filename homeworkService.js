@@ -14,7 +14,8 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 export async function saveHomework(
     lessonId,
     week,
-    text
+    text,
+    exam = false
 ) {
 
     const studentId =
@@ -38,11 +39,13 @@ export async function saveHomework(
             lessonId,
             week,
             text,
+            exam,
             updatedAt:
                 serverTimestamp()
         }
 
     );
+
     location.reload();
 }
 
@@ -74,13 +77,24 @@ export async function loadHomework(
         !snap.exists()
     ) {
 
-        return "";
+        return {
+            text: "",
+            exam: false
+        };
     }
 
-    return (
-        snap.data().text
-        || ""
-    );
+    const data =
+        snap.data();
+
+    return {
+
+        text:
+            data.text || "",
+
+        exam:
+            data.exam || false
+
+    };
 }
 
 export async function loadAllHomework() {
@@ -116,19 +130,20 @@ export async function loadAllHomework() {
             const key =
                 `${data.lessonId}_${data.week}`;
 
-            homeworkMap[key] =
-                data.text;
+            homeworkMap[key] = {
+
+                text:
+                    data.text || "",
+
+                exam:
+                    data.exam || false
+
+            };
         }
     );
 
     return homeworkMap;
 }
-
-saveExamFlag(
-    lessonId,
-    week,
-    value
-)
 
 loadExamFlag(
     lessonId,
