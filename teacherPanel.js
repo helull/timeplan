@@ -205,18 +205,6 @@ export function openAdminPanel() {
                     Administrasjon
                 </h2>
 
-                <button id="newLesson">
-                    Ny time
-                </button>
-
-                <button id="newHoliday">
-                    Ferie
-                </button>
-
-                <button id="newDayOff">
-                    Fridag
-                </button>
-
                 <button id="importSchedule">
                     Importer JSON
                 </button>
