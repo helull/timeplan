@@ -144,8 +144,3 @@ export async function loadAllHomework() {
 
     return homeworkMap;
 }
-
-loadExamFlag(
-    lessonId,
-    week
-)
