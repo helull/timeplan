@@ -46,7 +46,8 @@ export function renderTeacherButton() {
 
 export function openToolsPanel() {
 
-    const enabled = localStorage.getItem("showTeacherNames") === "true";
+    const teachersenabled = localStorage.getItem("showTeacherNames") === "true";
+    const roomsenabled = localStorage.getItem("showRooms") === "true";
     
     if (
         document.getElementById(
@@ -73,11 +74,11 @@ export function openToolsPanel() {
                 </h2>
 
                 <button id="toggleTeacherNames">
-                   ${enabled ? "Skjul lærere" : "Vis lærere"}
+                   ${teachersenabled ? "Skjul lærere" : "Vis lærere"}
                 </button>
                 
                 <button id="toggleRooms">
-                   ${enabled ? "Skjul rom" : "Vis rom"}
+                   ${roomsenabled ? "Skjul rom" : "Vis rom"}
                 </button>
 
                 <button id="logoutUser">
