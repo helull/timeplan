@@ -703,8 +703,39 @@ h1{
     min-height:75px;
 }
 
+
+
+
+
+
 .exam-lesson {
     border: 6px solid #ff0000 !important;
     box-sizing: border-box;
-    box-shadow: 0 0 12px #ff0000;
+    position: relative;
+    overflow: hidden;
+}
+
+.exam-lesson::before {
+
+    content: "PRØVE";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-25deg);
+
+    font-size: 3rem;
+    font-weight: 900;
+
+    color: rgba(255,255,255,0.25);
+
+    letter-spacing: 8px;
+
+    pointer-events: none;
+
+    z-index: 1;
 }
