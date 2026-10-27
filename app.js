@@ -358,6 +358,9 @@ const schedule =
     
 const homeworkMap =
     await loadAllHomework();
+    
+const examMap =
+    await loadAllExamFlags();
 
 renderSchedule(
     schedule,
