@@ -689,3 +689,11 @@ h1{
     white-space:
         pre-wrap;
 }
+
+.lesson-long{
+    min-height:100px;
+}
+
+.lesson-short{
+    min-height:75px;
+}
