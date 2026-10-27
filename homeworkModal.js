@@ -7,7 +7,7 @@ import {
 from "./homeworkService.js";
 
 const TEACHER_PASSWORD =
-    "DITT_PASSORD";
+    "TEMP123";
 
 export async function openHomeworkModal(
     lessonId,
