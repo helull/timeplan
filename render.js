@@ -143,7 +143,6 @@ export function renderSchedule(
     ] === true;
 
                         let homework = "";
-                        let isExam = false;
 
                         if (
                             typeof lessonData ===
