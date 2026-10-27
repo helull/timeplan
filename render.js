@@ -10,7 +10,8 @@ from "./colors.js";
 
 export function renderSchedule(
     schedule,
-    homeworkMap = {}
+    homeworkMap = {},
+    examMap = {}
 ) {
 
     const weeks =
@@ -136,6 +137,10 @@ export function renderSchedule(
                             homeworkMap[
                                 `${lesson.lessonId}_${weekNo}`
                             ];
+                        const isExam =
+    examMap[
+        `${lesson.lessonId}_${weekNo}`
+    ] === true;
 
                         let homework = "";
                         let isExam = false;
@@ -149,18 +154,23 @@ export function renderSchedule(
                                 lessonData;
 
                         }
-                        else if (
-                            lessonData
-                        ) {
+                        if (
+    typeof lessonData ===
+    "string"
+) {
 
-                            homework =
-                                lessonData.text || "";
+    homework =
+        lessonData;
 
-                            isExam =
-                                lessonData.exam === true;
+}
+else if (
+    lessonData
+) {
 
-                        }
+    homework =
+        lessonData.text || "";
 
+}
                         day.innerHTML += `
 
                             <div class="
