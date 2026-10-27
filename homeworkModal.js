@@ -1,8 +1,6 @@
 import {
     saveHomework,
-    loadHomework,
-    saveExamFlag,
-    loadExamFlag
+    loadHomework
 }
 from "./homeworkService.js";
 
@@ -22,11 +20,17 @@ export async function openHomeworkModal(
         return;
     }
 
-    const currentText =
-        await loadHomework(
-            lessonId,
-            week
-        );
+ const homeworkData =
+    await loadHomework(
+        lessonId,
+        week
+    );
+
+const currentText =
+    homeworkData.text;
+
+let examEnabled =
+    homeworkData.exam;
 
     let examEnabled =
         await loadExamFlag(
@@ -109,13 +113,12 @@ ${currentText || ""}
                         .value
                         .trim();
 
-                await saveHomework(
-
-                    lessonId,
-                    week,
-                    text
-
-                );
+await saveHomework(
+    lessonId,
+    week,
+    text,
+    examEnabled
+);
 
                 alert(
                     "Lagret"
