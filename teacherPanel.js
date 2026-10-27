@@ -96,7 +96,7 @@ const classId =
                 </button>
 
                 <button id="openAdmin">
-                    Lærer
+                    Login lærer
                 </button>
                 
                 <button id="closeTools">    
