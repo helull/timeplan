@@ -49,11 +49,8 @@ export function openToolsPanel() {
     const teachersenabled = localStorage.getItem("showTeacherNames") === "true";
     const roomsenabled = localStorage.getItem("showRooms") === "true";
     
-    if (
-        document.getElementById(
-            "toolsModal"
-        )
-    ) {
+    if (document.getElementById("toolsModal")) 
+    {
         return;
     }
 
@@ -227,6 +224,10 @@ export function openAdminPanel() {
                 <button id="howToImport">
                     Hvordan importere fra bilde?
                 </button>
+
+                <button id="closeAdmin">    
+                    Lukk
+                </button>
             </div>
 
         </div>
@@ -245,6 +246,16 @@ export function openAdminPanel() {
         "click",
         openImportHelpModal
     );
+
+    document
+    .getElementById(
+        "closeAdmin"
+    )
+    ?.addEventListener(
+        "click",
+        closeAdminPanel
+    );
+    
 }
 
 export function openImportModal() {
@@ -276,11 +287,12 @@ export function openImportModal() {
 
                 <br><br>
 
-                <button
-                    id="saveSchedule">
-
+                <button id="saveSchedule">
                     Lagre
+                </button>
 
+                <button id="closeImport">    
+                    Lukk
                 </button>
 
             </div>
@@ -296,6 +308,14 @@ export function openImportModal() {
             "click",
             saveImportedSchedule
         );
+    document
+       .getElementById(
+        "closeImport"
+    )
+    ?.addEventListener(
+        "click",
+        closeImportPanel
+    );
     
 }
 export function openImportHelpModal() {
@@ -426,6 +446,14 @@ Regler:
 
             }
         );
+        document
+       .getElementById(
+        "closeImportHelp"
+    )
+    ?.addEventListener(
+        "click",
+        closeImportHelpPanel
+    );
 }
 
 async function copyImportPrompt() {
@@ -614,3 +642,36 @@ function closeToolsPanel() {
         ?.remove();
 
 }
+
+function closeAdminPanel() {
+
+    document
+        .getElementById(
+            "adminModal"
+        )
+        ?.remove();
+
+}
+
+
+function closeImportPanel() {
+
+    document
+        .getElementById(
+            "importModal"
+        )
+        ?.remove();
+
+}
+
+function closeImportHelpPanel() {
+
+    document
+        .getElementById(
+            "importHelpModal"
+        )
+        ?.remove();
+
+}
+
+
