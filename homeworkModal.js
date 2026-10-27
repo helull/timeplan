@@ -137,7 +137,7 @@ await saveHomework(
     )
     ?.addEventListener(
         "click",
-        () => {
+        async () => {
 
             const password =
                 prompt(
