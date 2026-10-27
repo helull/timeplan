@@ -702,3 +702,8 @@ h1{
 .lesson-short{
     min-height:75px;
 }
+
+.exam-lesson {
+    border: 6px solid #ff0000 !important;
+    box-sizing: border-box;
+}
