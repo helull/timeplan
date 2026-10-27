@@ -7,7 +7,8 @@ import {
     setDoc,
     serverTimestamp,
     collection,
-    getDocs
+    getDocs,
+    deleteDoc
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
@@ -143,4 +144,95 @@ export async function loadAllHomework() {
     );
 
     return homeworkMap;
+}
+
+export async function saveExamFlag(
+    lessonId,
+    week,
+    exam
+) {
+
+    const documentId =
+        `${lessonId}_${week}`;
+
+    if (!exam) {
+
+        await deleteDoc(
+            doc(
+                db,
+                "exams",
+                documentId
+            )
+        );
+
+        return;
+    }
+
+    await setDoc(
+
+        doc(
+            db,
+            "exams",
+            documentId
+        ),
+
+        {
+            lessonId,
+            week,
+            exam: true,
+            updatedAt:
+                serverTimestamp()
+        }
+    );
+}
+
+export async function loadExamFlag(
+    lessonId,
+    week
+) {
+
+    const documentId =
+        `${lessonId}_${week}`;
+
+    const snap =
+        await getDoc(
+
+            doc(
+                db,
+                "exams",
+                documentId
+            )
+
+        );
+
+    return snap.exists();
+}
+
+export async function loadAllExamFlags() {
+
+    const snapshot =
+        await getDocs(
+            collection(
+                db,
+                "exams"
+            )
+        );
+
+    const examMap = {};
+
+    snapshot.docs.forEach(
+        doc => {
+
+            const data =
+                doc.data();
+
+            const key =
+                `${data.lessonId}_${data.week}`;
+
+            examMap[key] =
+                true;
+        }
+    );
+
+    return examMap;
 }
