@@ -57,6 +57,16 @@ export function openToolsPanel() {
         return;
     }
 
+const studentName =
+    localStorage.getItem(
+        "studentName"
+    ) || "";
+
+const classId =
+    localStorage.getItem(
+        "classId"
+    ) || "";
+    
     document.body.insertAdjacentHTML(
 
         "beforeend",
@@ -70,7 +80,7 @@ export function openToolsPanel() {
                 class="modal-card">
 
                 <h2>
-                    Verktøy
+                    Verktøy - ${studentName} (${classId})
                 </h2>
 
                 <button id="toggleTeacherNames">
