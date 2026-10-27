@@ -325,6 +325,8 @@ h1{
         padding:12px;
     }
 
+    .subject{font-size:1rem;}
+    
     .days{
         width:auto;
 
@@ -340,9 +342,13 @@ h1{
     }
 
     .lesson{
-        min-height:110px;
+        min-height:70px;
     }
-
+    
+    .time{
+        font-size:.8rem;
+    }
+    
     h1{
         font-size:1.2rem;
         text-align:center;
@@ -353,6 +359,10 @@ h1{
         font-size:.8rem;
     }
 
+    .lesson-homework{
+        font-size:.75rem;
+    }
+    
     .dots{
         display:none;
     }
