@@ -64,7 +64,40 @@ export function renderSchedule(
                                 )
 
                         );
+const duration =
 
+    (
+        parseInt(
+            lesson.end.split(":")[0]
+        ) * 60 +
+
+        parseInt(
+            lesson.end.split(":")[1]
+        )
+
+    )
+
+    -
+
+    (
+        parseInt(
+            lesson.start.split(":")[0]
+        ) * 60 +
+
+        parseInt(
+            lesson.start.split(":")[1]
+        )
+    );
+
+const durationClass =
+
+    duration <= 45
+
+    ? "lesson-short"
+
+    : "lesson-long";
+
+                
                 day.innerHTML = `
 
                     <div class="header">
@@ -108,8 +141,7 @@ const homework =
                         
                         day.innerHTML += `
 
-                            <div
-                                class="lesson ${getSubjectColor(lesson.subject)}">
+                            <div class="lesson ${durationClass} ${getSubjectColor(lesson.subject)}">
                                 
                                 <div class="lesson-top">
                                 
