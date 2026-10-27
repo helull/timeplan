@@ -32,12 +32,6 @@ const currentText =
 let examEnabled =
     homeworkData.exam;
 
-    let examEnabled =
-        await loadExamFlag(
-            lessonId,
-            week
-        );
-
     document.body.insertAdjacentHTML(
 
         "beforeend",
@@ -134,71 +128,65 @@ await saveHomework(
         );
 
     document
-        .getElementById(
-            "toggleExam"
-        )
-        ?.addEventListener(
-            "click",
-            async () => {
+    .getElementById(
+        "toggleExam"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
 
-                const password =
-                    prompt(
-                        "Passord for prøvemarkering:"
-                    );
-
-                if (
-                    password !==
-                    TEACHER_PASSWORD
-                ) {
-                    alert(
-                        "Feil passord"
-                    );
-                    return;
-                }
-
-                examEnabled =
-                    !examEnabled;
-
-                await saveExamFlag(
-                    lessonId,
-                    week,
-                    examEnabled
+            const password =
+                prompt(
+                    "Passord for prøvemarkering:"
                 );
 
-                const button =
-                    document.getElementById(
-                        "toggleExam"
-                    );
-
-                if (
-                    examEnabled
-                ) {
-
-                    button.style.background =
-                        "#ff0000";
-
-                    button.style.color =
-                        "#ffffff";
-
-                }
-                else {
-
-                    button.style.background =
-                        "";
-
-                    button.style.color =
-                        "";
-
-                }
-
+            if (
+                password !==
+                TEACHER_PASSWORD
+            ) {
                 alert(
-                    examEnabled
-                        ? "Prøve slått PÅ"
-                        : "Prøve slått AV"
+                    "Feil passord"
                 );
+                return;
+            }
+
+            examEnabled =
+                !examEnabled;
+
+            const button =
+                document.getElementById(
+                    "toggleExam"
+                );
+
+            if (
+                examEnabled
+            ) {
+
+                button.style.background =
+                    "#ff0000";
+
+                button.style.color =
+                    "#ffffff";
 
             }
-        );
+            else {
+
+                button.style.background =
+                    "";
+
+                button.style.color =
+                    "";
+
+            }
+
+            alert(
+                examEnabled
+                    ? "Prøve slått PÅ"
+                    : "Prøve slått AV"
+            );
+
+        }
+    );
 
     document
         .getElementById(
