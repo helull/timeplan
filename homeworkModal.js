@@ -1,6 +1,8 @@
 import {
     saveHomework,
-    loadHomework
+    loadHomework,
+    saveExamFlag,
+    loadExamFlag
 }
 from "./homeworkService.js";
 
@@ -30,7 +32,10 @@ const currentText =
     homeworkData.text;
 
 let examEnabled =
-    homeworkData.exam;
+    await loadExamFlag(
+        lessonId,
+        week
+    );
 
     document.body.insertAdjacentHTML(
 
@@ -110,8 +115,7 @@ ${currentText || ""}
 await saveHomework(
     lessonId,
     week,
-    text,
-    examEnabled
+    text
 );
 
                 alert(
@@ -153,6 +157,12 @@ await saveHomework(
             examEnabled =
                 !examEnabled;
 
+            await saveExamFlag(
+                lessonId,
+                week,
+                examEnabled
+            );
+            
             const button =
                 document.getElementById(
                     "toggleExam"
