@@ -43,6 +43,7 @@ export async function saveHomework(
         }
 
     );
+    location.reload();
 }
 
 export async function loadHomework(
