@@ -375,11 +375,11 @@ h1{
 @media (orientation:landscape) and (max-width:900px){
 
     .lesson-short{
-        min-height:22px !important;
+        min-height:30px !important;
     }
 
     .lesson-long{
-        min-height:40px !important;
+        min-height:50px !important;
     }
     
     .lesson-top{
@@ -430,7 +430,7 @@ h1{
     /* Små fagkort */
 
 .lesson{
-    min-height:22px;
+    min-height:30px;
     padding:2px 4px;
     margin-bottom:2px;
     border-radius:8px;
@@ -438,11 +438,11 @@ h1{
 }
 
 .lesson-short{
-    min-height:22px;
+    min-height:30px;
 }
 
 .lesson-long{
-    min-height:26px;
+    min-height:50px;
 }
     /* Fagnavn */
 
