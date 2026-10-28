@@ -374,6 +374,18 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
+    .lesson-short{
+        min-height:22px !important;
+    }
+
+    .lesson-long{
+        min-height:26px !important;
+    }
+    
+    .lesson-top{
+        gap:4px;
+    }
+    
     .days{
         width:auto;
         display:grid;
@@ -422,6 +434,7 @@ h1{
     padding:2px 4px;
     margin-bottom:2px;
     border-radius:8px;
+    overflow:hidden;
 }
 
 .lesson-short{
@@ -436,7 +449,7 @@ h1{
     .subject{
         font-size:.7rem;
         font-weight:700;
-
+        line-height:1;
         white-space:nowrap;
         overflow:hidden;
         text-overflow:ellipsis;
