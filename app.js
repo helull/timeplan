@@ -26,6 +26,11 @@ import {
 from "./teacherLogin.js";
 
 import {
+    disableTeacherMode
+}
+from "./teacher.js";
+
+import {
     openToolsPanel
 }
 from "./teacherPanel.js";
@@ -69,6 +74,8 @@ let startX = 0;
 let startY = 0;
 
 let overviewMode = false;
+
+disableTeacherMode();
 
 const todayPosition =
     getCurrentSchoolPosition();
