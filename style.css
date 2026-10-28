@@ -482,20 +482,21 @@ h1{
        men veldig kompakt */
 
     .lesson-homework{
-        margin-top:2px;
-        padding-top:2px;
-        padding-right:0;
+    margin-top:1px;
+    padding-top:0;
+    border-top:none;
 
-        font-size:.6rem;
-        line-height:1.1;
+    font-size:.5rem;
+    line-height:1;
+    color:rgba(255,255,255,.9);
 
-        max-height:14px;
+    max-height:20px;
 
-        overflow:hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-    }
-
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+  
     .assignment,
     .homework,
     .assignment-note{
