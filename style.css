@@ -391,8 +391,12 @@ h1{
     }
 
     .header{
-        margin-bottom:4px;
+        margin-bottom:2px;
         text-align:center;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:4px;
     }
 
     /* Dag + uke veldig kompakt */
@@ -413,21 +417,20 @@ h1{
 
     /* Små fagkort */
 
-    .lesson{
-        min-height:38px;
-        padding:4px 6px;
-        margin-bottom:3px;
-        border-radius:10px;
-    }
+.lesson{
+    min-height:22px;
+    padding:2px 4px;
+    margin-bottom:2px;
+    border-radius:8px;
+}
 
-    .lesson-short{
-        min-height:38px;
-    }
+.lesson-short{
+    min-height:22px;
+}
 
-    .lesson-long{
-        min-height:48px;
-    }
-
+.lesson-long{
+    min-height:26px;
+}
     /* Fagnavn */
 
     .subject{
@@ -441,10 +444,16 @@ h1{
 
     /* Skjul lærer og rom */
 
-    .teacher,
-    .room{
-        display:none !important;
-    }
+    .teacher{
+    display:none !important;
+}
+
+.room{
+    display:block;
+    font-size:.55rem;
+    margin-top:1px;
+    line-height:1;
+}
 
     /* Skjul lekse-knappen */
 
