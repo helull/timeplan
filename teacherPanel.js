@@ -158,7 +158,7 @@ function adminLogin() {
 
         return;
     }
-    enableTeachermode();
+    enableTeacherMode();
     openAdminPanel();
 }
 
