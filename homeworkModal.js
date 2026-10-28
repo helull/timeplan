@@ -11,9 +11,6 @@ import {
 }
 from "./teacher.js";
 
-const teacherMode =
-    isTeacher();
-
 const TEACHER_PASSWORD =
     "TEMP123";
 
@@ -30,6 +27,9 @@ export async function openHomeworkModal(
         return;
     }
 
+var teacherMode =
+    isTeacher();
+    
  const homeworkData =
     await loadHomework(
         lessonId,
