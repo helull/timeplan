@@ -123,7 +123,22 @@ const isDayHoliday =
 
                     </div>
 
-if (isWeekHoliday) {
+
+                    
+
+  ${
+        startsLate
+        ?
+        `
+        <div class="late-start">
+            ⋯         ⋯ 
+        </div>
+        `
+        :
+        ""
+    }
+                `;
+                if (isWeekHoliday) {
 
     day.innerHTML += `
 
@@ -141,20 +156,6 @@ if (isWeekHoliday) {
 
     return;
 }
-                    
-
-  ${
-        startsLate
-        ?
-        `
-        <div class="late-start">
-            ⋯         ⋯ 
-        </div>
-        `
-        :
-        ""
-    }
-                `;
 
 
                 if (isDayHoliday) {
