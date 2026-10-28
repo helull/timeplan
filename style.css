@@ -763,22 +763,25 @@ h1{
     font-weight:600;
 }
 
-.room{
+.room-teacher{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
 
     margin-top:4px;
+}
 
-    font-size:.9rem;
+.room{
 
-    opacity:.95;
+    font-weight:700;
+    margin:0;
 }
 
 .teacher{
 
-    margin-top:2px;
-
-    font-size:.8rem;
-
-    opacity:.85;
+    font-style:italic;
+    margin:0;
 }
 
 .lesson-top{
