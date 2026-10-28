@@ -31,7 +31,7 @@ export function renderTeacherButton() {
         id="toolButton"
         class="admin-button">
 
-        🛠 Verktøy
+        Admin - verktøy
 
     </button>
     `
@@ -41,7 +41,7 @@ export function renderTeacherButton() {
         .getElementById("toolButton")
         ?.addEventListener(
             "click",
-            openToolsPanel
+            openAdminPanel
         );
 }
 
