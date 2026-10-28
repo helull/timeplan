@@ -6,6 +6,11 @@ import {
 }
 from "./homeworkService.js";
 
+import {
+    isTeacher
+}
+from "./teacher.js";
+
 const TEACHER_PASSWORD =
     "TEMP123";
 
