@@ -736,7 +736,7 @@ h1{
     background:#10b981;
 }
 
-.teacher-mode .menu-button{
+.teacher-mode.menu-button{
     background:#dc2626;
     color:white;
 }
