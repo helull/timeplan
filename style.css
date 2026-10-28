@@ -367,6 +367,148 @@ h1{
         display:none;
     }
 }
+
+
+/*=============
+    Landskap på telefon
+*/ ===============
+
+/* ========================
+   TELEFON LANDSKAP
+======================== */
+
+@media (orientation:landscape) and (max-width:900px) and (max-height:500px){
+
+    .days{
+        width:auto;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+
+        gap:3px;
+        padding:3px;
+
+        transform:none !important;
+    }
+
+    .day{
+        width:auto;
+        padding:3px;
+    }
+
+    .header{
+        margin-bottom:4px;
+        text-align:center;
+    }
+
+    /* Dag + uke veldig kompakt */
+
+    h1{
+        font-size:.7rem;
+        line-height:1.1;
+        text-align:center;
+        margin:0;
+    }
+
+    .week-number{
+        font-size:.7rem;
+        margin:0;
+        display:inline;
+        color:#6b7280;
+    }
+
+    /* Små fagkort */
+
+    .lesson{
+        min-height:38px;
+        padding:4px 6px;
+        margin-bottom:3px;
+        border-radius:10px;
+    }
+
+    .lesson-short{
+        min-height:38px;
+    }
+
+    .lesson-long{
+        min-height:48px;
+    }
+
+    /* Fagnavn */
+
+    .subject{
+        font-size:.7rem;
+        font-weight:700;
+
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    /* Skjul lærer og rom */
+
+    .teacher,
+    .room{
+        display:none !important;
+    }
+
+    /* Skjul lekse-knappen */
+
+    .homework-button{
+        display:none !important;
+    }
+
+    /* Tid mindre */
+
+    .time{
+        font-size:.6rem;
+        margin-top:2px;
+    }
+
+    /* Lekser og prøver vises,
+       men veldig kompakt */
+
+    .lesson-homework{
+        margin-top:2px;
+        padding-top:2px;
+        padding-right:0;
+
+        font-size:.6rem;
+        line-height:1.1;
+
+        max-height:14px;
+
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+    }
+
+    .assignment,
+    .homework,
+    .assignment-note{
+        font-size:.6rem;
+
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .assignment{
+        margin-top:2px;
+        padding:2px 4px;
+    }
+
+    .dots{
+        display:none;
+    }
+
+    /* Gjør prøve-merket litt mindre */
+
+    .exam-lesson::before{
+        font-size:1rem;
+        letter-spacing:2px;
+    }
+}
+
 /* ========================
    REGISTRERING
 ======================== */
