@@ -315,10 +315,10 @@ h1{
 }
 
 /* ========================
-   LANDSKAP
+   LANDSKAP PÅ PC/MAC
 ======================== */
 
-@media (orientation:landscape){
+@media (orientation:landscape) and and (min-width:901px){
 
     .day{
         width:auto;
@@ -367,7 +367,7 @@ h1{
         display:none;
     }
 }
-
+*/
 
 /*=============
     Landskap på telefon
@@ -377,7 +377,7 @@ h1{
    TELEFON LANDSKAP
 ======================== */
 
-@media (orientation:landscape) and (max-width:900px) and (max-height:500px){
+@media (orientation:landscape) and (max-width:900px){
 
     .days{
         width:auto;
