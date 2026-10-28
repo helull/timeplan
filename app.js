@@ -341,6 +341,32 @@ document.addEventListener(
     }
 );
 
+document.addEventListener(
+
+    "keydown",
+
+    e => {
+
+        if (e.key === "ArrowDown") {
+
+            e.preventDefault();
+            nextWeek();
+
+        }
+
+        else if (
+            e.key === "ArrowUp"
+        ) {
+
+            e.preventDefault();
+            previousWeek();
+
+        }
+
+    }
+
+);
+
 window.addEventListener(
     "resize",
     render
@@ -405,16 +431,3 @@ document
         }
 
     );
-
-/* document
-    .getElementById(
-        "menuButton"
-    )
-    ?.addEventListener(
-
-        "click",
-
-        openToolsPanel
-
-    );
-*/
