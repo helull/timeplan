@@ -207,7 +207,7 @@ export function openAdminPanel() {
                 </button>
                 
                 <button id="howToImport">
-                    Hvordan importere fra bilde?
+                    Bruk AI !
                 </button>
 
                 <button id="closeAdmin">    
@@ -270,7 +270,7 @@ export function openImportModal() {
                 class="modal-card">
 
                 <h2>
-                    Importer timeplan
+                    Importer timeplan, se FØRST instruksjon i "Bruk AI !"
                 </h2>
 
                 <textarea
