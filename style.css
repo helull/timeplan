@@ -449,10 +449,7 @@ h1{
 }
 
 .room{
-    display:block;
-    font-size:.55rem;
-    margin-top:1px;
-    line-height:1;
+     display:none !important;
 }
 
     /* Skjul lekse-knappen */
