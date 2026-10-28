@@ -11,6 +11,7 @@ export function enableTeacherMode(){
         "teacherMode",
         "true"
     );
+    document.getElementById("menuButton").classList.add("teacher-mode");
 }
 
 export function disableTeacherMode(){
@@ -18,4 +19,6 @@ export function disableTeacherMode(){
     localStorage.removeItem(
         "teacherMode"
     );
+    document.getElementById("menuButton").classList.remove("teacher-mode");
+
 }
