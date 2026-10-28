@@ -7,6 +7,12 @@ import {
 from "./homeworkService.js";
 
 import {
+    saveDayHoliday,
+    saveWeekHoliday
+}
+from "./holidayService.js";
+
+import {
     isTeacher
 }
 from "./teacher.js";
@@ -138,10 +144,14 @@ ${
     )
     ?.addEventListener(
         "click",
-        () => {
-
+        async () => {
+            await saveDayHoliday(
+                week,
+                1
+            );
+           
             alert(
-                "Knappen virker"
+                "Fridag lagret for uke ${week}, dag ${weekday}"
             );
 
         }
@@ -153,10 +163,12 @@ document
     )
     ?.addEventListener(
         "click",
-        () => {
-
+        async () => {
+            await saveWeekHoliday(
+                week
+            );
             alert(
-                "Knappen virker"
+                "Fri-uke lagret for uke ${week}"
             );
 
         }
