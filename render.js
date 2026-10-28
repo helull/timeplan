@@ -4,9 +4,17 @@ import {
 from "./homeworkModal.js";
 
 import {
+    loadHolidays
+}
+from "./holidayService.js";
+
+import {
     getSubjectColor
 }
 from "./colors.js";
+
+const holidays =
+    await loadHolidays();
 
 export function renderSchedule(
     schedule,
