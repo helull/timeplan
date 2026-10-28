@@ -263,7 +263,7 @@ ${
     <div
         class="lesson-homework">
 
-        📝 ${homework}
+         ${homework}
 
     </div>
     `
