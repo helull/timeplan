@@ -480,8 +480,8 @@ h1{
 
     .lesson-homework{
     margin-top:1px;
-    padding-top:0;
-    border-top:none;
+    padding-top:0 !important;
+    border-top:none !important;
 
     font-size:.5rem !important;
     line-height:1;
