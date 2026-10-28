@@ -654,7 +654,7 @@ h1{
 ======================== */
 
 .holiday-card{
-
+    min-height:80%;
     background:
         linear-gradient(
             135deg,
@@ -666,7 +666,7 @@ h1{
 }
 
 .dayoff-card{
-
+    min-height:80%;
     background:
         linear-gradient(
             135deg,
