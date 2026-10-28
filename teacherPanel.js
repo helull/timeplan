@@ -88,10 +88,6 @@ const classId =
                    ${roomsenabled ? "Skjul rom" : "Vis rom"}
                 </button>
 
-                <button id="logoutUser">
-                    Logg ut
-                </button>
-
                 <button id="openAdmin">
                     Login lærer
                 </button>
@@ -113,15 +109,6 @@ const classId =
         ?.addEventListener(
             "click",
             adminLogin
-        );
-
-    document
-        .getElementById(
-            "logoutUser"
-        )
-        ?.addEventListener(
-            "click",
-            logoutUser
         );
    
     document
@@ -176,7 +163,11 @@ function adminLogin() {
 }
 
 function logoutUser() {
-
+    let svar = confirm("Du logger nå ut, og får mulighet til å knytte deg til en annen klasse. Har du lagret lekser på din bruker blir de nå borte!");
+    if (!svar) {
+         return;
+    }
+        
     localStorage.clear();
 
     location.reload();
@@ -204,7 +195,11 @@ export function openAdminPanel() {
                 <h2>
                     Administrasjon
                 </h2>
-
+                
+                <button id="logoutUser">
+                    Logg ut
+                </button>
+                
                 <button id="importSchedule">
                     Importer JSON
                 </button>
@@ -221,7 +216,15 @@ export function openAdminPanel() {
         </div>
         `
     );
-
+    
+    document
+        .getElementById(
+            "logoutUser"
+        )
+        ?.addEventListener(
+            "click",
+            logoutUser
+        );
     document
         .getElementById("importSchedule")
         ?.addEventListener(
