@@ -43,6 +43,33 @@ export function renderSchedule(
                 const weekday =
                     index + 1;
 
+                const isWeekHoliday =
+    holidays.some(
+
+        holiday =>
+
+            holiday.type === "week" &&
+
+            holiday.week ===
+            Number(weekNo)
+
+    );
+
+const isDayHoliday =
+    holidays.some(
+
+        holiday =>
+
+            holiday.type === "day" &&
+
+            holiday.week ===
+            Number(weekNo) &&
+
+            holiday.weekday ===
+            weekday
+
+    );
+
                 const dayName = [
 
                     "Mandag",
@@ -96,6 +123,26 @@ export function renderSchedule(
 
                     </div>
 
+if (isWeekHoliday) {
+
+    day.innerHTML += `
+
+        <div class="lesson holiday-card">
+
+            <div class="subject">
+
+                🎉 FRIUKE
+
+            </div>
+
+        </div>
+
+    `;
+
+    return;
+}
+                    
+
   ${
         startsLate
         ?
@@ -109,6 +156,27 @@ export function renderSchedule(
     }
                 `;
 
+
+                if (isDayHoliday) {
+
+    day.innerHTML += `
+
+        <div class="lesson dayoff-card">
+
+            <div class="subject">
+
+                🌴 FRIDAG
+
+            </div>
+
+        </div>
+
+    `;
+
+    return;
+}
+                
+                
                 lessons.forEach(
                     lesson => {
 
