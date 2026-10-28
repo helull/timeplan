@@ -160,7 +160,8 @@ function adminLogin() {
         return;
     }
     enableTeacherMode();
-    openAdminPanel();
+    closeToolsPanel();
+    /*  openAdminPanel();  */
 }
 
 function logoutUser() {
