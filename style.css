@@ -881,3 +881,16 @@ h1{
 
     z-index: 1;
 }
+
+.late-start{
+
+    text-align:center;
+
+    color:#9ca3af;
+
+    margin:0 0 6px 0;
+
+    font-size:1.2rem;
+
+    line-height:1;
+}
