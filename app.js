@@ -26,12 +26,14 @@ import {
 from "./teacherLogin.js";
 
 import {
+    isTeacher,
     disableTeacherMode
 }
 from "./teacher.js";
 
 import {
-    openToolsPanel
+    openToolsPanel,
+    openAdminPanel
 }
 from "./teacherPanel.js";
 
@@ -376,28 +378,35 @@ renderSchedule(
     examMap
 );
 
-
     render();
-    if (localStorage.getItem("teacherMode") === "true") {
-        document.body.classList.add("teacher-mode");
-    }
     renderTeacherButton();
-
-if (
-    localStorage.getItem(
-        "teacherMode"
-    ) === "true"
-) {
-
-    document.body.classList.add(
-        "teacher-mode"
-    );
-}
 }
 
 init();
 
 document
+    .getElementById("menuButton")
+    ?.addEventListener(
+
+        "click",
+
+        () => {
+
+            if (isTeacher()) {
+
+                openAdminPanel();
+
+            } else {
+
+                openToolsPanel();
+
+            }
+
+        }
+
+    );
+
+/* document
     .getElementById(
         "menuButton"
     )
@@ -408,3 +417,4 @@ document
         openToolsPanel
 
     );
+*/
