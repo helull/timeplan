@@ -210,6 +210,7 @@ else if (
                                     </div>
 
                                 </div>
+                                <div class="room-teacher">
 
 ${
     showRooms
@@ -218,7 +219,7 @@ ${
     `
     <div class="room">
 
-        📍 ${lesson.roomName || ""}
+         ${lesson.roomName || ""}
 
     </div>
     `
@@ -235,8 +236,9 @@ ${
     `
     <div class="teacher">
 
-        👤 ${lesson.teacherName || ""}
+         ${lesson.teacherName || ""}
 
+    </div>
     </div>
     `
 
