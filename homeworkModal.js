@@ -11,6 +11,9 @@ import {
 }
 from "./teacher.js";
 
+const teacherMode =
+    isTeacher();
+
 const TEACHER_PASSWORD =
     "TEMP123";
 
@@ -55,22 +58,29 @@ let examEnabled =
                 class="modal-card">
 
                 <h2>
-                    Lekser
+                    ${teacherMode ? "Ferie og fridager (for hele appen) og prøvemarkering (for din klasse)" : "Lekser(for deg) og prøvemarkering (for hele klassen)"}
                 </h2>
 
-                <textarea
-                    id="homeworkText"
-                    rows="8"
-                    style="width:100%;">
+${
+    teacherMode
+    ? ""
+    : `
+    <textarea
+        id="homeworkText"
+        rows="8"
+        style="width:100%;">
 
 ${currentText || ""}
 
-                </textarea>
+    </textarea>
 
-                <br><br>
+    <br><br>
+    `
+}
 
                 <button
-                    id="saveHomework">
+                    id="saveHomework"
+                    ${teacherMode ? "disabled" : ""}>
 
                     Lagre
 
@@ -87,6 +97,28 @@ ${currentText || ""}
 
                 </button>
 
+${
+    teacherMode
+    ?
+    `
+    <button
+        id="leggInnFridag">
+
+        Gjør dagen til fridag
+
+    </button>
+
+    <button
+        id="leggInnFriuke">
+
+        Gjør hele uken til friuke
+
+    </button>
+    `
+    :
+    ""
+}
+
                 <button
                     id="closeHomework">
 
@@ -100,6 +132,37 @@ ${currentText || ""}
         `
     );
 
+    document
+    .getElementById(
+        "leggInnFridag"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            alert(
+                "Knappen virker"
+            );
+
+        }
+    );
+
+document
+    .getElementById(
+        "leggInnFriuke"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            alert(
+                "Knappen virker"
+            );
+
+        }
+    );
+
+    
     document
         .getElementById(
             "saveHomework"
