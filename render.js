@@ -66,6 +66,9 @@ export function renderSchedule(
 
                         );
 
+                const startsLate =
+                    lessons.length &&
+                    lessons[0].start !== "08:15";
                 day.innerHTML = `
 
                     <div class="header">
@@ -85,6 +88,17 @@ export function renderSchedule(
 
                     </div>
 
+  ${
+        startsLate
+        ?
+        `
+        <div class="late-start">
+            ⋯ Starter senere
+        </div>
+        `
+        :
+        ""
+    }
                 `;
 
                 lessons.forEach(
