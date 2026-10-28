@@ -151,7 +151,7 @@ ${
             );
            
             alert(
-                "Fridag lagret for uke ${week}, dag ${weekday}"
+                `Fridag lagret for uke ${week}, dag ${weekday}`
             );
 
         }
@@ -168,7 +168,7 @@ document
                 week
             );
             alert(
-                "Fri-uke lagret for uke ${week}"
+                `Fri-uke lagret for uke ${week}`
             );
 
         }
