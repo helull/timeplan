@@ -1,10 +1,18 @@
 import {
     openHomeworkModal
 }
+    
 from "./homeworkModal.js";
 
 import {
-    loadHolidays
+    isTeacher
+}
+from "./teacher.js";
+
+import {
+    loadHolidays,
+    removeDayHoliday,
+    removeWeekHoliday
 }
 from "./holidayService.js";
 
@@ -140,19 +148,36 @@ const isDayHoliday =
                 `;
                 if (isWeekHoliday) {
 
-    day.innerHTML += `
 
-        <div class="lesson holiday-card">
+                    
+day.innerHTML += `
 
-            <div class="subject">
+    <div class="lesson holiday-card">
 
-                🎉 FRI DENNE UKE
+        <div class="subject">
 
-            </div>
+            FRI DENNE UKE
 
         </div>
 
-    `;
+        ${
+            isTeacher()
+            ?
+            `
+            <button
+                class="homework-button delete-week-holiday"
+                data-week="${weekNo}">
+
+                ✕ Fjern Friuke
+            </button>
+            `
+            :
+            ""
+        }
+
+    </div>
+
+`;
 
     return;
 }
@@ -160,19 +185,36 @@ const isDayHoliday =
 
                 if (isDayHoliday) {
 
+                    
     day.innerHTML += `
 
-        <div class="lesson dayoff-card">
+    <div class="lesson dayoff-card">
 
-            <div class="subject">
+        <div class="subject">
 
-                IKKE UNDERVISNING IDAG!
-
-            </div>
+           IKKE UNDERVISNING IDAG!
 
         </div>
 
-    `;
+        ${
+            isTeacher()
+            ?
+            `
+            <button
+                class="homework-button delete-day-holiday"
+                data-week="${weekNo}"
+                data-weekday="${weekday}">
+
+                ✕ Fjern undervisningsfri dag
+            </button>
+            `
+            :
+            ""
+        }
+
+    </div>
+
+`;
 
     return;
 }
@@ -382,6 +424,56 @@ ${
 
                         }
                     );
+                document
+    .querySelectorAll(
+        ".delete-week-holiday"
+    )
+    .forEach(
+        button => {
+
+            button.onclick =
+                async () => {
+
+                    await removeWeekHoliday(
+
+                        Number(
+                            button.dataset.week
+                        )
+
+                    );
+
+                    location.reload();
+                };
+
+        }
+    );
+                document
+    .querySelectorAll(
+        ".delete-day-holiday"
+    )
+    .forEach(
+        button => {
+
+            button.onclick =
+                async () => {
+
+                    await removeDayHoliday(
+
+                        Number(
+                            button.dataset.week
+                        ),
+
+                        Number(
+                            button.dataset.weekday
+                        )
+
+                    );
+
+                    location.reload();
+                };
+
+        }
+    );
             }
         );
     });
