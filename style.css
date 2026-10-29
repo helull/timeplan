@@ -909,3 +909,12 @@ h1{
 
     line-height:1;
 }
+
+.teacher-only{
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    opacity:0;
+}
