@@ -113,7 +113,7 @@ export function renderSchedule(
                         ?
                         `
                         <div class="late-start">
-                            ⋯ ⋯
+                            •••
                         </div>
                         `
                         :
