@@ -175,11 +175,22 @@ export function renderSchedule(
                     return;
                 }
 
+                let lunchRendered = false;
                 lessons.forEach(
                     lesson => {
+                        if (
+                            !lunchRendered &&
+                            lesson.start >= "12:00"
+                        ) {
+                            day.innerHTML += `
+                                <div class="lunch-break">
+                                    •••
+                                </div>
+                            `;
+                            lunchRendered = true;
+                        }
 
-                        const duration =
-
+                        const duration =    
                             (
                                 parseInt(
                                     lesson.end.split(":")[0]
@@ -188,7 +199,6 @@ export function renderSchedule(
                                 parseInt(
                                     lesson.end.split(":")[1]
                                 )
-
                             )
 
                             -
