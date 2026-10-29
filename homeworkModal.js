@@ -154,7 +154,7 @@ ${
             );
            
             alert(
-                `Undervisningsfri dag lagret for uke ${week}, dag ${weekday}`
+                `Denne dag er nå undervisningsfri for uke ${week}`
             );
 
         }
