@@ -419,11 +419,15 @@ h1{
 @media (orientation:landscape) and (max-width:900px){
 
     .late-start{
-        font-size: 0.8rem;
-        font-weight: 700;
+        font-size: 0.5rem;
+        font-weight: 400;
         letter-spacing: 6px;
     }
-
+    .lunch-break{
+        font-size: 0.5rem;
+        font-weight: 400;
+        letter-spacing: 6px;
+    }
     
     .lesson-short{
         min-height:30px !important;
@@ -964,7 +968,7 @@ h1{
 
 .lunch-break{
     text-align:center;
-    margin:2px 0;
+    margin:0;
     font-size:1.1rem;
     font-weight:900;
     letter-spacing:6px;
