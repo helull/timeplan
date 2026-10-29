@@ -146,7 +146,7 @@ const isDayHoliday =
 
             <div class="subject">
 
-                🎉 FRIUKE
+                🎉 FRI DENNE UKE
 
             </div>
 
@@ -166,7 +166,7 @@ const isDayHoliday =
 
             <div class="subject">
 
-                🌴 FRIDAG
+                IKKE UNDERVISNING IDAG!
 
             </div>
 
