@@ -160,20 +160,14 @@ day.innerHTML += `
 
         </div>
 
-        ${
-            isTeacher()
-            ?
-            `
-            <button
-                class="homework-button delete-week-holiday"
-                data-week="${weekNo}">
+        <button
+    class="homework-button delete-week-holiday"
+    data-week="${weekNo}"
+    disabled>
 
-                ✕ Fjern Friuke
-            </button>
-            `
-            :
-            ""
-        }
+    ✕ Fjern Friuke
+
+</button>
 
     </div>
 
@@ -195,23 +189,13 @@ day.innerHTML += `
            IKKE UNDERVISNING IDAG!
 
         </div>
-
-        ${
-            isTeacher()
-            ?
-            `
             <button
                 class="homework-button delete-day-holiday"
                 data-week="${weekNo}"
                 data-weekday="${weekday}">
-
                 ✕ Fjern undervisningsfri dag
-            </button>
-            `
-            :
-            ""
-        }
-
+          </button>
+          
     </div>
 
 `;
