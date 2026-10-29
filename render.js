@@ -306,7 +306,8 @@ export function renderSchedule(
                                 <button
                                     class="homework-button"
                                     data-lesson="${lesson.lessonId}"
-                                    data-week="${weekNo}">
+                                    data-week="${weekNo}"
+                                    data-weekday="${weekday}">
 
                                     📝
 
@@ -351,6 +352,10 @@ export function renderSchedule(
 
                             Number(
                                 button.dataset.week
+                            ),
+                            
+                            Number(
+                                button.dataset.weekday
                             )
 
                         );
