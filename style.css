@@ -911,10 +911,14 @@ h1{
 }
 
 .teacher-only{
-
     visibility:hidden;
-
-    pointer-events:none;
-
     opacity:0;
+    pointer-events:none;
+}
+
+.teacher-only.teacher-active{
+
+    visibility:visible;
+    opacity:1;
+    pointer-events:auto;
 }
