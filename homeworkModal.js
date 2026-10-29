@@ -22,7 +22,8 @@ const TEACHER_PASSWORD =
 
 export async function openHomeworkModal(
     lessonId,
-    week
+    week,
+    weekday
 ) {
 
     if (
@@ -150,11 +151,11 @@ ${
         async () => {
             await saveDayHoliday(
                 week,
-                1
+                weekday
             );
            
             alert(
-                `Denne dag er nå undervisningsfri for uke ${week}`
+                `${weekday} i uke ${week} er nå underevisningsfri`
             );
 
         }
