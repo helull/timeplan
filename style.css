@@ -27,7 +27,7 @@ body{
 }
 
 
-button:not(.homework-button) {
+button:not(.homework-button):not(.menu-button) {
     padding: 10px 18px;
 
     border: none;
@@ -36,13 +36,13 @@ button:not(.homework-button) {
     background: #2563eb;
     color: white;
 
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 2px 6px rgba(0,0,0,.12);
+        0 1px 4px rgba(0,0,0,.12);
 
     transition:
         background .2s ease,
@@ -50,7 +50,7 @@ button:not(.homework-button) {
         box-shadow .2s ease;
 }
 
-button:not(.homework-button):hover {
+button:not(.homework-button):not(.menu-button):hover {
     background: #1d4ed8;
 
     transform: translateY(-1px);
@@ -59,14 +59,14 @@ button:not(.homework-button):hover {
         0 4px 10px rgba(0,0,0,.16);
 }
 
-button:not(.homework-button):active {
+button:not(.homework-button):not(.menu-button):active {
     transform: translateY(0);
 
     box-shadow:
         0 1px 3px rgba(0,0,0,.12);
 }
 
-button:not(.homework-button):disabled {
+button:not(.homework-button):not(.menu-button):disabled {
     background: #9ca3af;
     cursor: not-allowed;
     box-shadow: none;
@@ -945,6 +945,7 @@ h1{
 }
 
 .late-start{
+    text-align: center;
     margin: 0;
     padding: 0;
     font-size: 1.4rem;
