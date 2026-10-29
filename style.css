@@ -945,11 +945,10 @@ h1{
 }
 
 .late-start{
-    text-align:center;
-    color:#9ca3af;
-    margin:0 0 2px 0;
-    font-size:0.2rem;
-    line-height:1;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #6b7280;
 }
 
 .teacher-only{
