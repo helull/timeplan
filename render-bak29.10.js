@@ -192,7 +192,8 @@ day.innerHTML += `
             <button
                 class="homework-button delete-day-holiday"
                 data-week="${weekNo}"
-                data-weekday="${weekday}">
+                data-weekday="${weekday}"
+                disabled>
                 ✕ Fjern undervisningsfri dag
           </button>
           
