@@ -133,7 +133,7 @@ export function renderSchedule(
                             </div>
 
                             <button
-                                class="homework-button delete-week-holiday"
+                                class="homework-button delete-week-holiday teacher-only"
                                 data-week="${weekNo}"
                                 disabled>
 
@@ -159,7 +159,7 @@ export function renderSchedule(
                             </div>
 
                             <button
-                                class="homework-button delete-day-holiday"
+                                class="homework-button delete-day-holiday teacher-only"
                                 data-week="${weekNo}"
                                 data-weekday="${weekday}"
                                 disabled>
