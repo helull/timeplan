@@ -11,49 +11,58 @@ export function enableTeacherMode(){
         "teacherMode",
         "true"
     );
-    document.getElementById("menuButton").classList.add("teacher-mode");
-        document
-        .querySelectorAll(
-            ".delete-week-holiday"
+
+    document
+        .getElementById(
+            "menuButton"
         )
-        .forEach(
-            button =>
-                button.disabled = false
+        .classList.add(
+            "teacher-mode"
         );
 
     document
         .querySelectorAll(
-            ".delete-day-holiday"
+            ".teacher-only"
         )
         .forEach(
-            button =>
-                button.disabled = false
+            button => {
+
+                button.classList.add(
+                    "teacher-active"
+                );
+
+                button.disabled = false;
+            }
         );
 }
 
 export function disableTeacherMode(){
 
-    localStorage.removeItem(
-        "teacherMode"
+    localStorage.setItem(
+        "teacherMode",
+        "false"
     );
-    
-    document.getElementById("menuButton").classList.remove("teacher-mode");
 
-        document
-        .querySelectorAll(
-            ".delete-week-holiday"
+    document
+        .getElementById(
+            "menuButton"
         )
-        .forEach(
-            button =>
-                button.disabled = true
+        ?.classList.remove(
+            "teacher-mode"
         );
 
     document
         .querySelectorAll(
-            ".delete-day-holiday"
+            ".teacher-only"
         )
         .forEach(
-            button =>
-                button.disabled = true
+            button => {
+
+                button.classList.remove(
+                    "teacher-active"
+                );
+
+                button.disabled = true;
+            }
         );
 }
