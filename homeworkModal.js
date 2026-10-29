@@ -64,7 +64,7 @@ let examEnabled =
                 class="modal-card">
 
                 <h2>
-                    ${teacherMode ? "Ferie og fridager (for hele appen) og prøvemarkering (for din klasse)" : "Lekser(for deg) og prøvemarkering (for hele klassen)"}
+                    ${teacherMode ? "Ferie og undervisningsfri dager (for hele appen) og prøvemarkering (for din klasse)" : "Lekser(for deg) og prøvemarkering (for hele klassen)"}
                 </h2>
 
 ${
@@ -92,6 +92,7 @@ ${currentText || ""}
 
                 </button>
 
+                <br><br>
                 <button
                     id="toggleExam"
                     style="
@@ -99,7 +100,7 @@ ${currentText || ""}
                         color:${examEnabled ? "#ffffff" : ""};
                     ">
 
-                    Prøve
+                    For denne timen: Prøve
 
                 </button>
 
@@ -107,24 +108,26 @@ ${
     teacherMode
     ?
     `
+    <br><br>
     <button
         id="leggInnFridag">
 
-        Gjør dagen til fridag
+        For alle klasser: Gjør denne dagen undervisningsfri
 
     </button>
 
+    <br><br>
     <button
         id="leggInnFriuke">
 
-        Gjør hele uken til friuke
+        For alle klasser: Gjør hele uken til friuke
 
     </button>
     `
     :
     ""
 }
-
+                <br><br>
                 <button
                     id="closeHomework">
 
@@ -151,7 +154,7 @@ ${
             );
            
             alert(
-                `Fridag lagret for uke ${week}, dag ${weekday}`
+                `Undervisningsfri dag lagret for uke ${week}, dag ${weekday}`
             );
 
         }
