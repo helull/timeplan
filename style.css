@@ -418,6 +418,13 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
+    .late-start{
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 6px;
+    }
+
+    
     .lesson-short{
         min-height:30px !important;
     }
