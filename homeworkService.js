@@ -154,7 +154,8 @@ export async function loadAllHomework() {
 export async function saveExamFlag(
     lessonId,
     week,
-    exam
+    exam,
+    subject
 ) {
 
     const documentId =
@@ -166,13 +167,6 @@ export async function saveExamFlag(
             "exams",
             documentId
         );
-
-    /*
-       Hvis brukeren trykker på
-       "Prøve" når flagget allerede
-       finnes, skal vi forsøke å
-       slette det.
-    */
 
     if (!exam) {
 
@@ -189,8 +183,7 @@ export async function saveExamFlag(
             snap.data();
 
         /*
-           Lærer kan alltid
-           slette prøveflagg.
+           Lærer kan alltid slette.
         */
 
         if (isTeacher()) {
@@ -203,10 +196,24 @@ export async function saveExamFlag(
         }
 
         /*
-           Elevmodus:
-           Hvis lærer har satt
-           prøven, skal den ikke
-           kunne slettes.
+           Hvis fag ikke stemmer,
+           skal det ikke slettes.
+        */
+
+        if (
+            data.subject !== subject
+        ) {
+
+            alert(
+                "Kan ikke slette prøve for annet fag."
+            );
+
+            return;
+        }
+
+        /*
+           Elev kan ikke slette
+           læreropprettet prøve.
         */
 
         if (
@@ -220,22 +227,12 @@ export async function saveExamFlag(
             return;
         }
 
-        /*
-           Ikke satt av lærer:
-           Eleven får lov til å
-           slette.
-        */
-
         await deleteDoc(
             examRef
         );
 
         return;
     }
-
-    /*
-       Opprett prøveflagg
-    */
 
     await setDoc(
 
@@ -244,9 +241,9 @@ export async function saveExamFlag(
         {
             lessonId,
             week,
+            subject,
             exam: true,
             teacher: isTeacher(),
-            subject: "kommer senere",
             updatedAt:
                 serverTimestamp()
         }
