@@ -44,9 +44,11 @@ var teacherMode =
 const currentText =
     homeworkData.text;
 
+const classId = localStorage.getItem("classId") || "";
+    
 let examInfo =
     await loadExamFlag(
-        className,
+        classId,
         lessonId,
         week
     );
