@@ -29,7 +29,7 @@ body{
 
 button:not(.homework-button):not(.menu-button) {
     padding: 5px 10px;
-
+    margin:10px;
     border: none;
     border-radius: 8px;
 
@@ -702,12 +702,12 @@ h1{
 
 .modal-card{
 
+.modal-card {
+    background: #f8fbff;    
+    border: 1px solid #dbeafe;
+    box-shadow: 0 12px 40px rgba(0,0,0,.15);
     width:min(450px,92vw);
-
-    background:white;
-
     border-radius:24px;
-
     padding:24px;
 }
 /* ========================
