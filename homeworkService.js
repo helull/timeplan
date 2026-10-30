@@ -158,7 +158,8 @@ export async function saveExamFlag(
     subject
 ) {
 
-    const className = <her>
+
+    const className = localStorage.getItem("classId") || "";
     const documentId =
         `${className}_${lessonId}_${week}`;
 
