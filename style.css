@@ -419,16 +419,18 @@ h1{
 @media (orientation:landscape) and (max-width:900px){
 
     .late-start{
-        font-size: 0.5rem;
-        font-weight: 400;
+        margin: -4px;
+        font-size: 0.3rem;
+        font-weight: 200;
         letter-spacing: 6px;
-        line-height:0.3;
+        line-height:0.2;
     }
     .lunch-break{
-        font-size: 0.5rem;
-        font-weight: 400;
+        margin: -4px;
+        font-size: 0.3rem;
+        font-weight: 200;
         letter-spacing: 6px;
-        line-height:0.3;
+        line-height:0.2;
     }
     
     .lesson-short{
@@ -958,6 +960,7 @@ h1{
 }
 
 .late-start{
+    margin:-4px 0 4px 0;
     opacity: .6;
     text-align: center;
     margin: 0;
@@ -970,6 +973,7 @@ h1{
 }
 
 .lunch-break{
+    margin:-4px 0 4px 0;
     opacity: .6;
     text-align:center;
     margin:0;
