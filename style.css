@@ -520,7 +520,6 @@ h1{
     }
 
     .room-teacher{
-        margin:1px 0 -5px;
         display:flex;
         justify-content:flex-end;
         align-items:center;
@@ -534,6 +533,11 @@ h1{
         margin: 1px 0 -5px;
     }
 
+    /* Lekse skal komme på samme linje som romnummer hvis det vises */
+    .lesson-homework{
+        padding-right:4px;
+    }
+    
     /* Skjul lekse-knappen */
 
     .homework-button{
