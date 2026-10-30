@@ -4,7 +4,7 @@ from "./firebase.js";
 import {
     isTeacher
 }
-from "teacher.js";
+from "./teacher.js";
 
 import {
     doc,
