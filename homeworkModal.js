@@ -46,11 +46,13 @@ var teacherMode =
 const currentText =
     homeworkData.text;
 
-let examEnabled =
+let examInfo =
     await loadExamFlag(
         lessonId,
         week
     );
+    
+let examEnabled = examInfo.exam;
 
     document.body.insertAdjacentHTML(
 
