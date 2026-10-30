@@ -535,7 +535,9 @@ h1{
 
     /* Lekse skal komme på samme linje som romnummer hvis det vises */
     .lesson-homework{
-        padding-right:4px;
+        padding-top:0 !important;
+        border-top:none !important;
+        margin-top:-8px;
     }
     
     /* Skjul lekse-knappen */
