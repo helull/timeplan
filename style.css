@@ -423,12 +423,14 @@ h1{
         font-weight: 200;
         letter-spacing: 6px;
         line-height:0.2;
+        margin:-10px 0 10px 0
     }
     .lunch-break{
         font-size: 0.3rem;
         font-weight: 200;
         letter-spacing: 6px;
         line-height:0.2;
+        margin:-10px 0 10px 0
     }
     
     .lesson-short{
@@ -964,7 +966,7 @@ h1{
 .late-start{
     opacity: .6;
     text-align: center;
-    margin: 0;
+    margin:-10px 0 10px 0
     padding: 0;
     font-size: 1.1rem;
     font-weight: 500;
@@ -974,6 +976,7 @@ h1{
 }
 
 .lunch-break{
+    margin:-10px 0 10px 0
     opacity: .6;
     text-align:center;
     font-size:1.1rem;
