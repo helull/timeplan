@@ -521,7 +521,10 @@ h1{
 
     .room-teacher{
         margin:1px 0 -5px;
-        text-align: right;
+        display:flex;
+        justify-content:flex-end;
+        align-items:center;
+        gap:8px;
     }
 
     .room{
@@ -969,7 +972,7 @@ h1{
 .late-start{
     opacity: .6;
     text-align: center;
-    margin:-10px 0 10px 0
+    margin:-10px 0 10px 0;
     padding: 0;
     font-size: 1.1rem;
     font-weight: 500;
@@ -979,7 +982,7 @@ h1{
 }
 
 .lunch-break{
-    margin:-10px 0 10px 0
+    margin:-10px 0 10px 0;
     opacity: .6;
     text-align:center;
     font-size:1.1rem;
