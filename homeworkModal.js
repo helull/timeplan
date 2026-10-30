@@ -229,8 +229,7 @@ const success =
         lessonId,
         week,
         newState,
-        subject,
-        className
+        subject
     );
 
 if (!success) {
