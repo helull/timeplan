@@ -249,7 +249,7 @@ ${currentText || ""}
                 ) {
 
                     const blockText =
-                        await openBlockExamModal();
+                        await openBlockExamModal(week);
 
                     if (
                         blockText === null
