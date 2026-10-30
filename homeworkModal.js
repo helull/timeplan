@@ -91,7 +91,7 @@ ${currentText || ""}
                     id="saveHomework"
                     ${teacherMode ? "disabled" : ""}>
 
-                    Lagre
+                    Lagre lekser
 
                 </button>
 
