@@ -518,13 +518,15 @@ h1{
     }
 
     .room-teacher{
-        margin-top:1px;
+        margin:1px 0 -5px;
+        text-align: right;
     }
 
     .room{
-        font-size:.2rem;
+        font-size:.5rem;
         font-style:italic;
-        margin:0;
+        text-align: right;
+        margin: 1px 0 -5px;
     }
 
     /* Skjul lekse-knappen */
