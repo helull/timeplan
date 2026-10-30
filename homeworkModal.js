@@ -219,15 +219,24 @@ await saveHomework(
     ?.addEventListener(
         "click",
         async () => {
-            examEnabled =
-                !examEnabled;
+            const newState =
+    !examEnabled;
 
-            await saveExamFlag(
-                lessonId,
-                week,
-                examEnabled,
-                lesson.subject
-            );
+const success =
+    await saveExamFlag(
+        lessonId,
+        week,
+        newState,
+        lesson.subject
+    );
+
+if (!success) {
+    return;
+}
+
+examEnabled =
+    newState;
+
             
             const button =
                 document.getElementById(
