@@ -46,6 +46,7 @@ const currentText =
 
 let examInfo =
     await loadExamFlag(
+        className,
         lessonId,
         week
     );
@@ -228,7 +229,8 @@ const success =
         lessonId,
         week,
         newState,
-        subject
+        subject,
+        className
     );
 
 if (!success) {
