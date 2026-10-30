@@ -20,7 +20,8 @@ from "./teacher.js";
 export async function openHomeworkModal(
     lessonId,
     week,
-    weekday
+    weekday,
+    subject
 ) {
 
     if (
@@ -227,7 +228,7 @@ const success =
         lessonId,
         week,
         newState,
-        lesson.subject
+        subject
     );
 
 if (!success) {
