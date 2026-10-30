@@ -111,7 +111,7 @@ ${currentText || ""}
                         color:${examEnabled ? "#ffffff" : ""};
                     ">
 
-                    Legg timen inn i Prøveplan
+                    Inn/ut av prøveplan
 
                 </button>
 
