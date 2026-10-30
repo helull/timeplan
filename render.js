@@ -226,12 +226,16 @@ export function renderSchedule(
                                 `${lesson.lessonId}_${weekNo}`
                             ];
 
-                        const isExam =
-
+                        const examData =
                             examMap[
                                 `${lesson.lessonId}_${weekNo}`
-                            ] === true;
+                            ];
 
+                        const isExam =
+                            examData?.exam ?? false;
+                        /* examData?.teacher    og   examData?.subject kan nå brukes*/
+
+                        
                         let homework = "";
 
                         if (
