@@ -206,7 +206,22 @@ export async function loadExamFlag(
 
         );
 
-    return snap.exists();
+    if (!snap.exists()) {
+
+    return {
+        exam: false,
+        teacher: false,
+        subject: ""
+    };
+}
+
+const data = snap.data();
+
+return {
+    exam: data.exam || false,
+    teacher: data.teacher || false,
+    subject: data.subject || ""
+};
 }
 
 export async function loadAllExamFlags() {
@@ -230,8 +245,17 @@ export async function loadAllExamFlags() {
             const key =
                 `${data.lessonId}_${data.week}`;
 
-            examMap[key] =
-                true;
+examMap[key] = {
+
+    exam: data.exam || false,
+
+    teacher:
+        data.teacher || false,
+
+    subject:
+        data.subject || ""
+
+};
         }
     );
 
