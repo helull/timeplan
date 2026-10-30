@@ -366,7 +366,8 @@ export function renderSchedule(
                             
                             Number(
                                 button.dataset.weekday
-                            )
+                            ),
+                            button.dataset.subject
 
                         );
 
