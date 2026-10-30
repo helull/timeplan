@@ -83,7 +83,6 @@ ${currentText || ""}
 
     </textarea>
 
-    <br><br>
     `
 }
 
@@ -95,7 +94,6 @@ ${currentText || ""}
 
                 </button>
 
-                <br><br>
                 <button
                     id="toggleExam"
                     style="
@@ -111,7 +109,7 @@ ${
     teacherMode
     ?
     `
-    <br><br>
+    
     <button
         id="leggInnFridag">
 
@@ -119,7 +117,7 @@ ${
 
     </button>
 
-    <br><br>
+    
     <button
         id="leggInnFriuke">
 
@@ -130,7 +128,7 @@ ${
     :
     ""
 }
-                <br><br>
+                
                 <button
                     id="closeHomework">
 
