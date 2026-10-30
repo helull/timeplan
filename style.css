@@ -28,7 +28,7 @@ body{
 
 
 button:not(.homework-button):not(.menu-button) {
-    padding: 10px 18px;
+    padding: 5px 10px;
 
     border: none;
     border-radius: 8px;
