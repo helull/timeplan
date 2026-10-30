@@ -176,15 +176,11 @@ export async function saveExamFlag(
             );
 
         if (!snap.exists()) {
-            return;
+            return false;
         }
 
         const data =
             snap.data();
-
-        /*
-           Lærer kan alltid slette.
-        */
 
         if (isTeacher()) {
 
@@ -192,13 +188,8 @@ export async function saveExamFlag(
                 examRef
             );
 
-            return;
+            return true;
         }
-
-        /*
-           Hvis fag ikke stemmer,
-           skal det ikke slettes.
-        */
 
         if (
             data.subject !== subject
@@ -208,13 +199,8 @@ export async function saveExamFlag(
                 "Kan ikke slette prøve for annet fag."
             );
 
-            return;
+            return false;
         }
-
-        /*
-           Elev kan ikke slette
-           læreropprettet prøve.
-        */
 
         if (
             data.teacher === true
@@ -224,14 +210,14 @@ export async function saveExamFlag(
                 "Kan ikke slettes, satt av lærer."
             );
 
-            return;
+            return false;
         }
 
         await deleteDoc(
             examRef
         );
 
-        return;
+        return true;
     }
 
     await setDoc(
@@ -248,6 +234,8 @@ export async function saveExamFlag(
                 serverTimestamp()
         }
     );
+
+    return true;
 }
 
 export async function loadExamFlag(
