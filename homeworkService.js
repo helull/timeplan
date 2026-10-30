@@ -155,11 +155,12 @@ export async function saveExamFlag(
     lessonId,
     week,
     exam,
-    subject
+    subject,
+    className
 ) {
 
     const documentId =
-        `${lessonId}_${week}`;
+        `${className}_${lessonId}_${week}`;
 
     const examRef =
         doc(
@@ -225,6 +226,7 @@ export async function saveExamFlag(
         examRef,
 
         {
+            className,
             lessonId,
             week,
             subject,
@@ -239,12 +241,13 @@ export async function saveExamFlag(
 }
 
 export async function loadExamFlag(
+    className,
     lessonId,
     week
 ) {
 
     const documentId =
-        `${lessonId}_${week}`;
+        `${className}_${lessonId}_${week}`;
 
     const snap =
         await getDoc(
