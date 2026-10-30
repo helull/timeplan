@@ -367,3 +367,66 @@ export async function saveBlockExam(
 
     return true;
 }
+
+export async function loadBlockExams(
+    week
+) {
+
+    const classId =
+        localStorage.getItem(
+            "classId"
+        ) || "";
+
+    let grade = "VG1";
+
+    if (
+        classId.startsWith("2")
+    ) {
+        grade = "VG2";
+    }
+
+    if (
+        classId.startsWith("3")
+    ) {
+        grade = "VG3";
+    }
+
+    const snapshot =
+        await getDocs(
+            collection(
+                db,
+                "blockExams"
+            )
+        );
+
+    return snapshot.docs
+        .map(
+            doc => ({
+                id: doc.id,
+                ...doc.data()
+            })
+        )
+        .filter(
+            exam =>
+                exam.week === week &&
+                exam.grade === grade
+        );
+
+}
+
+
+export async function deleteBlockExam(
+    docId
+) {
+
+    await deleteDoc(
+
+        doc(
+            db,
+            "blockExams",
+            docId
+        )
+
+    );
+
+}
