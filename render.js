@@ -30,6 +30,7 @@ export function renderSchedule(
     examMap = {}
 ) {
 
+    console.log("schedule.id er", schedule.id)
     const weeks =
         document.querySelectorAll(
             ".week"
