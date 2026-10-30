@@ -244,7 +244,8 @@ await saveHomework(
             await saveExamFlag(
                 lessonId,
                 week,
-                examEnabled
+                examEnabled,
+                lesson.subject
             );
             
             const button =
