@@ -3,7 +3,9 @@ import {
     loadHomework,
     saveExamFlag,
     loadExamFlag,
-    saveBlockExam
+    saveBlockExam,
+    loadBlockExams,
+    deleteBlockExam
 }
 from "./homeworkService.js";
 
@@ -351,7 +353,14 @@ ${currentText || ""}
         );
 }
 
-function openBlockExamModal() {
+async function openBlockExamModal(
+    week
+) {
+
+    const exams =
+        await loadBlockExams(
+            week
+        );
 
     return new Promise(
         resolve => {
@@ -369,14 +378,66 @@ function openBlockExamModal() {
 
                             <h3>
 
-                                Hva gjelder prøven?
+                                BLOKK-prøver
 
                             </h3>
+
+                            <div
+                                id="blockExamList">
+
+                                ${
+                                    exams.length
+                                    ?
+                                    exams
+                                        .map(
+                                            exam =>
+                                                `
+                                                <div
+                                                    class="block-exam-row"
+                                                    style="
+                                                        display:flex;
+                                                        justify-content:space-between;
+                                                        align-items:center;
+                                                        margin:4px 0;
+                                                    ">
+
+                                                    <span>
+
+                                                        🧪 ${exam.title}
+
+                                                    </span>
+
+                                                    <button
+                                                        class="delete-block-exam"
+                                                        data-id="${exam.id}">
+
+                                                        ✕
+
+                                                    </button>
+
+                                                </div>
+                                                `
+                                        )
+                                        .join("")
+                                    :
+                                    `
+                                    <div>
+
+                                        Ingen registrerte prøver.
+
+                                    </div>
+                                    `
+                                }
+
+                            </div>
+
+                            <hr>
 
                             <input
                                 id="blockExamText"
                                 type="text"
                                 maxlength="20"
+                                placeholder="Ny prøve"
                                 style="
                                     width:100%;
                                     box-sizing:border-box;
@@ -387,14 +448,14 @@ function openBlockExamModal() {
                             <button
                                 id="saveBlockExam">
 
-                                Lagre
+                                Ny prøve
 
                             </button>
 
                             <button
                                 id="cancelBlockExam">
 
-                                Avbryt
+                                Lukk
 
                             </button>
 
@@ -405,64 +466,98 @@ function openBlockExamModal() {
                 );
 
             document
-                .getElementById(
-                    "saveBlockExam"
+                .querySelectorAll(
+                    ".delete-block-exam"
                 )
-                .addEventListener(
-                    "click",
-                    () => {
+                .forEach(
+                    button => {
 
-                        const text =
-                            document
-                                .getElementById(
-                                    "blockExamText"
-                                )
-                                .value
-                                .trim();
+                        button.onclick =
+                            async () => {
 
-                        if (!text) {
+                                if (
+                                    !confirm(
+                                        "Slette denne prøven?"
+                                    )
+                                ) {
+                                    return;
+                                }
 
-                            alert(
-                                "Skriv inn hva prøven gjelder."
-                            );
+                                await deleteBlockExam(
+                                    button.dataset.id
+                                );
 
-                            return;
-                        }
+                                document
+                                    .getElementById(
+                                        "blockExamModal"
+                                    )
+                                    ?.remove();
 
-                        document
-                            .getElementById(
-                                "blockExamModal"
-                            )
-                            ?.remove();
+                                resolve(
+                                    null
+                                );
 
-                        resolve(
-                            text
-                        );
+                            };
 
                     }
                 );
 
             document
                 .getElementById(
-                    "cancelBlockExam"
+                    "saveBlockExam"
                 )
-                .addEventListener(
-                    "click",
-                    () => {
+                .onclick =
+                () => {
 
+                    const text =
                         document
                             .getElementById(
-                                "blockExamModal"
+                                "blockExamText"
                             )
-                            ?.remove();
+                            .value
+                            .trim();
 
-                        resolve(
-                            null
+                    if (!text) {
+
+                        alert(
+                            "Skriv inn hva prøven gjelder."
                         );
 
+                        return;
                     }
-                );
+
+                    document
+                        .getElementById(
+                            "blockExamModal"
+                        )
+                        ?.remove();
+
+                    resolve(
+                        text
+                    );
+
+                };
+
+            document
+                .getElementById(
+                    "cancelBlockExam"
+                )
+                .onclick =
+                () => {
+
+                    document
+                        .getElementById(
+                            "blockExamModal"
+                        )
+                        ?.remove();
+
+                    resolve(
+                        null
+                    );
+
+                };
 
         }
     );
+
 }
