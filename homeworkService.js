@@ -155,10 +155,10 @@ export async function saveExamFlag(
     lessonId,
     week,
     exam,
-    subject,
-    className
+    subject
 ) {
 
+    const className = <her>
     const documentId =
         `${className}_${lessonId}_${week}`;
 
