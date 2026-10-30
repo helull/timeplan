@@ -2,6 +2,11 @@ import { db }
 from "./firebase.js";
 
 import {
+    isTeacher
+}
+from "teacher.js";
+
+import {
     doc,
     getDoc,
     setDoc,
@@ -181,6 +186,7 @@ export async function saveExamFlag(
             week,
             exam: true,
             teacher: isTeacher(),
+            subject: "kommer senere",
             updatedAt:
                 serverTimestamp()
         }
