@@ -317,7 +317,8 @@ export function renderSchedule(
                                     class="homework-button"
                                     data-lesson="${lesson.lessonId}"
                                     data-week="${weekNo}"
-                                    data-weekday="${weekday}">
+                                    data-weekday="${weekday}"
+                                    data-subject="${lesson.subject}">
 
                                     📝
 
