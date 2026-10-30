@@ -512,15 +512,20 @@ h1{
         text-overflow:ellipsis;
     }
 
-    /* Skjul lærer og rom */
-
+    /* Skjul lærer */
     .teacher{
-    display:none !important;
-}
+        display:none !important;
+    }
 
-.room{
-     display:none !important;
-}
+    .room-teacher{
+        margin-top:1px;
+    }
+
+    .room{
+        font-size:.2rem;
+        font-style:italic;
+        margin:0;
+    }
 
     /* Skjul lekse-knappen */
 
