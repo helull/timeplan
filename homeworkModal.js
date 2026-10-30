@@ -17,9 +17,6 @@ import {
 }
 from "./teacher.js";
 
-const TEACHER_PASSWORD =
-    "TEMP123";
-
 export async function openHomeworkModal(
     lessonId,
     week,
@@ -222,22 +219,6 @@ await saveHomework(
     ?.addEventListener(
         "click",
         async () => {
-
-            const password =
-                prompt(
-                    "Passord for prøvemarkering:"
-                );
-
-            if (
-                password !==
-                TEACHER_PASSWORD
-            ) {
-                alert(
-                    "Feil passord"
-                );
-                return;
-            }
-
             examEnabled =
                 !examEnabled;
 
