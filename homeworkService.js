@@ -180,6 +180,7 @@ export async function saveExamFlag(
             lessonId,
             week,
             exam: true,
+            teacher: isTeacher(),
             updatedAt:
                 serverTimestamp()
         }
