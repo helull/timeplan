@@ -68,7 +68,7 @@ let examEnabled = examInfo.exam;
                 class="modal-card">
 
                 <h2>
-                    ${teacherMode ? "Ferie og undervisningsfri dager (for hele appen) og prøvemarkering (for din klasse)" : "Lekser(for deg) og prøvemarkering (for hele klassen)"}
+                    ${teacherMode ? "Ferie og undervisningsfri dager (for hele appen) og prøvemarkering (for din klasse)" : "Lekser og prøveplan"}
                 </h2>
 
 ${
@@ -91,7 +91,7 @@ ${currentText || ""}
                     id="saveHomework"
                     ${teacherMode ? "disabled" : ""}>
 
-                    Lagre lekser
+                    Lagre mine lekser
 
                 </button>
 
@@ -102,7 +102,7 @@ ${currentText || ""}
                         color:${examEnabled ? "#ffffff" : ""};
                     ">
 
-                    For denne timen: Prøve
+                    Legg timen inn i Prøveplan for klassen
 
                 </button>
 
