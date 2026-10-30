@@ -10,6 +10,7 @@ import {
     doc,
     getDoc,
     setDoc,
+    addDoc,
     serverTimestamp,
     collection,
     getDocs,
@@ -315,4 +316,54 @@ examMap[key] = {
     );
 
     return examMap;
+}
+
+export async function saveBlockExam(
+    lessonId,
+    week,
+    title
+) {
+
+    const classId =
+        localStorage.getItem(
+            "classId"
+        ) || "";
+
+    let grade = "VG1";
+
+    if (
+        classId.startsWith("2")
+    ) {
+        grade = "VG2";
+    }
+
+    if (
+        classId.startsWith("3")
+    ) {
+        grade = "VG3";
+    }
+
+    await addDoc(
+
+        collection(
+            db,
+            "blockExams"
+        ),
+
+        {
+            lessonId,
+            week,
+            grade,
+            title,
+
+            teacher:
+                isTeacher(),
+
+            createdAt:
+                serverTimestamp()
+        }
+
+    );
+
+    return true;
 }
