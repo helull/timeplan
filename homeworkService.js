@@ -160,26 +160,86 @@ export async function saveExamFlag(
     const documentId =
         `${lessonId}_${week}`;
 
+    const examRef =
+        doc(
+            db,
+            "exams",
+            documentId
+        );
+
+    /*
+       Hvis brukeren trykker på
+       "Prøve" når flagget allerede
+       finnes, skal vi forsøke å
+       slette det.
+    */
+
     if (!exam) {
 
+        const snap =
+            await getDoc(
+                examRef
+            );
+
+        if (!snap.exists()) {
+            return;
+        }
+
+        const data =
+            snap.data();
+
+        /*
+           Lærer kan alltid
+           slette prøveflagg.
+        */
+
+        if (isTeacher()) {
+
+            await deleteDoc(
+                examRef
+            );
+
+            return;
+        }
+
+        /*
+           Elevmodus:
+           Hvis lærer har satt
+           prøven, skal den ikke
+           kunne slettes.
+        */
+
+        if (
+            data.teacher === true
+        ) {
+
+            alert(
+                "Kan ikke slettes, satt av lærer."
+            );
+
+            return;
+        }
+
+        /*
+           Ikke satt av lærer:
+           Eleven får lov til å
+           slette.
+        */
+
         await deleteDoc(
-            doc(
-                db,
-                "exams",
-                documentId
-            )
+            examRef
         );
 
         return;
     }
 
+    /*
+       Opprett prøveflagg
+    */
+
     await setDoc(
 
-        doc(
-            db,
-            "exams",
-            documentId
-        ),
+        examRef,
 
         {
             lessonId,
