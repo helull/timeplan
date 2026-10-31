@@ -431,7 +431,7 @@ h1{
         font-weight: 200;
         letter-spacing: 6px;
         line-height:1;
-        margin:10px 0 -10px 0
+        margin:20px 0 -20px 0 !important;
     }
     
     .lesson-short{
