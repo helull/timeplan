@@ -425,14 +425,14 @@ h1{
         line-height:0.2;
         margin:10px 0 -10px 0
     }
-    .lunch-break{
+/*    .lunch-break{
         background:yellow;
         font-size: 3rem;
         font-weight: 200;
         letter-spacing: 6px;
         line-height:10;
         margin:20px 0 -20px 0 !important;
-    }
+    }*/
     
     .lesson-short{
         min-height:30px !important;
