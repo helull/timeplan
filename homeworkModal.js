@@ -251,7 +251,7 @@ ${currentText || ""}
                 
 
                 /* BLOKKFAG */
-                console.log("subject og room er ", subject, room);
+                console.log("subject og roomName er ", subject, roomName);
 
                 if (isBlockSubject || isBlockRoom) {
 
