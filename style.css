@@ -426,7 +426,7 @@ h1{
         margin:10px 0 -10px 0
     }
     .lunch-break{
-        background:red;
+        background:yellow;
         font-size: 0.3rem;
         font-weight: 200;
         letter-spacing: 6px;
@@ -497,13 +497,6 @@ h1{
     overflow:hidden;
 }
 
-.lesson-short{
-    min-height:30px;
-}
-
-.lesson-long{
-    min-height:50px;
-}
     /* Fagnavn */
 
     .subject{
