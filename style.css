@@ -425,6 +425,10 @@ h1{
         line-height:0.2;
         margin:10px 0 -10px 0
     }
+    .lunch-break{
+        background:yellow;
+        font-size: 3rem;
+    }
 /*    .lunch-break{
         background:yellow;
         font-size: 3rem;
@@ -1003,4 +1007,12 @@ h1{
     visibility:visible;
     opacity:1;
     pointer-events:auto;
+}
+
+.lunch-break{
+    background:pink !important;
+}
+
+.late-start{
+    background:lime !important;
 }
