@@ -374,7 +374,8 @@ export function renderSchedule(
                                 button.dataset.weekday
                             ),
                             button.dataset.subject,
-                            schedule.id
+                            schedule.id,
+                            schedule.roomName
 
                         );
 
