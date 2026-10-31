@@ -24,7 +24,8 @@ export async function openHomeworkModal(
     lessonId,
     week,
     weekday,
-    subject
+    subject,
+    roomName
 ) {
 
     if (
@@ -241,12 +242,17 @@ ${currentText || ""}
                         .includes(
                             "BLOKK"
                         );
+                const isBlockRoom =
+                    roomName
+                        ?.toUpperCase()
+                        .includes(
+                            "BLOKK"
+                        );
+                
 
                 /* BLOKKFAG */
 
-                if (
-                    isBlockSubject
-                ) {
+                if (isBlockSubject || isBlockRoom) {
 
                     const blockText =
                         await openBlockExamModal(week);
