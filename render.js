@@ -362,7 +362,7 @@ export function renderSchedule(
 
                 button.onclick =
                     () => {
-
+                        console.log("før kallet: button.dataset.subject button.dataset.roomName", button.dataset.subject,button.dataset.roomName)
                         openHomeworkModal(
 
                             button.dataset.lesson,
