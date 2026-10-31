@@ -323,8 +323,9 @@ export function renderSchedule(
                                     data-lesson="${lesson.lessonId}"
                                     data-week="${weekNo}"
                                     data-weekday="${weekday}"
-                                    data-subject="${lesson.subject}">
-
+                                    data-subject="${lesson.subject}"
+                                    data-roomName="${lesson.roomName}">
+                                    
                                     📝
 
                                 </button>
@@ -374,9 +375,8 @@ export function renderSchedule(
                                 button.dataset.weekday
                             ),
                             button.dataset.subject,
-                            schedule.id,
-                            schedule.roomName
-
+                            /*schedule.id,*/
+                            button.dataset.roomName
                         );
 
                     };
