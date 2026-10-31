@@ -324,7 +324,7 @@ export function renderSchedule(
                                     data-week="${weekNo}"
                                     data-weekday="${weekday}"
                                     data-subject="${lesson.subject}"
-                                    data-roomName="${lesson.roomName}">
+                                    data-room-name="${lesson.roomName}">
                                     
                                     📝
 
@@ -363,6 +363,7 @@ export function renderSchedule(
                 button.onclick =
                     () => {
                         console.log("før kallet: button.dataset.subject button.dataset.roomName", button.dataset.subject,button.dataset.roomName)
+                        
                         openHomeworkModal(
 
                             button.dataset.lesson,
