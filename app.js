@@ -85,6 +85,9 @@ let overviewMode = false;
 
 disableTeacherMode();
 
+const tentamens =
+    await loadTentamens();
+
 const blockExams =
     await loadBlockExams();
 
@@ -410,7 +413,8 @@ renderSchedule(
     schedule,
     homeworkMap,
     examMap,
-    blockExams
+    blockExams,
+    tentamens
 );
 
     render();
