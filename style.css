@@ -428,10 +428,10 @@ h1{
 
     .lunch-break{
         background:yellow !important;
-        font-size:3rem !important;
+        font-size:2rem !important;
 
-        margin-top:40px !important;
-        margin-bottom:40px !important;
+        margin-top:10px !important;
+        margin-bottom:10px !important;
 
         line-height:1 !important;
         border:3px solid red !important;
@@ -1016,12 +1016,4 @@ h1{
     visibility:visible;
     opacity:1;
     pointer-events:auto;
-}
-
-.lunch-break{
-    background:pink !important;
-}
-
-.late-start{
-    background:lime !important;
 }
