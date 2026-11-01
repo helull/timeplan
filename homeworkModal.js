@@ -18,7 +18,11 @@ from "./homeworkService.js";
 
 import {
     saveDayHoliday,
-    saveWeekHoliday
+    saveWeekHoliday,
+    removeDayHoliday,
+    removeWeekHoliday,
+    hasDayHoliday,
+    hasWeekHoliday
 }
 from "./holidayService.js";
 
@@ -46,6 +50,18 @@ export async function openHomeworkModal(
     const teacherMode =
         isTeacher();
 
+    const dayHolidayEnabled =
+        await hasDayHoliday(
+            week,
+            weekday
+        );
+
+    const weekHolidayEnabled =
+        await hasWeekHoliday(
+            week
+        );
+    
+    
     const homeworkData =
         await loadHomework(
             lessonId,
@@ -128,7 +144,11 @@ ${currentText || ""}
                     ?
                     `
                     <button
-                        id="leggInnFridag">
+                        id="leggInnFridag"
+                        style="
+                            background:${dayHolidayEnabled ? "#ff0000" : ""};
+                            color:${dayHolidayEnabled ? "#ffffff" : ""};
+                        ">
 
                         For alle klasser:
                         Gjør denne dagen undervisningsfri
@@ -136,7 +156,11 @@ ${currentText || ""}
                     </button>
 
                     <button
-                        id="leggInnFriuke">
+                        id="leggInnFriuke"
+                            style="
+                            background:${weekHolidayEnabled ? "#ff0000" : ""};
+                            color:${weekHolidayEnabled ? "#ffffff" : ""};
+                        ">
 
                         For alle klasser:
                         Gjør hele uken til friuke
@@ -181,44 +205,113 @@ ${currentText || ""}
         }
     );
     
-    document
-        .getElementById(
-            "leggInnFridag"
-        )
-        ?.addEventListener(
-            "click",
-            async () => {
+let dayHolidayState =
+    dayHolidayEnabled;
+
+document
+    .getElementById(
+        "leggInnFridag"
+    )
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            const button =
+
+                document.getElementById(
+                    "leggInnFridag"
+                );
+
+            if (
+                dayHolidayState
+            ) {
+
+                await removeDayHoliday(
+                    week,
+                    weekday
+                );
+
+                dayHolidayState =
+                    false;
+
+            } else {
 
                 await saveDayHoliday(
                     week,
                     weekday
                 );
 
-                alert(
-                    `${weekday} i uke ${week} er nå undervisningsfri`
+                dayHolidayState =
+                    true;
+            }
+
+            button.style.background =
+
+                dayHolidayState
+                    ? "#ff0000"
+                    : "";
+
+            button.style.color =
+
+                dayHolidayState
+                    ? "#ffffff"
+                    : "";
+
+        }
+    );
+    
+  let weekHolidayState =
+    weekHolidayEnabled;
+
+document
+    .getElementById(
+        "leggInnFriuke"
+    )
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            const button =
+
+                document.getElementById(
+                    "leggInnFriuke"
                 );
 
-            }
-        );
+            if (
+                weekHolidayState
+            ) {
 
-    document
-        .getElementById(
-            "leggInnFriuke"
-        )
-        ?.addEventListener(
-            "click",
-            async () => {
+                await removeWeekHoliday(
+                    week
+                );
+
+                weekHolidayState =
+                    false;
+
+            } else {
 
                 await saveWeekHoliday(
                     week
                 );
 
-                alert(
-                    `Fri-uke lagret for uke ${week}`
-                );
-
+                weekHolidayState =
+                    true;
             }
-        );
+
+            button.style.background =
+
+                weekHolidayState
+                    ? "#ff0000"
+                    : "";
+
+            button.style.color =
+
+                weekHolidayState
+                    ? "#ffffff"
+                    : "";
+
+        }
+    );
 
     document
         .getElementById(
