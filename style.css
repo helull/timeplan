@@ -419,7 +419,7 @@ h1{
 @media (orientation:landscape) and (max-width:900px){
 
     .late-start{
-        font-size: 0.3rem;
+        font-size: 0.4rem;
         font-weight: 200;
         letter-spacing: 6px;
         line-height:0.2;
@@ -427,11 +427,10 @@ h1{
     }
 
     .lunch-break{
-        background:yellow !important;
-        font-size:0.3rem !important;
+        font-size:0.4rem !important;
 
-        margin-top:-2px !important;
-        margin-bottom:2px !important;
+        margin-top:-3px !important;
+        margin-bottom:3px !important;
 
         line-height:1 !important;
     }
