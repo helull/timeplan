@@ -276,14 +276,38 @@ export function renderSchedule(
                         
                         const grade = `VG${schedule.className.charAt(0)}`;
 
+                        const isBlockSubject =
+    lesson.subject
+        ?.toUpperCase()
+        .includes(
+            "BLOKK"
+        );
+
+const isBlockRoom =
+    lesson.roomName
+        ?.toUpperCase()
+        .includes(
+            "BLOKK"
+        );
+
+const lessonTime =
+    lesson.lessonId
+        .split("_")
+        .pop();
+                        
+                        
                         const matchingBlockExams =
-                            blockExams.filter(
-                                exam =>
-                                    exam.week === weekNo &&
-                                    exam.day === weekday &&
-                                    exam.grade === grade &&
-                                    exam.lessonId.split("_").pop() === lesson.lessonId.split("_").pop()
-                            );
+    (isBlockSubject || isBlockRoom)
+        ? blockExams.filter(
+            exam =>
+                Number(exam.week) === weekNo &&
+                Number(exam.day) === weekday &&
+                exam.grade === grade &&
+                exam.lessonId
+                    .split("_")
+                    .pop() === lessonTime
+        )
+        : [];
 
                         const isBlockExam = matchingBlockExams.length > 0;
                         const hasExam =isExam || isBlockExam;
