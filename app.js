@@ -91,6 +91,8 @@ const tentamens =
 const blockExams =
     await loadBlockExams();
 
+console.log("Block exams fra Firestore:", blockExams);
+
 const todayPosition =
     getCurrentSchoolPosition();
 
