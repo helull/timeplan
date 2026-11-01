@@ -17,7 +17,7 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import {
     loadAllHomework,
     loadAllExamFlags,
-    loadBlockExams
+    loadAllBlockExams
 }
 from "./homeworkService.js";
 
@@ -89,7 +89,7 @@ const tentamens =
     await loadTentamens();
 
 const blockExams =
-    await loadBlockExams();
+    await loadAllBlockExams();
 
 console.log("Block exams fra Firestore:", blockExams);
 
