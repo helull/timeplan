@@ -434,3 +434,30 @@ export async function deleteBlockExam(
     );
 
 }
+
+export async function loadAllBlockExams() {
+
+    const snapshot =
+
+        await getDocs(
+
+            collection(
+                db,
+                "blockExams"
+            )
+
+        );
+
+    return snapshot.docs.map(
+
+        doc => ({
+
+            id: doc.id,
+
+            ...doc.data()
+
+        })
+
+    );
+
+}
