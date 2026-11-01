@@ -256,7 +256,7 @@ ${currentText || ""}
                 if (isBlockSubject || isBlockRoom) {
 
                     const blockText =
-                        await openBlockExamModal(week, day);
+                        await openBlockExamModal(week, weekday);
 
                     if (
                         blockText === null
