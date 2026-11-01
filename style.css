@@ -433,8 +433,8 @@ h1{
         font-size:0.8rem !important;
         font-weight: 200 !important;
         letter-spacing: 6px !important;
-        margin-top:-3px !important;
-        margin-bottom:1px !important;
+        margin-top:-5px !important;
+        margin-bottom:-3px !important;
         line-height:1 !important;
     }
 
@@ -449,11 +449,11 @@ h1{
     }*/
     
     .lesson-short{
-        min-height:30px !important;
+        min-height:25px !important;
     }
 
     .lesson-long{
-        min-height:50px !important;
+        min-height:40px !important;
     }
     
     .lesson-top{
