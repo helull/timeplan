@@ -941,9 +941,9 @@ h1{
 
     transform:
         translate(-50%, -50%)
-        rotate(-25deg);
+        rotate(-10deg);
 
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 900;
 
     color: rgba(255,255,255,0.25);
