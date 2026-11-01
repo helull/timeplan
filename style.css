@@ -144,9 +144,8 @@ h1{
 ======================== */
 
 .lesson{
-    min-height:70px;
-    margin-bottom:8px;
-    padding:6px;
+    margin-bottom:5px;
+    padding:4px;
 
     border-radius:24px;
 
@@ -385,8 +384,12 @@ h1{
         transform:none !important;
     }
 
-    .lesson{
-        min-height:70px;
+    .lesson-short{
+        min-height:40px !important;
+    }
+
+    .lesson-long{
+        min-height:60px !important;
     }
     
     .time{
@@ -936,11 +939,11 @@ h1{
 }
 
 .lesson-long{
-    min-height:100px;
+    min-height:80px;
 }
 
 .lesson-short{
-    min-height:75px;
+    min-height:60px;
 }
 
 
@@ -948,14 +951,14 @@ h1{
 
 
 
-.exam-lesson {
+.exam- {
     border: 6px solid #ff0000 !important;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
 }
 
-.exam-lesson::before {
+.exam-::before {
 
     content: "PRØVE";
 
