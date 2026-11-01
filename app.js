@@ -11,7 +11,8 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
     loadAllHomework,
-    loadAllExamFlags
+    loadAllExamFlags,
+    loadAllBlockExams
 }
 from "./homeworkService.js";
 
@@ -78,6 +79,9 @@ let startY = 0;
 let overviewMode = false;
 
 disableTeacherMode();
+
+const blockExams =
+    await loadAllBlockExams();
 
 const todayPosition =
     getCurrentSchoolPosition();
@@ -400,7 +404,8 @@ const examMap =
 renderSchedule(
     schedule,
     homeworkMap,
-    examMap
+    examMap,
+    blockExams
 );
 
     render();
