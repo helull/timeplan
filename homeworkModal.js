@@ -1,4 +1,11 @@
 import {
+    saveTentamen,
+    loadTentamens,
+    deleteTentamen
+}
+from "./tentamenService.js";
+
+import {
     saveHomework,
     loadHomework,
     saveExamFlag,
@@ -135,6 +142,11 @@ ${currentText || ""}
                         Gjør hele uken til friuke
 
                     </button>
+                    <button
+                        id="manageTentamens">
+
+                        Legg inn/fjern Eksamensforberedende Prøve
+                    </button>
                     `
                     :
                     ""
@@ -153,6 +165,22 @@ ${currentText || ""}
         `
     );
 
+    document
+    .getElementById(
+        "manageTentamens"
+    )
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            await openTentamenModal(
+                week,
+                weekday
+            );
+
+        }
+    );
+    
     document
         .getElementById(
             "leggInnFridag"
@@ -565,6 +593,305 @@ async function openBlockExamModal(
                         null
                     );
 
+                };
+
+        }
+    );
+
+}
+
+async function openTentamenModal(
+    week,
+    day
+) {
+
+    if (!isTeacher()) {
+        return;
+    }
+
+    const tentamens =
+        await loadTentamens();
+
+    return new Promise(
+        resolve => {
+
+            document.body
+                .insertAdjacentHTML(
+
+                    "beforeend",
+
+                    `
+                    <div
+                        class="modal"
+                        id="tentamenModal">
+
+                        <div
+                            class="modal-card">
+
+                            <h3>
+                                Tentamener
+                            </h3>
+
+                            <div
+                                id="tentamenList">
+
+                                ${
+                                    tentamens.length
+
+                                    ?
+
+                                    tentamens
+                                        .map(
+                                            tentamen =>
+
+                                                `
+                                                <div
+                                                    style="
+                                                        display:flex;
+                                                        justify-content:space-between;
+                                                        align-items:center;
+                                                        margin:6px 0;
+                                                    ">
+
+                                                    <span>
+
+                                                        ${tentamen.grade}
+                                                        -
+                                                        uke ${tentamen.week}
+                                                        -
+                                                        dag ${tentamen.day}
+                                                        -
+                                                        ${tentamen.subject}
+                                                        -
+                                                        ${tentamen.startTime}
+
+                                                    </span>
+
+                                                    <button
+                                                        class="delete-tentamen"
+                                                        data-id="${tentamen.id}">
+
+                                                        ✕
+
+                                                    </button>
+
+                                                </div>
+                                                `
+                                        )
+                                        .join("")
+
+                                    :
+
+                                    `
+                                    <div>
+                                        Ingen registrerte tentamener
+                                    </div>
+                                    `
+                                }
+
+                            </div>
+
+                            <hr>
+
+                            <label>
+                                Trinn
+                            </label>
+
+                            <select
+                                id="tentamenGrade"
+                                style="
+                                    width:100%;
+                                    padding:8px;
+                                    margin-top:4px;
+                                ">
+
+                                <option value="VG1">
+                                    VG1
+                                </option>
+
+                                <option value="VG2">
+                                    VG2
+                                </option>
+
+                                <option value="VG3">
+                                    VG3
+                                </option>
+
+                            </select>
+
+                            <br><br>
+
+                            <label>
+                                Fag
+                            </label>
+
+                            <input
+                                id="tentamenSubject"
+                                type="text"
+                                maxlength="50"
+                                placeholder="F.eks. Norsk"
+
+                                style="
+                                    width:100%;
+                                    box-sizing:border-box;
+                                ">
+
+                            <br><br>
+
+                            <label>
+                                Oppstart
+                            </label>
+
+                            <input
+                                id="tentamenStart"
+                                type="time"
+                                value="09:00"
+
+                                style="
+                                    width:100%;
+                                    box-sizing:border-box;
+                                ">
+
+                            <br><br>
+
+                            <button
+                                id="saveTentamen">
+
+                                Lagre tentamen
+
+                            </button>
+
+                            <button
+                                id="cancelTentamen">
+
+                                Lukk
+
+                            </button>
+
+                        </div>
+
+                    </div>
+                    `
+                );
+
+            document
+                .querySelectorAll(
+                    ".delete-tentamen"
+                )
+                .forEach(
+                    button => {
+
+                        button.onclick =
+                            async () => {
+
+                                if (
+                                    !confirm(
+                                        "Slette tentamen?"
+                                    )
+                                ) {
+                                    return;
+                                }
+
+                                await deleteTentamen(
+                                    button.dataset.id
+                                );
+
+                                alert(
+                                    "Tentamen slettet"
+                                );
+
+                                document
+                                    .getElementById(
+                                        "tentamenModal"
+                                    )
+                                    ?.remove();
+
+                                resolve();
+                            };
+
+                    }
+                );
+
+            document
+                .getElementById(
+                    "saveTentamen"
+                )
+                .onclick =
+                async () => {
+
+                    const grade =
+
+                        document
+                            .getElementById(
+                                "tentamenGrade"
+                            )
+                            .value;
+
+                    const subject =
+
+                        document
+                            .getElementById(
+                                "tentamenSubject"
+                            )
+                            .value
+                            .trim();
+
+                    const startTime =
+
+                        document
+                            .getElementById(
+                                "tentamenStart"
+                            )
+                            .value;
+
+                    if (
+                        !subject
+                    ) {
+
+                        alert(
+                            "Skriv inn fag."
+                        );
+
+                        return;
+                    }
+
+                    await saveTentamen(
+
+                        week,
+                        day,
+                        grade,
+                        subject,
+                        startTime
+
+                    );
+
+                    alert(
+                        "Tentamen lagret"
+                    );
+
+                    document
+                        .getElementById(
+                            "tentamenModal"
+                        )
+                        ?.remove();
+
+                    resolve();
+                };
+
+            document
+                .getElementById(
+                    "cancelTentamen"
+                )
+                .onclick =
+                () => {
+
+                    document
+                        .getElementById(
+                            "tentamenModal"
+                        )
+                        ?.remove();
+
+                    resolve();
                 };
 
         }
