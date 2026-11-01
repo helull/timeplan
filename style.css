@@ -368,7 +368,18 @@ h1{
         padding:12px;
     }
 
-    .subject{font-size:1rem;}
+    .subject{
+        font-size:1rem;
+    }
+
+    .subject{
+        flex:1;
+        min-width:0;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        font-size:1rem;
+    }
     
     .days{
         width:auto;
