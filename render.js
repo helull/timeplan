@@ -282,7 +282,7 @@ export function renderSchedule(
                                     exam.week === weekNo &&
                                     exam.day === weekday &&
                                     exam.grade === grade &&
-                                    exam.lessonId === lesson.lessonId
+                                    exam.lessonId.split("_").pop() === lesson.lessonId.split("_").pop()
                             );
 
                         const isBlockExam = matchingBlockExams.length > 0;
