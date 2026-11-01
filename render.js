@@ -28,7 +28,8 @@ export function renderSchedule(
     schedule,
     homeworkMap = {},
     examMap = {},
-    blockExams = []
+    blockExams = [],
+    tentamens = []
 ) {
     
     console.log("blockExams:", blockExams);
@@ -57,6 +58,8 @@ export function renderSchedule(
                 const weekday =
                     index + 1;
 
+                const grade =    `VG${schedule.className.charAt(0)}`;
+                
                 const dayName = [
                     "Mandag",
                     "Tirsdag",
@@ -78,6 +81,13 @@ export function renderSchedule(
                             holiday.type === "day" &&
                             holiday.week === weekNo &&
                             holiday.weekday === weekday
+                    );
+                const tentamen =
+                    tentamens.find(
+                           item =>
+                            Number(item.week) === weekNo &&
+                            Number(item.day) === weekday &&
+                            item.grade === grade
                     );
 
                 const lessons =
@@ -178,6 +188,33 @@ export function renderSchedule(
 
                     return;
                 }
+                
+                if (tentamen) {
+
+    day.innerHTML += `
+
+        <div class="lesson tentamen-card">
+
+            <div class="subject">
+                ${tentamen.subject}
+            </div>
+
+            <div class="homework">
+
+                Oppstart kl. ${tentamen.startTime}.
+
+                <br><br>
+
+                Møt opp minst 20 minutter før.
+
+            </div>
+
+        </div>
+
+    `;
+
+    return;
+}
 
                 let lunchRendered = false;
                 lessons.forEach(
