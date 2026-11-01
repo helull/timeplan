@@ -81,7 +81,7 @@ let overviewMode = false;
 disableTeacherMode();
 
 const blockExams =
-    await loadAllBlockExams();
+    await loadBlockExams();
 
 const todayPosition =
     getCurrentSchoolPosition();
