@@ -335,14 +335,17 @@ export function renderSchedule(
                                     homework
                                     ?
                                     `
-                                    <div class="lesson-homework">
-                                        ${homework}
+                                    <div
+                                        class="lesson-homework-preview"
+                                        data-homework="${homework.replace(/"/g,"&quot;")}">
+
+                                    📝 ${homework}
+
                                     </div>
                                     `
                                     :
                                     ""
                                 }
-
                             </div>
 
                         `;
