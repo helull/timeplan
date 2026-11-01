@@ -228,7 +228,7 @@ export function renderSchedule(
 
                         const examData =
                             examMap[
-                                `${lesson.lessonId}_${weekNo}`
+                                `${schedule.className}_${lesson.lessonId}_${weekNo}`
                             ];
 
                         const isExam =
