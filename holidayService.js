@@ -109,3 +109,41 @@ export async function removeWeekHoliday(
     );
 
 }
+
+export async function hasDayHoliday(
+    week,
+    weekday
+) {
+
+    const holidays =
+        await loadHolidays();
+
+    return holidays.some(
+        holiday =>
+
+            holiday.type === "day" &&
+
+            holiday.week === week &&
+
+            holiday.weekday === weekday
+    );
+
+}
+
+
+export async function hasWeekHoliday(
+    week
+) {
+
+    const holidays =
+        await loadHolidays();
+
+    return holidays.some(
+        holiday =>
+
+            holiday.type === "week" &&
+
+            holiday.week === week
+    );
+
+}
