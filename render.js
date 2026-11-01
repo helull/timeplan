@@ -327,7 +327,7 @@ export function renderSchedule(
                                     data-subject="${lesson.subject}"
                                     data-room-name="${lesson.roomName}">
                                     
-                                    📝
+                                    ✏️
 
                                 </button>
 
@@ -339,7 +339,7 @@ export function renderSchedule(
                                         class="lesson-homework-preview"
                                         data-homework="${homework.replace(/"/g,"&quot;")}">
 
-                                    📝 ${homework}
+                                    📖 ${homework}
 
                                     </div>
                                     `
