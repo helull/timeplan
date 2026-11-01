@@ -229,7 +229,6 @@ export function renderSchedule(
                                 `${lesson.lessonId}_${weekNo}`
                             ];
 
-                        console.log("${schedule.className}_${lesson.lessonId}_${weekNo} er", schedule.className, lesson.lessonId, weekNo);
                         const examData =
                             examMap[
                                 `${schedule.className}_${lesson.lessonId}_${weekNo}`
@@ -390,7 +389,6 @@ ${
 
                 button.onclick =
                     () => {
-                        console.log("før kallet: button.dataset.subject button.dataset.roomName", button.dataset.subject,button.dataset.roomName)
                         event.stopPropagation();
                         openHomeworkModal(
                             
