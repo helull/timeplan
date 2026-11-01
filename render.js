@@ -338,7 +338,7 @@ export function renderSchedule(
             ${
                 matchingBlockExams
                     .map(
-                        exam => `📝 ${exam.title}`
+                        exam => `📌 ${exam.title}`
                     )
                     .join("<br>")
             }
