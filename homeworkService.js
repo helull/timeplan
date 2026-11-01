@@ -412,7 +412,7 @@ export async function loadBlockExams(
         .filter(
             exam =>
                 exam.week === week &&
-                exam.grade === day &&
+                exam.day === day &&
                 exam.grade === grade
         );
 
