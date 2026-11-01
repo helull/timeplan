@@ -428,13 +428,12 @@ h1{
 
     .lunch-break{
         background:yellow !important;
-        font-size:2rem !important;
+        font-size:1rem !important;
 
-        margin-top:10px !important;
-        margin-bottom:10px !important;
+        margin-top:1px !important;
+        margin-bottom:1px !important;
 
         line-height:1 !important;
-        border:3px solid red !important;
     }
 
 
