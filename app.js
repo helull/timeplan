@@ -386,11 +386,9 @@ const classId =
     );
 
 const schedule =
-    await loadSchedule(
-        className: classId,
-        classId
-    );
+    await loadSchedule(classId);
 
+schedule.className = classId;    
     console.log("Schedule fra Firestore:", schedule);
     
 const homeworkMap =
