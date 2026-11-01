@@ -321,6 +321,7 @@ examMap[key] = {
 export async function saveBlockExam(
     lessonId,
     week,
+    day,
     title
 ) {
 
@@ -353,6 +354,7 @@ export async function saveBlockExam(
         {
             lessonId,
             week,
+            day,
             grade,
             title,
 
@@ -369,7 +371,8 @@ export async function saveBlockExam(
 }
 
 export async function loadBlockExams(
-    week
+    week,
+    day
 ) {
 
     const classId =
@@ -409,6 +412,7 @@ export async function loadBlockExams(
         .filter(
             exam =>
                 exam.week === week &&
+                exam.grade === day &&
                 exam.grade === grade
         );
 
