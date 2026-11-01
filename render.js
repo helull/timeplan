@@ -27,7 +27,8 @@ const holidays =
 export function renderSchedule(
     schedule,
     homeworkMap = {},
-    examMap = {}
+    examMap = {},
+    blockExams = []
 ) {
 
     console.log("schedule er", schedule)
@@ -234,8 +235,20 @@ export function renderSchedule(
 
                         const isExam =
                             examData?.exam ?? false;
-                        /* examData?.teacher    og   examData?.subject kan nå brukes*/
+                        
+                        const grade = `VG${schedule.className.charAt(0)}`;
 
+                        const blockExam =
+                            blockExams.find(
+                                exam =>
+                                    exam.week === weekNo &&
+                                    exam.day === weekday &&
+                                    exam.lessonId === lesson.lessonId &&
+                                    exam.grade === grade
+                            );
+
+                        const isBlockExam = !!blockExam;
+                        const hasExam =isExam || isBlockExam;
                         
                         let homework = "";
 
@@ -274,14 +287,24 @@ export function renderSchedule(
                                 ${getSubjectColor(
                                     lesson.subject
                                 )}
-                                ${isExam ? "exam-lesson" : ""}
+                                ${hasExam ? "exam-lesson" : ""}
                             ">
 
                                 <div class="lesson-top">
 
                                     <div class="subject">
-                                        ${lesson.subject}
-                                    </div>
+    ${lesson.subject}
+</div>
+
+${
+    isBlockExam
+    ? `
+    <div class="exam-title">
+        📝 ${blockExam.title}
+    </div>
+    `
+    : ""
+}
 
                                     <div class="time">
                                         ${lesson.start}
