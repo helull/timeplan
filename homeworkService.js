@@ -299,7 +299,7 @@ export async function loadAllExamFlags() {
                 doc.data();
 
             const key =
-                `${className}_${data.lessonId}_${data.week}`;
+                `${data.className}_${data.lessonId}_${data.week}`;
 
 examMap[key] = {
 
