@@ -923,14 +923,14 @@ h1{
 
 
 
-.exam- {
+.exam-lesson {
     border: 6px solid #ff0000 !important;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
 }
 
-.exam-::before {
+.exam-lesson::before {
 
     content: "PRØVE";
 
