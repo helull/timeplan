@@ -425,10 +425,19 @@ h1{
         line-height:0.2;
         margin:10px 0 -10px 0
     }
+
     .lunch-break{
-        background:yellow;
-        font-size: 3rem;
+        background:yellow !important;
+        font-size:3rem !important;
+
+        margin-top:40px !important;
+        margin-bottom:40px !important;
+
+        line-height:1 !important;
+        border:3px solid red !important;
     }
+
+
 /*    .lunch-break{
         background:yellow;
         font-size: 3rem;
