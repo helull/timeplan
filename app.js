@@ -387,6 +387,7 @@ const classId =
 
 const schedule =
     await loadSchedule(
+        className: classId,
         classId
     );
 
