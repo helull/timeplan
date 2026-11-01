@@ -367,9 +367,9 @@ export function renderSchedule(
                 button.onclick =
                     () => {
                         console.log("før kallet: button.dataset.subject button.dataset.roomName", button.dataset.subject,button.dataset.roomName)
-                        
+                        event.stopPropagation();
                         openHomeworkModal(
-
+                            
                             button.dataset.lesson,
 
                             Number(
@@ -380,7 +380,6 @@ export function renderSchedule(
                                 button.dataset.weekday
                             ),
                             button.dataset.subject,
-                            /*schedule.id,*/
                             button.dataset.roomName
                         );
 
