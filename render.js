@@ -30,8 +30,10 @@ export function renderSchedule(
     examMap = {},
     blockExams = []
 ) {
-
+    
+    console.log("blockExams:", blockExams);
     console.log("schedule er", schedule)
+    
     const weeks =
         document.querySelectorAll(
             ".week"
