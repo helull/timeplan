@@ -861,7 +861,7 @@ h1{
 }
 
 .homework-button{
-
+    z-index:100;
     position:absolute;
 
     right:8px;
