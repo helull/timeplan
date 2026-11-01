@@ -276,7 +276,7 @@ export function renderSchedule(
                         
                         const grade = `VG${schedule.className.charAt(0)}`;
 
-                        const blockExam =
+                        const matchingBlockExams =
                             blockExams.filter(
                                 exam =>
                                     exam.week === weekNo &&
