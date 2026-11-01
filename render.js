@@ -277,14 +277,15 @@ export function renderSchedule(
                         const grade = `VG${schedule.className.charAt(0)}`;
 
                         const blockExam =
-                            blockExams.find(
+                            blockExams.filter(
                                 exam =>
                                     exam.week === weekNo &&
                                     exam.day === weekday &&
-                                    exam.grade === grade
+                                    exam.grade === grade &&
+                                    exam.lessonId === lesson.lessonId
                             );
 
-                        const isBlockExam = !!blockExam;
+                        const isBlockExam = matchingBlockExams.length > 0;
                         const hasExam =isExam || isBlockExam;
                         
                         let homework = "";
@@ -330,16 +331,19 @@ export function renderSchedule(
                                 <div class="lesson-top">
 
                                     <div class="subject">
-    ${lesson.subject}
-</div>
-
-${
+   ${
     isBlockExam
     ? `
-    <div class="exam-title">
-        📝 ${blockExam.title}
-    </div>
-    `
+        <div class="exam-title">
+            ${
+                matchingBlockExams
+                    .map(
+                        exam => `📝 ${exam.title}`
+                    )
+                    .join("<br>")
+            }
+        </div>
+      `
     : ""
 }
 
