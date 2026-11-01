@@ -243,7 +243,6 @@ export function renderSchedule(
                                 exam =>
                                     exam.week === weekNo &&
                                     exam.day === weekday &&
-                                    exam.lessonId === lesson.lessonId &&
                                     exam.grade === grade
                             );
 
