@@ -2,6 +2,11 @@ import { db }
 from "./firebase.js";
 
 import {
+    loadTentamens
+}
+from "./tentamenService.js";
+
+import {
     doc,
     getDoc,
     setDoc,
