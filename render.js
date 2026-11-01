@@ -331,29 +331,22 @@ export function renderSchedule(
                                 <div class="lesson-top">
 
                                     <div class="subject">
-   ${
-    isBlockExam
-    ? `
-        <div class="exam-title">
-            ${
-                matchingBlockExams
-                    .map(
-                        exam => `📌 ${exam.title}`
-                    )
-                    .join("<br>")
-            }
-        </div>
-      `
-    : ""
-}
+
+
+                                        ${lesson.subject}
+
+                                    </div>
 
                                     <div class="time">
+
                                         ${lesson.start}
                                         -
                                         ${lesson.end}
+
                                     </div>
 
-                                </div>
+                                 </div>
+           
 
                                 <div class="room-teacher">
 
@@ -382,6 +375,24 @@ export function renderSchedule(
                                     }
 
                                 </div>
+
+
+ ${
+    isBlockExam
+    ? `
+        <div class="exam-title">
+            ${
+                matchingBlockExams
+                    .map(
+                        exam => `📌 ${exam.title}`
+                    )
+                    .join("<br>")
+            }
+        </div>
+      `
+    : ""
+}
+
 
                                 <button
                                     class="homework-button"
