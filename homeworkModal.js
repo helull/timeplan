@@ -540,7 +540,8 @@ async function openBlockExamModal(
 
                                                     <button
                                                         class="delete-block-exam"
-                                                        data-id="${exam.id}">
+                                                        data-id="${exam.id}"
+                                                        data-teacher="${exam.teacher}">
 
                                                         ✕
 
@@ -606,6 +607,12 @@ async function openBlockExamModal(
                         button.onclick =
                             async () => {
 
+                                const isTeacherExam = button.dataset.teacher === "true";
+                                if (isTeacherExam && !isTeacher()) {
+                                    alert("Denne prøven kan bare slettes av lærer.");
+                                    return;
+                                }
+                                
                                 if (
                                     !confirm(
                                         "Slette denne prøven?"
