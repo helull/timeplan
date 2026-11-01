@@ -84,7 +84,7 @@ export async function openHomeworkModal(
 
                 <h2>
                     ${teacherMode
-                        ? "Ferie og undervisningsfri dager (for hele appen) og prøvemarkering (for din klasse)"
+                        ? "Fridager, prøver og EFP"
                         : "Lekser og prøveplan"}
                 </h2>
 
