@@ -256,7 +256,7 @@ ${currentText || ""}
                 if (isBlockSubject || isBlockRoom) {
 
                     const blockText =
-                        await openBlockExamModal(week);
+                        await openBlockExamModal(week, day);
 
                     if (
                         blockText === null
@@ -268,6 +268,7 @@ ${currentText || ""}
                         await saveBlockExam(
                             lessonId,
                             week,
+                            weekday,
                             blockText
                         );
 
@@ -361,12 +362,14 @@ ${currentText || ""}
 }
 
 async function openBlockExamModal(
-    week
+    week,
+    day
 ) {
 
     const exams =
         await loadBlockExams(
-            week
+            week,
+            day
         );
 
     return new Promise(
