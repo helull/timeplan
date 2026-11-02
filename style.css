@@ -432,7 +432,7 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
-    .lesson-homework-preview{
+.lesson-homework-preview{
 
     font-size:.45rem;
 
@@ -594,6 +594,16 @@ h1{
     .exam-lesson::before{
         font-size:1rem;
         letter-spacing:2px;
+    }
+
+    .tentamen-card .subject {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    }
+
+    .tentamen-card .homework {
+        font-size: 0.6rem !important;
+        line-height: 1 !important;
     }
 }
 
