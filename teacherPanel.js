@@ -466,6 +466,7 @@ Regler:
 
 - Returner kun JSON
 - Ingen markdown
+- classId skal få verdi fra teksten i en liten boks oppe til venstre
 - Ingen forklaringer
 - weekday:
   Mandag=1
@@ -477,9 +478,10 @@ Regler:
 - lessonId skal være unik
 - Ta med subject
 -- Hvis tekst inneholder ordet "Blokk", skal subject være "<subject> - Blokk"
-- Ta med teacherName hvis synlig
-- Ta med roomName hvis synlig
-- Ta med start og end
+-- Hvis det er flere økter på samme tidspunkt skal du kun bruke økten merket med "Blokk", hopp over de andre.
+- Ta med teacherName hvis synlig, men hvis det finnes flere lærere skal ikke lærer tas med
+- Ta med roomName hvis synlig, men hvis det finnes flere rom i økta skal ikke roomName tas med
+- Ta med start og end. Hvis det ikke er mulig å lese start og end, sammenlign med nabodagene og bruk de riktige verdiene.
 - Ikke ta med color
 - JSON skal kunne leses direkte av JSON.parse()`;
 
