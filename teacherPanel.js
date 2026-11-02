@@ -372,6 +372,7 @@ Format:
 Regler:
 
 - Returner kun JSON
+- Bytt ut verdien i classId med det som står i boksen oppe til venstre i bildet
 - Ingen markdown
 - Ingen forklaringer
 - weekday:
@@ -383,10 +384,11 @@ Regler:
 - Ett objekt per undervisningsøkt
 - lessonId skal være unik
 - Ta med subject
--- Hvis subject eller tekst under er "Blokk", skal subject være "<subject> - Blokk"
-- Ta med teacherName hvis synlig
-- Ta med roomName hvis synlig
-- Ta med start og end
+-- Hvis subject eller tekst nedenfor denne er "Blokk", skal subject være "<subject> - Blokk"
+-- Hvis det er flere økter på samme tid i samme dag, skal subject være "Blokk". Da skal alle andre økter i samme tid og dag hoppes over
+- Ta med teacherName hvis synlig.  Hvis det finnes flere lærere, skal teacherName være tom
+- Ta med roomName hvis synlig.  Hvis det finnes flere rom, skal roomName være tom
+- Ta med start og end. Hvis start og end ikke er synlig, sammenlign med tidene i nabodagene.
 - Ikke ta med color
 - JSON skal kunne leses direkte av JSON.parse()
                 </textarea>
