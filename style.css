@@ -1099,4 +1099,46 @@ h1{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-``
+
+.tentamen-card {
+    min-height: 50vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 1rem;
+
+    padding: 2rem;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        180deg,
+        #fff8e1,
+        #ffe082
+    );
+
+    border: 3px solid #ffb300;
+
+    text-align: center;
+
+    box-sizing: border-box;
+}
+
+.tentamen-card .subject {
+    font-size: 2rem;
+    font-weight: 700;
+
+    margin-bottom: 1rem;
+
+    color: #5d4037;
+}
+
+.tentamen-card .homework {
+    font-size: 1.2rem;
+    line-height: 1.6;
+
+    color: #333;
+}
