@@ -290,10 +290,10 @@ const isBlockRoom =
             "BLOKK"
         );
 
-const lessonTime =
+/* const lessonTime =
     lesson.lessonId
         .split("_")
-        .pop();
+        .pop();*/
                         
                         
                         const matchingBlockExams =
@@ -303,9 +303,10 @@ const lessonTime =
                 Number(exam.week) === weekNo &&
                 Number(exam.day) === weekday &&
                 exam.grade === grade &&
-                exam.lessonId
+                /*exam.lessonId
                     .split("_")
-                    .pop() === lessonTime
+                    .pop() === lessonTime*/
+                exam.examTime
         )
         : [];
 
