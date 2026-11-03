@@ -36,7 +36,8 @@ export async function openHomeworkModal(
     week,
     weekday,
     subject,
-    roomName
+    roomName,
+    startTime
 ) {
 
     if (
@@ -377,7 +378,7 @@ document
                 if (isBlockSubject || isBlockRoom) {
 
                     const blockText =
-                        await openBlockExamModal(week, weekday);
+                        await openBlockExamModal(week, weekday, startTime);
 
                     if (
                         blockText === null
@@ -390,7 +391,8 @@ document
                             lessonId,
                             week,
                             weekday,
-                            blockText
+                            blockText,
+                            startTime
                         );
 
                     if (!success) {
@@ -484,13 +486,15 @@ document
 
 async function openBlockExamModal(
     week,
-    day
+    day,
+    startTime
 ) {
 
     const exams =
         await loadBlockExams(
             week,
-            day
+            day,
+            startTime
         );
 
     return new Promise(
