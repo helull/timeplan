@@ -373,7 +373,7 @@ document
                 
 
                 /* BLOKKFAG */
-                console.log("subject og roomName er ", subject, roomName);
+                console.log("subject, roomName og startTime er ", subject, roomName, startTime);
 
                 if (isBlockSubject || isBlockRoom) {
 
