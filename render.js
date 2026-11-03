@@ -303,10 +303,7 @@ const isBlockRoom =
                 Number(exam.week) === weekNo &&
                 Number(exam.day) === weekday &&
                 exam.grade === grade &&
-                /*exam.lessonId
-                    .split("_")
-                    .pop() === lessonTime*/
-                exam.examTime
+                exam.examTime === lesson.start
         )
         : [];
 
