@@ -425,7 +425,8 @@ const isBlockRoom =
                                     data-week="${weekNo}"
                                     data-weekday="${weekday}"
                                     data-subject="${lesson.subject}"
-                                    data-room-name="${lesson.roomName}">
+                                    data-room-name="${lesson.roomName}"
+                                    data-start-time="${lesson.start}">
                                     
                                     ✏️
 
@@ -479,7 +480,8 @@ const isBlockRoom =
                                 button.dataset.weekday
                             ),
                             button.dataset.subject,
-                            button.dataset.roomName
+                            button.dataset.roomName,
+                            button.dataset.startTime
                         );
 
                     };
