@@ -322,7 +322,8 @@ export async function saveBlockExam(
     lessonId,
     week,
     day,
-    title
+    title,
+    startTime
 ) {
 
     const classId =
@@ -362,7 +363,8 @@ export async function saveBlockExam(
                 isTeacher(),
 
             createdAt:
-                serverTimestamp()
+                serverTimestamp(),
+            examTime: startTime
         }
 
     );
@@ -372,7 +374,8 @@ export async function saveBlockExam(
 
 export async function loadBlockExams(
     week,
-    day
+    day,
+    startTime
 ) {
 
     const classId =
@@ -413,7 +416,8 @@ export async function loadBlockExams(
             exam =>
                 exam.week === week &&
                 exam.day === day &&
-                exam.grade === grade
+                exam.grade === grade &&
+                exam.examTime === startTime
         );
 
 }
