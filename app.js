@@ -33,14 +33,14 @@ from "./teacherLogin.js";
 
 import {
     isTeacher,
-    removeTeacherMode
+    removeTeacherMode,
+    initializeTeacherMode
 }
 from "./teacher.js";
 
 import {
     openToolsPanel,
-    openAdminPanel,
-    initializeTeacherMode
+    openAdminPanel
 }
 from "./teacherPanel.js";
 
