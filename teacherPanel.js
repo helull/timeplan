@@ -12,7 +12,7 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
     isTeacher,
-    enableTeacherMode
+    applyTacherMode
 }
 from "./teacher.js";
 
@@ -159,13 +159,13 @@ function adminLogin() {
 
         return;
     }
-    enableTeacherMode();
+    applyTeacherMode();
     closeToolsPanel();
     /*  openAdminPanel();  */
 }
 
 function logoutUser() {
-    let svar = confirm("Du logger nå ut. a)Er du admin, blir du vanlig bruker igjen. b)Er du elev får du mulighet til å knytte deg til en annen klasse. NB: Har du lagret lekser på din bruker blir de nå borte!");
+    let svar = confirm("Du logger nå ut og får du mulighet til å knytte deg til en annen klasse. NB: Har du lagret lekser på din bruker blir de nå borte!");
     if (!svar) {
          return;
     }
