@@ -1,8 +1,8 @@
 // teacherLogin.js
 
 import {
-    enableTeacherMode,
-    disableTeacherMode,
+    applyTeacherMode,
+    TeacherMode,
     isTeacher
 }
 from "./teacher.js";
