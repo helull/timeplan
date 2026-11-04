@@ -33,7 +33,7 @@ from "./teacherLogin.js";
 
 import {
     isTeacher,
-    disableTeacherMode
+    removeTeacherMode
 }
 from "./teacher.js";
 
