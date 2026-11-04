@@ -39,7 +39,8 @@ from "./teacher.js";
 
 import {
     openToolsPanel,
-    openAdminPanel
+    openAdminPanel,
+    initializeTeacherMode
 }
 from "./teacherPanel.js";
 
@@ -83,7 +84,8 @@ let startY = 0;
 
 let overviewMode = false;
 
-disableTeacherMode();
+//disableTeacherMode();
+initializeTeacherMode();
 
 const tentamens =
     await loadTentamens();
