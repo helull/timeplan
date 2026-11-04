@@ -11,7 +11,7 @@ export async function loginTeacher(){
 
     if (isTeacher()) {
 
-        disableTeacherMode();
+        removeTeacherMode();
 
         location.reload();
 
@@ -28,7 +28,7 @@ export async function loginTeacher(){
         "TEMP123"
     ) {
 
-        enableTeacherMode();
+        applyTeacherMode();
 
         location.reload();
     }
