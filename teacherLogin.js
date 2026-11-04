@@ -2,7 +2,7 @@
 
 import {
     applyTeacherMode,
-    TeacherMode,
+    removeTeacherMode,
     isTeacher
 }
 from "./teacher.js";
