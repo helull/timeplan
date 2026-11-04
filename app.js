@@ -400,7 +400,7 @@ async function init(){
 
         initializeTeacherMode();
     }
-    elseif (!hasStudent()) {
+    else if (!hasStudent()) {
         await showRegister();
         return;
     }
