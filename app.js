@@ -390,12 +390,21 @@ window.addEventListener(
 
 async function init(){
 
+
+    
+
+    
     if (!hasStudent()) {
 
         await showRegister();
         return;
     }
 
+
+
+
+
+    
 const classId =
     localStorage.getItem(
         "classId"
