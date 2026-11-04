@@ -12,7 +12,7 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
     isTeacher,
-    applyTacherMode
+    applyTeacherMode
 }
 from "./teacher.js";
 
