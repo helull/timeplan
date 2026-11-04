@@ -390,21 +390,22 @@ window.addEventListener(
 
 async function init(){
 
+    const userType = localStorage.getItem("userType");
+    const studentId = localStorage.getItem("studentId");
 
-    
+    if (userType === "teacher") {
+        /* De to neste linjer må slettes når jeg får på plass valg av klasse for lærere */
+        localStorage.setItem("studentName")
+        localStorage.setItem("classId")
 
-    
-    if (!hasStudent()) {
-
+        initializeTeacherMode();
+    }
+    elseif (!hasStudent()) {
         await showRegister();
         return;
     }
 
-
-
-
-
-    
+   
 const classId =
     localStorage.getItem(
         "classId"
