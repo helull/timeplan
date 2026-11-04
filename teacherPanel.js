@@ -159,6 +159,12 @@ function adminLogin() {
 
         return;
     }
+    
+    localStorage.setItem(
+        "userType",
+        "teacher"
+    );
+    
     applyTeacherMode();
     closeToolsPanel();
     /*  openAdminPanel();  */
