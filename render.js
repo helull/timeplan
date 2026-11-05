@@ -31,7 +31,6 @@ export function renderSchedule(
     blockExams = [],
     tentamens = []
 ) {
-    
     console.log("blockExams:", blockExams);
     console.log("schedule er", schedule)
     
@@ -171,7 +170,8 @@ export function renderSchedule(
                     lessons.length > 0 &&
                     lessons[0].start !== "08:15";
 
-                day.innerHTML = `
+                //day.innerHTML = `
+                let html = `
 
                     <div class="header">
 
@@ -201,7 +201,7 @@ export function renderSchedule(
 
                 if (isWeekHoliday) {
 
-                    day.innerHTML += `
+                    html += `
 
                         <div class="lesson holiday-card">
 
@@ -221,13 +221,14 @@ export function renderSchedule(
                         </div>
 
                     `;
+                    day.innerHTML = html;
 
                     return;
                 }
 
                 if (isDayHoliday) {
 
-                    day.innerHTML += `
+                    html += `
 
                         <div class="lesson dayoff-card">
 
@@ -248,13 +249,14 @@ export function renderSchedule(
                         </div>
 
                     `;
+                    day.innerHTML = html;
 
                     return;
                 }
                 
                 if (tentamen) {
 
-    day.innerHTML += `
+        html += `
 
         <div class="lesson tentamen-card">
 
@@ -275,6 +277,7 @@ export function renderSchedule(
         </div>
 
     `;
+    day.innerHTML = html;
 
     return;
 }
@@ -286,7 +289,7 @@ export function renderSchedule(
                             !lunchRendered &&
                             lesson.start >= "12:00"
                         ) {
-                            day.innerHTML += `
+                            html += `
                                 <div class="lunch-break">
                                     •••
                                 </div>
@@ -420,11 +423,9 @@ export function renderSchedule(
 
 
 
-                      
-//let html = "";
-
-                       day.innerHTML += `
-
+                        //day.innerHTML += `                    
+                        //let html = "";
+                        html += `
                             <div class="
                                 lesson
                                 ${durationClass}
@@ -529,17 +530,15 @@ export function renderSchedule(
                                     ""
                                 }
                             </div>
-
                         `;
+                       
                     }
                 );
+                 day.innerHTML = html;
             }
         );
     });
   
-  // day.innerHTML = html;
-    
-
     /* Lekseknapper */
 
     document
