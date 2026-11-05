@@ -14,7 +14,8 @@ import {
     isTeacher,
     applyTeacherMode,
     enableAdminMode,
-    isAdmin
+    isAdmin,
+    applyAdminMode
 }
 from "./teacher.js";
 
@@ -273,6 +274,9 @@ export function openAdminPanel() {
         closeAdminPanel
     );
     
+    if (isAdmin()) {
+    applyAdminMode();
+}
 }
 
 export function openImportModal() {
