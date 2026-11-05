@@ -12,7 +12,9 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
     isTeacher,
-    applyTeacherMode
+    applyTeacherMode,
+    enableAdminMode,
+    isAdmin
 }
 from "./teacher.js";
 
@@ -201,6 +203,10 @@ export function openAdminPanel() {
                 <button id="changeClass">
                     Endre klasse
                 </button>
+
+                <button id="adminMode">
+                    Administrator
+                </button>
                 
                 <button id="importSchedule">
                     Importer JSON
@@ -219,6 +225,15 @@ export function openAdminPanel() {
         `
     );
 
+    document
+    .getElementById(
+        "adminMode"
+    )
+    ?.addEventListener(
+        "click",
+        adminModeLogin
+    );
+    
     document
     .getElementById(
         "changeClass"
