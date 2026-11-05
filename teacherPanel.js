@@ -197,6 +197,16 @@ export function openAdminPanel() {
         return;
     }
 
+    const teacherName =
+    localStorage.getItem(
+        "teacherName"
+    ) || "";
+
+    const classId =
+    localStorage.getItem(
+        "classId"
+    ) || "";
+    
     document.body.insertAdjacentHTML(
 
         "beforeend",
@@ -210,7 +220,7 @@ export function openAdminPanel() {
                 class="modal-card">
 
                 <h2>
-                    Administrasjon - ${studentName} (${classId})
+                    Administrasjon - ${teacherName} (${classId})
                 </h2>
                 
                 <button id="logoutUser">
