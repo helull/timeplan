@@ -99,8 +99,8 @@ const classId =
                    ${roomsenabled ? "Skjul rom" : "Vis rom"}
                 </button>
 
-                <button id="openAdmin">
-                    Login lærer
+                <button id="logoutUserFromTools">
+                    Logg ut
                 </button>
                 
                 <button id="closeTools">    
@@ -113,15 +113,15 @@ const classId =
         `
     );
 
-    document
+        document
         .getElementById(
-            "openAdmin"
+            "logoutUserFromTools"
         )
         ?.addEventListener(
             "click",
-            adminLogin
+            logoutUser
         );
-   
+    
     document
     .getElementById(
         "toggleTeacherNames"
@@ -149,35 +149,6 @@ const classId =
         closeToolsPanel
     );
     
-}
-
-function adminLogin() {
-
-    const password =
-        prompt(
-            "Lærerpassord"
-        );
-
-    if (
-        password !==
-        "TEMP123"
-    ) {
-
-        alert(
-            "Feil passord"
-        );
-
-        return;
-    }
-    
-    localStorage.setItem(
-        "userType",
-        "teacher"
-    );
-    
-    applyTeacherMode();
-    closeToolsPanel();
-    /*  openAdminPanel();  */
 }
 
 function logoutUser() {
