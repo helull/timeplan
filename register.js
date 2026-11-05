@@ -10,7 +10,7 @@ import {
 from "./classService.js";
 
 import {
-    erExists
+    teacherExists
 }
 from "./teacherService.js";
 
