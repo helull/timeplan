@@ -394,6 +394,7 @@ async function init(){
     const studentId = localStorage.getItem("studentId");
 
     if (userType === "teacher") {
+        const classId = localStorage.setItem("classId", "1STA");
         initializeTeacherMode();
     }
     else if (!hasStudent()) {
