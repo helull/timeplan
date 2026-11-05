@@ -10,7 +10,7 @@ import {
 from "./classService.js";
 
 import {
-    teacherExists
+    erExists
 }
 from "./teacherService.js";
 
@@ -55,7 +55,7 @@ export async function showRegister() {
                 <hr>
 
                 <button
-                    id="teacherLoginButton">
+                    id="erLoginButton">
 
                     Lærerinnlogging
 
@@ -183,29 +183,29 @@ export async function showRegister() {
 
     );
 
-    const teacherButton =
+    const erButton =
         document.getElementById(
-            "teacherLoginButton"
+            "erLoginButton"
         );
 
-    teacherButton.addEventListener(
+    erButton.addEventListener(
 
         "click",
 
         async () => {
 
-            const teacherName =
+            const erName =
                 prompt(
                     "Skriv inn lærernavn"
                 );
 
-            if (!teacherName) {
+            if (!erName) {
                 return;
             }
 
             const exists =
-                await teacherExists(
-                    teacherName.trim()
+                await erExists(
+                    erName.trim()
                 );
 
             if (!exists) {
@@ -217,8 +217,8 @@ export async function showRegister() {
                 return;
             }
 
-            loginTeacher(
-                teacherName
+            loginer(
+                erName
             );
 
             location.reload();
