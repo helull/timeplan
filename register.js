@@ -12,7 +12,7 @@ from "./classService.js";
 import {
     teacherExists
 }
-from "./teacherService.js";
+from "./Service.js";
 
 import {
     loginTeacher
@@ -189,9 +189,7 @@ export async function showRegister() {
         );
 
     teacherButton.addEventListener(
-
         "click",
-
         async () => {
 
             const teacherName =
@@ -216,6 +214,11 @@ export async function showRegister() {
 
                 return;
             }
+            
+            localStorage.setItem(
+                "classId",
+                selectedClass
+            );
 
             loginTeacher(
                 teacherName
