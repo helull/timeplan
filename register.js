@@ -214,7 +214,14 @@ export async function showRegister() {
 
                 return;
             }
-            
+
+const selectedClass =
+    document
+        .getElementById(
+            "classSelect"
+        )
+        .value;
+           
             localStorage.setItem(
                 "classId",
                 selectedClass
