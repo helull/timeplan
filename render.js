@@ -340,22 +340,7 @@ export function renderSchedule(
                         const isExam =
                             examData?.exam ?? false;
                         
-                        const grade = `VG${schedule.className.charAt(0)}`;
-
-                        const isBlockSubject =
-                            lesson.subject
-                                    ?.toUpperCase()
-                                    .includes(
-                                      "BLOKK"
-                                  );
-
-                          const isBlockRoom =
-                            lesson.roomName
-                              ?.toUpperCase()
-                                .includes(
-                                  "BLOKK"
-                            );
-                     
+                        const grade = `VG${schedule.className.charAt(0)}`;                    
                         
                     const blockExamMap =
                         {};
