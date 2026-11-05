@@ -19,7 +19,7 @@ from "./teacher.js";
 import {
     loadClasses
 }
-from "./scheduleService.js";
+from "./classService.js";
 
 import {
     reloadScheduleForClass
