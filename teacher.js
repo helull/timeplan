@@ -20,7 +20,9 @@ export function loginTeacher(
         "teacherName",
         teacherName
     );
-
+    
+    sessionStorage.removeItem("adminMode");
+    
     applyTeacherMode();
 }
 
@@ -92,11 +94,7 @@ export function removeTeacherMode() {
 
 export function initializeTeacherMode() {
 
-    if (
-        localStorage.getItem(
-            "userType"
-        ) === "teacher"
-    ) {
+    if (isTeacher()) {
 
         applyTeacherMode();
 
@@ -104,7 +102,18 @@ export function initializeTeacherMode() {
 
         removeTeacherMode();
     }
+
+    if (isAdmin()) {
+
+        applyAdminMode();
+
+    } else {
+
+        removeAdminMode();
+    }
 }
+
+
 export function isAdmin() {
 
     return (
@@ -131,4 +140,40 @@ export function disableAdminMode() {
     );
 
     removeAdminMode();
+}
+
+export function applyAdminMode() {
+
+    document
+        .querySelectorAll(
+            ".admin-only"
+        )
+        .forEach(
+            item => {
+
+                item.classList.add(
+                    "admin-active"
+                );
+
+                item.disabled = false;
+            }
+        );
+}
+
+export function removeAdminMode() {
+
+    document
+        .querySelectorAll(
+            ".admin-only"
+        )
+        .forEach(
+            item => {
+
+                item.classList.remove(
+                    "admin-active"
+                );
+
+                item.disabled = true;
+            }
+        );
 }
