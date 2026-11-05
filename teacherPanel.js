@@ -186,8 +186,7 @@ function logoutUser() {
          return;
     }
         
-    localStorage.clear();
-
+    localStorage.removeItem("studentName");
     location.reload();
 }
 
