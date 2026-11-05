@@ -208,11 +208,11 @@ export function openAdminPanel() {
                     Administrator
                 </button>
                 
-                <button id="importSchedule">
+                <button class="admin-only" disabled id="importSchedule">
                     Importer JSON
                 </button>
                 
-                <button id="howToImport">
+                <button class="admin-only" disabled  id="howToImport">
                     Bruk AI !
                 </button>
 
@@ -825,4 +825,40 @@ function closeChangeClassModal() {
             "changeClassModal"
         )
         ?.remove();
+}
+
+
+function adminModeLogin() {
+
+    if (isAdmin()) {
+
+        alert(
+            "Administrator er allerede aktiv."
+        );
+
+        return;
+    }
+
+    const password =
+        prompt(
+            "Administratorpassord"
+        );
+
+    if (
+        password !==
+        "NESBRU2025"
+    ) {
+
+        alert(
+            "Feil passord"
+        );
+
+        return;
+    }
+
+    enableAdminMode();
+
+    alert(
+        "Administrator aktivert."
+    );
 }
