@@ -21,7 +21,7 @@ from "./teacher.js";
 
 export async function showRegister() {
 
-    document.body.instAdjacentHTML(
+    document.body.insertAdjacentHTML(
 
         "beforeend",
 
