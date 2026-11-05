@@ -33,6 +33,11 @@ export function renderSchedule(
 ) {
     console.log("blockExams:", blockExams);
     console.log("schedule er", schedule)
+
+    const totalDays =
+    document.querySelectorAll(".day").length;
+
+    let completed = 0;
     
     const weeks =
         document.querySelectorAll(
@@ -520,6 +525,30 @@ export function renderSchedule(
                     }
                 );
                  day.innerHTML = html;
+
+
+
+                
+                completed++;
+
+const percent =
+    Math.round(
+        completed / totalDays * 100
+    );
+
+document.getElementById(
+    "progressBar"
+).style.width =
+    `${percent}%`;
+
+document.getElementById(
+    "loadingText"
+).textContent =
+    `Laster ${percent}%`;
+
+
+
+                
             }
         );
     });
