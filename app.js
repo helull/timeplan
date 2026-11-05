@@ -434,7 +434,7 @@ if (isTeacher()) {
 }
     
     render();
-    renderTeacherButton();
+    //renderTeacherButton();
 }
 
 export async function reloadScheduleForClass(
