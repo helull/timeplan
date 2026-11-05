@@ -16,6 +16,16 @@ import {
 }
 from "./teacher.js";
 
+import {
+    loadClasses
+}
+from "./scheduleService.js";
+
+import {
+    reloadScheduleForClass
+}
+from "./app.js";
+
 export function renderTeacherButton() {
 
     if (!isTeacher()) {
@@ -207,6 +217,10 @@ export function openAdminPanel() {
                 <button id="logoutUser">
                     Logg ut
                 </button>
+
+                <button id="changeClass">
+                    Endre klasse
+                </button>
                 
                 <button id="importSchedule">
                     Importer JSON
@@ -223,6 +237,15 @@ export function openAdminPanel() {
 
         </div>
         `
+    );
+
+    document
+    .getElementById(
+        "changeClass"
+    )
+    ?.addEventListener(
+        "click",
+        openChangeClassModal
     );
     
     document
@@ -678,3 +701,133 @@ function closeImportHelpPanel() {
 }
 
 
+async function openChangeClassModal() {
+
+    if (
+        document.getElementById(
+            "changeClassModal"
+        )
+    ) {
+        return;
+    }
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div
+            class="modal"
+            id="changeClassModal">
+
+            <div
+                class="modal-card">
+
+                <h2>
+                    Velg klasse
+                </h2>
+
+                <select
+                    id="teacherClassSelect"
+                    style="width:100%">
+                </select>
+
+                <br><br>
+
+                <button
+                    id="saveClassChange">
+
+                    Bytt klasse
+
+                </button>
+
+                <button
+                    id="closeClassChange">
+
+                    Lukk
+
+                </button>
+
+            </div>
+
+        </div>
+        `
+    );
+
+    const select =
+        document.getElementById(
+            "teacherClassSelect"
+        );
+
+    const classes =
+        await loadClasses();
+
+    classes.forEach(
+        item => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                item.id;
+
+            option.textContent =
+                item.name;
+
+            select.appendChild(
+                option
+            );
+        }
+    );
+
+    select.value =
+        localStorage.getItem(
+            "classId"
+        ) || "";
+
+    document
+        .getElementById(
+            "saveClassChange"
+        )
+        ?.addEventListener(
+            "click",
+            saveClassChange
+        );
+
+    document
+        .getElementById(
+            "closeClassChange"
+        )
+        ?.addEventListener(
+            "click",
+            closeChangeClassModal
+        );
+}
+
+async function saveClassChange() {
+
+    const classId =
+        document.getElementById(
+            "teacherClassSelect"
+        ).value;
+
+    if (!classId) {
+        return;
+    }
+
+    closeChangeClassModal();
+    closeAdminPanel();
+
+    await reloadScheduleForClass(
+        classId
+    );
+}
+
+function closeChangeClassModal() {
+
+    document
+        .getElementById(
+            "changeClassModal"
+        )
+        ?.remove();
+}
