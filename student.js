@@ -1,9 +1,9 @@
 export function hasStudent() {
 
     return (
-        /*localStorage.getItem(
+        localStorage.getItem(
             "studentName"
-        ) && */
+        ) &&
         localStorage.getItem(
             "classId"
         )
