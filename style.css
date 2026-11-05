@@ -1178,3 +1178,13 @@ h1{
     z-index: 999999;
     background: rgba(255,255,255,0.9);
 }
+
+.admin-only {
+
+    display: none;
+}
+
+.admin-only.admin-active {
+
+    display: block;
+}
