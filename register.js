@@ -21,7 +21,7 @@ from "./teacher.js";
 
 export async function showRegister() {
 
-    document.body.insertAdjacentHTML(
+    document.body.instAdjacentHTML(
 
         "beforeend",
 
@@ -55,7 +55,7 @@ export async function showRegister() {
                 <hr>
 
                 <button
-                    id="erLoginButton">
+                    id="teacherLoginButton">
 
                     Lærerinnlogging
 
@@ -183,29 +183,29 @@ export async function showRegister() {
 
     );
 
-    const erButton =
+    const teacherButton =
         document.getElementById(
-            "erLoginButton"
+            "teacherLoginButton"
         );
 
-    erButton.addEventListener(
+    teacherButton.addEventListener(
 
         "click",
 
         async () => {
 
-            const erName =
+            const teacherName =
                 prompt(
                     "Skriv inn lærernavn"
                 );
 
-            if (!erName) {
+            if (!teacherName) {
                 return;
             }
 
             const exists =
-                await erExists(
-                    erName.trim()
+                await teacherExists(
+                    teacherName.trim()
                 );
 
             if (!exists) {
@@ -217,8 +217,8 @@ export async function showRegister() {
                 return;
             }
 
-            loginer(
-                erName
+            loginTeacher(
+                teacherName
             );
 
             location.reload();
