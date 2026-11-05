@@ -435,6 +435,39 @@ renderSchedule(
     renderTeacherButton();
 }
 
+export async function reloadScheduleForClass(
+    classId
+) {
+
+    localStorage.setItem(
+        "classId",
+        classId
+    );
+
+    const schedule =
+        await loadSchedule(
+            classId
+        );
+
+    schedule.className =
+        classId;
+
+    const homeworkMap =
+        await loadAllHomework();
+
+    const examMap =
+        await loadAllExamFlags();
+
+    renderSchedule(
+        schedule,
+        homeworkMap,
+        examMap,
+        blockExams,
+        tentamens
+    );
+}
+
+
 init();
 
 document
