@@ -1171,3 +1171,10 @@ h1{
     );
     transition: width .2s;
 }
+
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: rgba(255,255,255,0.9);
+}
