@@ -394,10 +394,6 @@ async function init(){
     const studentId = localStorage.getItem("studentId");
 
     if (userType === "teacher") {
-        /* De to neste linjer må slettes når jeg får på plass valg av klasse for lærere */
-        localStorage.setItem("studentName", "Hans Hansen");
-        localStorage.setItem("classId", "1STA");
-
         initializeTeacherMode();
     }
     else if (!hasStudent()) {
