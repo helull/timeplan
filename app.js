@@ -34,7 +34,8 @@ from "./teacherLogin.js";
 import {
     isTeacher,
     removeTeacherMode,
-    initializeTeacherMode
+    initializeTeacherMode,
+    applyTeacherMode
 }
 from "./teacher.js";
 
