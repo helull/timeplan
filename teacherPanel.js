@@ -193,7 +193,7 @@ export function openAdminPanel() {
                 class="modal-card">
 
                 <h2>
-                    Administrasjon - ${teacherName} (${classId})
+                    Administrasjon - ${teacherName}  - ${isAdmin() ? "👑" : ""}  (${classId})
                 </h2>
                 
                 <button id="logoutUser">
