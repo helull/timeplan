@@ -144,7 +144,7 @@ ${currentText || ""}
                     teacherMode
                     ?
                     `
-                    <button
+                    <button class="admin-only" disabled
                         id="leggInnFridag"
                         style="
                             background:${dayHolidayEnabled ? "#ff0000" : ""};
@@ -156,7 +156,7 @@ ${currentText || ""}
 
                     </button>
 
-                    <button
+                    <button class="admin-only" disabled
                         id="leggInnFriuke"
                             style="
                             background:${weekHolidayEnabled ? "#ff0000" : ""};
@@ -167,7 +167,7 @@ ${currentText || ""}
                         Gjør hele uken til friuke
 
                     </button>
-                    <button
+                    <button class="admin-only" disabled
                         id="manageTentamens">
 
                         Legg inn/fjern Eksamensforberedende Prøve
