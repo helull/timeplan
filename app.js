@@ -428,6 +428,10 @@ renderSchedule(
     tentamens
 );
 
+if (isTeacher()) {
+    applyTeacherMode();
+}
+    
     render();
     renderTeacherButton();
 }
