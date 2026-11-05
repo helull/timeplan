@@ -210,7 +210,7 @@ export function openAdminPanel() {
                 class="modal-card">
 
                 <h2>
-                    Administrasjon
+                    Administrasjon - ${studentName} (${classId})
                 </h2>
                 
                 <button id="logoutUser">
