@@ -105,3 +105,30 @@ export function initializeTeacherMode() {
         removeTeacherMode();
     }
 }
+export function isAdmin() {
+
+    return (
+        sessionStorage.getItem(
+            "adminMode"
+        ) === "true"
+    );
+}
+
+export function enableAdminMode() {
+
+    sessionStorage.setItem(
+        "adminMode",
+        "true"
+    );
+
+    applyAdminMode();
+}
+
+export function disableAdminMode() {
+
+    sessionStorage.removeItem(
+        "adminMode"
+    );
+
+    removeAdminMode();
+}
