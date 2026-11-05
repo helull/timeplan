@@ -12,7 +12,7 @@ from "./classService.js";
 import {
     teacherExists
 }
-from "./Service.js";
+from "./teacherService.js";
 
 import {
     loginTeacher
