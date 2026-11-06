@@ -9,7 +9,7 @@ import {
     isSignInWithEmailLink,
     signInWithEmailLink
 }
-from "firebase/auth";
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
