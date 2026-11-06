@@ -638,9 +638,9 @@ function toggleTeacherNames() {
     );
 
     if (localStorage.getItem("showTeacherNames")) {
-        document.querySelectorAll(".room").forEach(el => el.classList.remove(".roomInvisible"));
+        document.querySelectorAll(".teacher").forEach(el => el.classList.remove(".teacherInvisible"));
     } else {
-        document.querySelectorAll(".room").forEach(el => el.classList.add(".roomInvisible"));
+        document.querySelectorAll(".teacher").forEach(el => el.classList.add(".teacherInvisible"));
     }
 
     //location.reload();
@@ -662,7 +662,13 @@ function toggleRooms() {
 
     );
 
-    location.reload();
+    if (localStorage.getItem("showRooms")) {
+        document.querySelectorAll(".room").forEach(el => el.classList.remove(".roomInvisible"));
+    } else {
+        document.querySelectorAll(".room").forEach(el => el.classList.add(".roomInvisible"));
+    }
+    
+    //location.reload();
 }
 
 function closeToolsPanel() {
