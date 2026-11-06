@@ -58,6 +58,9 @@ export async function openHomeworkModal(
     const teacherMode =
         isTeacher();
 
+    if teacherMode {
+        const teacherName = 
+    }
     const dayHolidayEnabled =
         await hasDayHoliday(
             week,
@@ -119,7 +122,7 @@ const teacherHomeworkText =
                 <h2>
                     ${isAdmin()
                         ? "Fridager, prøver og EFP"
-                        : "Lekser og prøveplan"}
+                        : "Lekser og prøveplan (${teacherName})"}
                 </h2>
 
                 ${
