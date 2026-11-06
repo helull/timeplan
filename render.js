@@ -27,6 +27,7 @@ const holidays =
 export function renderSchedule(
     schedule,
     homeworkMap = {},
+    teacherHomeworkMap = {},
     examMap = {},
     blockExams = [],
     tentamens = []
@@ -337,6 +338,11 @@ export function renderSchedule(
                                 `${lesson.lessonId}_${weekNo}`
                             ];
 
+                        const teacherLessonData =
+                    teacherHomeworkMap[
+        `${schedule.className}_${lesson.lessonId}_${weekNo}`
+    ];
+                        
                         const examData =
                             examMap[
                                 `${schedule.className}_${lesson.lessonId}_${weekNo}`
@@ -380,6 +386,7 @@ export function renderSchedule(
                         const hasExam =isExam || isBlockExam;
                         
                         let homework = "";
+                        let teacherHomework = "";
 
                         if (
                             typeof lessonData ===
@@ -398,7 +405,14 @@ export function renderSchedule(
 
                         }
 
+if (teacherLessonData) {
 
+    teacherHomework =
+        teacherLessonData.text || "";
+}
+``
+
+                        
                   const showTeacherNames =
                     localStorage.getItem(
                       "showTeacherNames"
@@ -503,6 +517,22 @@ export function renderSchedule(
                                     <div
                                         class="lesson-homework-preview"
                                         data-homework="${homework.replace(/"/g,"&quot;")}">
+
+${
+    teacherHomework
+    ?
+    `
+    <div
+        class="teacher-homework-preview">
+
+        📚 ${teacherHomework}
+
+    </div>
+    `
+    :
+    ""
+}
+
 
                                     📖 ${homework}
 
