@@ -196,8 +196,32 @@ export async function showRegister() {
     teacherButton.addEventListener(
         "click",
         async () => {
-            
 
+        const password =
+            prompt(
+                "Lærerpassord"
+            );
+
+        if (
+            password !==
+            "NESBRU2025"
+        ) {
+
+            alert(
+                "Feil passord"
+            );
+
+            return;
+        }
+
+        loginTeacher(
+            "teacher"
+        );
+
+        location.reload();
+
+            
+/*
             const selectedClass = document.getElementById("classSelect").value;        
             localStorage.setItem("classId", selectedClass);
             const teacherEmail = prompt("Skriv inn AFK-e-post");
@@ -207,15 +231,7 @@ export async function showRegister() {
             await sendMagicLink(teacherEmail.trim());
 
             alert("Sjekk e-posten din.");
-
+*/
         }
-
-
-/*
-            loginTeacher(
-                teacherName
-            );
-
-            location.reload();*/
     );
 }
