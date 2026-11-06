@@ -123,7 +123,7 @@ const teacherHomeworkText =
                 </h2>
 
                 ${
-    !teacherMode
+    !teacherHomeworkText
     ?
     `
     ${
