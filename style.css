@@ -994,6 +994,12 @@ h1{
     pointer-events:none;
 }
 
+.roomVisible{
+    visibility:hidden;
+    opacity:0;
+    pointer-events:none;
+}
+
 .teacher-only.teacher-active{
 
     visibility:visible;
