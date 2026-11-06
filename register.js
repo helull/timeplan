@@ -191,31 +191,9 @@ export async function showRegister() {
     teacherButton.addEventListener(
         "click",
         async () => {
+            
 
-const teacherEmail =
-    prompt(
-        "Skriv inn AFK-e-post"
-    );
-
-            if (!teacherName) {
-                return;
-            }
-
-            const exists =
-                await teacherExists(
-                    teacherName.trim()
-                );
-
-            if (!exists) {
-
-                alert(
-                    "Lærer ikke registrert."
-                );
-
-                return;
-            }
-
-const selectedClass =
+            const selectedClass =
     document
         .getElementById(
             "classSelect"
@@ -226,6 +204,27 @@ const selectedClass =
                 "classId",
                 selectedClass
             );
+            
+    const teacherEmail =
+        prompt(
+            "Skriv inn AFK-e-post"
+        );
+
+    if (!teacherEmail) {
+        return;
+    }
+
+    await sendMagicLink(
+        teacherEmail.trim()
+    );
+
+    alert(
+     "Sjekk e-posten din."
+    );
+
+            }
+
+
 
             loginTeacher(
                 teacherName
