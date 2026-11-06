@@ -143,9 +143,9 @@ const teacherHomeworkText =
 
             <div
                 class="teacher-homework-text">
-
-                ${teacherHomeworkText}
-
+                    ${formatTeacherHomework(
+                    teacherHomeworkText
+                    )}
             </div>
 
         </div>
@@ -1122,4 +1122,34 @@ async function openTentamenModal(
         }
     );
 
+}
+
+
+function formatTeacherHomework(text) {
+
+    if (!text) {
+        return "";
+    }
+
+    const match = text.match(
+        /(.*?)\s*\((https?:\/\/.*?)\)$/s
+    );
+
+    if (!match) {
+        return text;
+    }
+
+    const title = match[1].trim();
+    const url = match[2].trim();
+
+    return `
+        <div>${title}</div>
+        <br>
+        <a
+            href="${url}"
+            target="_blank"
+            class="teacher-homework-link">
+            📓 Åpne OneNote-side
+        </a>
+    `;
 }
