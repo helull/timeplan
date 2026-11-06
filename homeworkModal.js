@@ -59,7 +59,7 @@ export async function openHomeworkModal(
         isTeacher();
 
     if teacherMode {
-        const teacherName = 
+        const teacherName =  localStorage.getItem("userName");
     }
     const dayHolidayEnabled =
         await hasDayHoliday(
