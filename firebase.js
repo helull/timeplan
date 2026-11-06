@@ -4,7 +4,13 @@ from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import { getFirestore }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-import { getAuth } from "firebase/auth";
+import {
+    getAuth,
+    isSignInWithEmailLink,
+    signInWithEmailLink
+}
+from "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgxepR17v3SquIBubNK1V36FiPAox2rEM",
