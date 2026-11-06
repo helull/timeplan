@@ -123,20 +123,57 @@ const teacherHomeworkText =
                 </h2>
 
                 ${
-                    teacherMode
-                    ? ""
-                    :
-                    `
-                    <textarea
-                        id="homeworkText"
-                        rows="8"
-                        style="width:100%;">
+    !teacherMode
+    ?
+    `
+    ${
+        teacherHomeworkText
+        ?
+        `
+        <div
+            class="teacher-homework-card">
 
-                        ${currentText || ""}
+            <div
+                class="teacher-homework-title">
 
-                    </textarea>
-                    `
-                }
+                📚 Lærerlekse
+
+            </div>
+
+            <div
+                class="teacher-homework-text">
+
+                ${teacherHomeworkText}
+
+            </div>
+
+        </div>
+
+        <br>
+        `
+        :
+        ""
+    }
+
+    <div
+        class="student-homework-title">
+
+        📝 Mine notater
+
+    </div>
+
+    <textarea
+        id="homeworkText"
+        rows="8"
+        style="width:100%;">
+
+${currentText || ""}
+
+    </textarea>
+    `
+    :
+    ""
+}
 
 ${
     teacherMode
