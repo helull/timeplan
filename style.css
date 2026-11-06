@@ -995,15 +995,17 @@ h1{
 }
 
 .roomInvisible{
-    visibility:hidden;
-    opacity:0;
-    pointer-events:none;
+    display: none !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
 }
 
 .teacherInvisible{
-    visibility:hidden;
-    opacity:0;
-    pointer-events:none;
+    display: none !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
 }
 
 
