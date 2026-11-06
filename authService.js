@@ -8,6 +8,11 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
+const actionCodeSettings = {
+    url: "https://helull.github.io/timeplan/",
+    handleCodeInApp: true
+};
+
 export async function sendMagicLink(
     email
 ) {
