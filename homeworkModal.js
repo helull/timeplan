@@ -180,7 +180,7 @@ ${
     ?
     `
     <h3>
-        📚 Lærerlekse
+        📚 Lærerlekse (${classId})
     </h3>
 
     <textarea
