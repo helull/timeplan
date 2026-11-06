@@ -1131,25 +1131,83 @@ function formatTeacherHomework(text) {
         return "";
     }
 
-    const match = text.match(
+    // Variant 1:
+    // Tittel + URL i parentes
+    //
+    // Eksempel:
+    // Årsplan 1P 2026 - 27
+    // (https://...)
+    //
+    const titleAndUrlMatch = text.match(
         /(.*?)\s*\((https?:\/\/.*?)\)$/s
     );
 
-    if (!match) {
-        return text;
+    if (titleAndUrlMatch) {
+
+        const title =
+            titleAndUrlMatch[1].trim();
+
+        const url =
+            titleAndUrlMatch[2].trim();
+
+        const linkText =
+            url.includes("sharepoint.com")
+                ? "📓 Åpne OneNote-side"
+                : "📄 Åpne dokument";
+
+        return `
+            <div>
+                ${title}
+            </div>
+
+            <br>
+
+            <a
+                href="${url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="teacher-homework-link">
+
+                ${linkText}
+
+            </a>
+        `;
     }
 
-    const title = match[1].trim();
-    const url = match[2].trim();
+    // Variant 2:
+    // Bare URL
+    //
+    // Eksempel:
+    // https://...
+    //
+    const urlOnlyMatch = text.match(
+        /^\s*(https?:\/\/[^\s]+)\s*$/
+    );
 
-    return `
-        <div>${title}</div>
-        <br>
-        <a
-            href="${url}"
-            target="_blank"
-            class="teacher-homework-link">
-            📓 Åpne OneNote-side
-        </a>
-    `;
+    if (urlOnlyMatch) {
+
+        const url =
+            urlOnlyMatch[1];
+
+        const linkText =
+            url.includes("sharepoint.com")
+                ? "📓 Åpne OneNote-side"
+                : "📄 Åpne dokument";
+
+        return `
+            <a
+                href="${url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="teacher-homework-link">
+
+                ${linkText}
+
+            </a>
+        `;
+    }
+
+    // Variant 3:
+    // Vanlig tekst uten lenke
+    return text;
 }
