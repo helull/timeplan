@@ -58,7 +58,7 @@ export function renderTeacherButton() {
         );
 }
 
-export function openToolsPanel() {
+    export function openToolsPanel() {
 
     const teachersenabled = localStorage.getItem("showTeacherNames") === "true";
     const roomsenabled = localStorage.getItem("showRooms") === "true";
