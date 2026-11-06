@@ -55,12 +55,10 @@ export async function openHomeworkModal(
         return;
     }
 
-    const teacherMode =
-        isTeacher();
-
-    if teacherMode {
-        const teacherName =  localStorage.getItem("userName");
-    }
+    const teacherMode = isTeacher();
+       
+    if teacherMode {const teacherName =  localStorage.getItem("userName");  }
+    
     const dayHolidayEnabled =
         await hasDayHoliday(
             week,
