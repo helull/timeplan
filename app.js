@@ -150,8 +150,10 @@ function updateDots(){
         );
 }
 
-function render(){
+    colsole.log("før render");
+    console.table({ ...localStorage });
 
+function render(){
     weeks.forEach(
         (week,index)=>{
 
