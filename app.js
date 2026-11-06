@@ -2,6 +2,11 @@ import { db }
 from "./firebase.js";
 
 import {
+    loadAllTeacherHomework
+}
+from "./teacherHomeworkService.js";
+
+import {
     loadTentamens
 }
 from "./tentamenService.js";
@@ -417,6 +422,9 @@ schedule.className = classId;
     
 const homeworkMap =
     await loadAllHomework();
+
+const teacherHomeworkMap =
+    await loadAllTeacherHomework();
     
 const examMap =
     await loadAllExamFlags();
@@ -424,6 +432,7 @@ const examMap =
 renderSchedule(
     schedule,
     homeworkMap,
+    teacherHomeworkMap,
     examMap,
     blockExams,
     tentamens
