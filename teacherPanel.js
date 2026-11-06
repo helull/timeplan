@@ -637,7 +637,12 @@ function toggleTeacherNames() {
 
     );
 
-    location.reload();
+    if (localStorage.getItem("showTeacherNames") {
+        document.querySelectorAll(".teacher-only").forEach(el => el.classList.remove("teacher-active"));
+        element.classList.remove("visible");
+    }
+
+    //location.reload();
 }
 
 function toggleRooms() {
