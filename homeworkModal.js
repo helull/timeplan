@@ -145,7 +145,7 @@ ${currentText || ""}
                     isAdmin()
                     ?
                     `
-                    <button class="admin-only" disabled
+                    <button
                         id="leggInnFridag"
                         style="
                             background:${dayHolidayEnabled ? "#ff0000" : ""};
@@ -157,7 +157,7 @@ ${currentText || ""}
 
                     </button>
 
-                    <button class="admin-only" disabled
+                    <button
                         id="leggInnFriuke"
                             style="
                             background:${weekHolidayEnabled ? "#ff0000" : ""};
@@ -168,7 +168,7 @@ ${currentText || ""}
                         Gjør hele uken til friuke
 
                     </button>
-                    <button class="admin-only" disabled
+                    <button
                         id="manageTentamens">
 
                         Legg inn/fjern Eksamensforberedende Prøve
