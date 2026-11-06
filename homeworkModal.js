@@ -148,8 +148,8 @@ const teacherHomeworkText =
 
             <div
                 class="teacher-homework-text">
-                    $(
-                    teacherHomeworkText
+                    $(formatTeacherHomework(
+                    teacherHomeworkText)
                     )
             </div>
 
@@ -1129,9 +1129,7 @@ async function openTentamenModal(
 
 }
 
-
-
-function formatTeacherHomework(text) {
+export function formatTeacherHomework(text) {
 
     if (!text) {
         return "";
