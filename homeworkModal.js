@@ -27,7 +27,8 @@ import {
 from "./holidayService.js";
 
 import {
-    isTeacher
+    isTeacher,
+    isAdmin
 }
 from "./teacher.js";
 
@@ -100,13 +101,13 @@ export async function openHomeworkModal(
                 class="modal-card">
 
                 <h2>
-                    ${teacherMode
+                    ${isAdmin()
                         ? "Fridager, prøver og EFP"
                         : "Lekser og prøveplan"}
                 </h2>
 
                 ${
-                    teacherMode
+                    isAdmin()
                     ? ""
                     :
                     `
@@ -123,7 +124,7 @@ ${currentText || ""}
 
                 <button
                     id="saveHomework"
-                    ${teacherMode ? "disabled" : ""}>
+                    ${isAdmin() ? "disabled" : ""}>
 
                     Lagre mine lekser
 
@@ -141,7 +142,7 @@ ${currentText || ""}
                 </button>
 
                 ${
-                    teacherMode
+                    isAdmin()
                     ?
                     `
                     <button class="admin-only" disabled
