@@ -139,7 +139,7 @@ const teacherHomeworkText =
             <div
                 class="teacher-homework-title">
 
-                📚 Lærerlekse
+                📚 Lærerlekse (${classId})
 
             </div>
 
