@@ -55,7 +55,7 @@ export async function openHomeworkModal(
         return;
     }
 
-    const teacherMode = isTeacher();
+    var teacherMode = isTeacher();
        
     if teacherMode {const teacherName =  localStorage.getItem("userName");  }
     
