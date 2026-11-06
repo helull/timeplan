@@ -9,7 +9,6 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-
 import {
     isTeacher,
     applyTeacherMode,
