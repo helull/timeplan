@@ -192,10 +192,10 @@ export async function showRegister() {
         "click",
         async () => {
 
-            const teacherName =
-                prompt(
-                    "Skriv inn lærernavn"
-                );
+const teacherEmail =
+    prompt(
+        "Skriv inn AFK-e-post"
+    );
 
             if (!teacherName) {
                 return;
