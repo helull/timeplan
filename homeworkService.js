@@ -2,6 +2,11 @@ import { db }
 from "./firebase.js";
 
 import {
+    saveTeacherHomework
+}
+from "./teacherHomeworkService.js";
+
+import {
     isTeacher
 }
 from "./teacher.js";
@@ -25,6 +30,18 @@ export async function saveHomework(
     exam = false
 ) {
 
+
+    
+await saveTeacherHomework(
+    "1STA",
+    "TEST",
+    45,
+    "Dette er en lærerlekse"
+);
+
+
+    
+    
     const studentId =
         localStorage.getItem(
             "studentId"
@@ -465,3 +482,4 @@ export async function loadAllBlockExams() {
     );
 
 }
+
