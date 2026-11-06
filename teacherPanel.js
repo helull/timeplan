@@ -95,11 +95,11 @@ const classId =
                 </h2>
 
                 <button id="toggleTeacherNames">
-                   ${teachersenabled ? "Skjul lærere" : "Vis lærere"}
+                   Vis/skjul lærer
                 </button>
                 
                 <button id="toggleRooms">
-                   ${roomsenabled ? "Skjul rom" : "Vis rom"}
+                  vis/skjul rom
                 </button>
 
                 <button id="logoutUserFromTools">
