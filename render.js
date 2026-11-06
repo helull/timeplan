@@ -1,5 +1,6 @@
 import {
-    openHomeworkModal
+    openHomeworkModal,
+    formatTeacherHomework,
 }
     
 from "./homeworkModal.js";
@@ -508,7 +509,7 @@ if (teacherLessonData) {
         class="teacher-homework-preview"
         data-homework="${teacherHomework.replace(/"/g,"&quot;")}">
 
-        📚 ${teacherHomework}
+        📚 ${formatTeacherHomework(teacherHomework)}
 
     </div>
     `
