@@ -1125,8 +1125,12 @@ async function openTentamenModal(
 }
 
 
-function formatTeacherHomework(text) {
 
+function formatTeacherHomework(text) {
+console.log(
+    "teacherHomeworkText =",
+    text
+);
     if (!text) {
         return "";
     }
