@@ -95,6 +95,11 @@ export async function openHomeworkModal(
 const teacherHomeworkText =
     teacherHomeworkData.text || "";
     
+    console.log(
+    "teacherHomeworkText råverdi",
+    JSON.stringify(teacherHomeworkText)
+);
+    
     let examInfo =
         await loadExamFlag(
             classId,
@@ -188,7 +193,7 @@ ${
         rows="5"
         style="width:100%;">
 
-${formatTeacherHomework(teacherHomeworkText)}
+${teacherHomeworkText}
 
     </textarea>
 
