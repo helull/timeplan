@@ -1,30 +1,42 @@
 import {
-    getAuth,
+    auth
+}
+from "./firebase.js";
+
+import {
     sendSignInLinkToEmail
 }
-from "firebase/auth";
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-const auth =
-    getAuth();
+export async function sendMagicLink(
+    email
+) {
 
-export async function
-sendMagicLink(email)
-{
     const actionCodeSettings = {
+
         url:
             window.location.origin,
+
         handleCodeInApp:
             true
+
     };
 
     await sendSignInLinkToEmail(
+
         auth,
+
         email,
+
         actionCodeSettings
+
     );
 
     localStorage.setItem(
+
         "emailForSignIn",
+
         email
+
     );
 }
