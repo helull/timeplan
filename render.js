@@ -460,11 +460,11 @@ if (teacherLessonData) {
            
 
                                 <div class="room-teacher">
-                                        <div class="room" ${showRooms ? "" : "class=roomInvisible"}>
+                                        <div class="room ${showRooms ? "" : "roomInvisible"}"}>
                                             ${lesson.roomName}
                                         </div>
                                         
-                                        <div class="teacher" ${showTeacherNames ? "" : "class=teacherInvisible"}>
+                                        <div class="teacher room ${showTeacherNames ? "" : "teacherNameInvisible"}"}>
                                             ${lesson.teacherName}
                                         </div>
                                 </div>
