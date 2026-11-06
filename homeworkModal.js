@@ -57,7 +57,7 @@ export async function openHomeworkModal(
 
     var teacherMode = isTeacher();
        
-    if (teacherMode === true) {const teacherName =  localStorage.getItem("userName");  }
+    if (teacherMode === true) {const teacherName =  localStorage.getItem("teacherName");  }
     
     const dayHolidayEnabled =
         await hasDayHoliday(
