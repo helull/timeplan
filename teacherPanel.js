@@ -637,7 +637,7 @@ function toggleTeacherNames() {
 
     );
 
-    if (localStorage.getItem("showTeacherNames")) {
+    if (localStorage.getItem("showTeacherNames") === "true" ) {
         document.querySelectorAll(".teacher").forEach(el => el.classList.remove("teacherInvisible"));
     } else {
         document.querySelectorAll(".teacher").forEach(el => el.classList.add("teacherInvisible"));
@@ -662,7 +662,7 @@ function toggleRooms() {
 
     );
 
-    if (localStorage.getItem("showRooms")) {
+    if (localStorage.getItem("showRooms") === "true") {
         document.querySelectorAll(".room").forEach(el => el.classList.remove("roomInvisible"));
     } else {
         document.querySelectorAll(".room").forEach(el => el.classList.add("roomInvisible"));
