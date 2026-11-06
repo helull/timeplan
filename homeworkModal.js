@@ -1126,38 +1126,25 @@ async function openTentamenModal(
 
 
 
+
 function formatTeacherHomework(text) {
-console.log(
-    "teacherHomeworkText =",
-    text
-);
+
     if (!text) {
         return "";
     }
 
-    // Variant 1:
     // Tittel + URL i parentes
-    //
-    // Eksempel:
-    // Årsplan 1P 2026 - 27
-    // (https://...)
-    //
-    const titleAndUrlMatch = text.match(
-        /(.*?)\s*\((https?:\/\/.*?)\)$/s
+    const titleUrlMatch = text.match(
+        /^(.+?)\s*\((https?:\/\/.+)\)\s*$/s
     );
 
-    if (titleAndUrlMatch) {
+    if (titleUrlMatch) {
 
         const title =
-            titleAndUrlMatch[1].trim();
+            titleUrlMatch[1].trim();
 
         const url =
-            titleAndUrlMatch[2].trim();
-
-        const linkText =
-            url.includes("sharepoint.com")
-                ? "📓 Åpne OneNote-side"
-                : "📄 Åpne dokument";
+            titleUrlMatch[2].trim();
 
         return `
             <div>
@@ -1172,31 +1159,21 @@ console.log(
                 rel="noopener noreferrer"
                 class="teacher-homework-link">
 
-                ${linkText}
+                📓 Åpne OneNote-side
 
             </a>
         `;
     }
 
-    // Variant 2:
     // Bare URL
-    //
-    // Eksempel:
-    // https://...
-    //
     const urlOnlyMatch = text.match(
-        /^\s*(https?:\/\/[^\s]+)\s*$/
+        /^\s*(https?:\/\/.+)\s*$/
     );
 
     if (urlOnlyMatch) {
 
         const url =
-            urlOnlyMatch[1];
-
-        const linkText =
-            url.includes("sharepoint.com")
-                ? "📓 Åpne OneNote-side"
-                : "📄 Åpne dokument";
+            urlOnlyMatch[1].trim();
 
         return `
             <a
@@ -1205,13 +1182,13 @@ console.log(
                 rel="noopener noreferrer"
                 class="teacher-homework-link">
 
-                ${linkText}
+                📓 Åpne OneNote-side
 
             </a>
         `;
     }
 
-    // Variant 3:
-    // Vanlig tekst uten lenke
+    // Vanlig tekst
     return text;
 }
+
