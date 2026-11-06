@@ -638,8 +638,9 @@ function toggleTeacherNames() {
     );
 
     if (localStorage.getItem("showTeacherNames") {
-        document.querySelectorAll(".teacher-only").forEach(el => el.classList.remove("teacher-active"));
-        element.classList.remove("visible");
+        document.querySelectorAll(".room").forEach(el => el.classList.remove(".roomInvisible"));
+    } else {
+        document.querySelectorAll(".room").forEach(el => el.classList.add(".roomInvisible"));
     }
 
     //location.reload();
