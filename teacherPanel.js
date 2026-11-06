@@ -623,52 +623,27 @@ await setDoc(
 
 function toggleTeacherNames() {
 
-    const current =
+    const current = localStorage.getItem("showTeacherNames") === "true";
+    localStorage.setItem("showTeacherNames", (!current).toString());
 
-        localStorage.getItem(
-            "showTeacherNames"
-        ) === "true";
-
-    localStorage.setItem(
-
-        "showTeacherNames",
-
-        (!current).toString()
-
-    );
-
-    if (localStorage.getItem("showTeacherNames") === "true" ) {
+    if (current) {
         document.querySelectorAll(".teacher").forEach(el => el.classList.remove("teacherInvisible"));
     } else {
         document.querySelectorAll(".teacher").forEach(el => el.classList.add("teacherInvisible"));
     }
-
-    //location.reload();
 }
 
 function toggleRooms() {
 
-    const current =
+    const current = localStorage.getItem("showRooms") === "true";
 
-        localStorage.getItem(
-            "showRooms"
-        ) === "true";
+    localStorage.setItem("showRooms",(!current).toString());
 
-    localStorage.setItem(
-
-        "showRooms",
-
-        (!current).toString()
-
-    );
-
-    if (localStorage.getItem("showRooms") === "true") {
+    if (current) {
         document.querySelectorAll(".room").forEach(el => el.classList.remove("roomInvisible"));
     } else {
         document.querySelectorAll(".room").forEach(el => el.classList.add("roomInvisible"));
     }
-    
-    //location.reload();
 }
 
 function closeToolsPanel() {
