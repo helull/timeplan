@@ -198,44 +198,24 @@ export async function showRegister() {
         async () => {
             
 
-            const selectedClass =
-    document
-        .getElementById(
-            "classSelect"
-        )
-        .value;
-           
-            localStorage.setItem(
-                "classId",
-                selectedClass
-            );
-            
-    const teacherEmail =
-        prompt(
-            "Skriv inn AFK-e-post"
-        );
+            const selectedClass = document.getElementById("classSelect").value;        
+            localStorage.setItem("classId", selectedClass);
+            const teacherEmail = prompt("Skriv inn AFK-e-post");
 
-    if (!teacherEmail) {
-        return;
-    }
+            if (!teacherEmail) { return;}
 
-    await sendMagicLink(
-        teacherEmail.trim()
-    );
+            await sendMagicLink(teacherEmail.trim());
 
-    alert(
-     "Sjekk e-posten din."
-    );
+            alert("Sjekk e-posten din.");
 
-            }
+        }
 
 
-
+/*
             loginTeacher(
                 teacherName
             );
 
-            location.reload();
-        }
+            location.reload();*/
     );
 }
