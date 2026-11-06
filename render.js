@@ -464,19 +464,9 @@ if (teacherLessonData) {
                                             ${lesson.roomName}
                                         </div>
                                         
-
-                                    ${
-                                        showTeacherNames
-                                        ?
-                                        `
                                         <div class="teacher">
-                                            ${lesson.teacherName || ""}
+                                            ${lesson.teacherName}
                                         </div>
-                                        `
-                                        :
-                                        ""
-                                    }
-
                                 </div>
 
 
