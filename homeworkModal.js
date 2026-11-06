@@ -69,7 +69,7 @@ export async function openHomeworkModal(
         await hasWeekHoliday(
             week
         );
-    
+
     
     const homeworkData =
         await loadHomework(
@@ -148,9 +148,9 @@ const teacherHomeworkText =
 
             <div
                 class="teacher-homework-text">
-                    ${formatTeacherHomework(
+                    $(
                     teacherHomeworkText
-                    )}
+                    )
             </div>
 
         </div>
@@ -1131,54 +1131,22 @@ async function openTentamenModal(
 
 
 
-
 function formatTeacherHomework(text) {
 
     if (!text) {
         return "";
     }
 
-    // Tittel + URL i parentes
-    const titleUrlMatch = text.match(
-        /^(.+?)\s*\((https?:\/\/.+)\)\s*$/s
-    );
+    // Finn første vanlig URL
+    const urlMatch =
+        text.match(
+            /https:\/\/[^\s]+/
+        );
 
-    if (titleUrlMatch) {
-
-        const title =
-            titleUrlMatch[1].trim();
+    if (urlMatch) {
 
         const url =
-            titleUrlMatch[2].trim();
-
-        return `
-            <div>
-                ${title}
-            </div>
-
-            <br>
-
-            <a
-                href="${url}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="teacher-homework-link">
-
-                📓 Åpne OneNote-side
-
-            </a>
-        `;
-    }
-
-    // Bare URL
-    const urlOnlyMatch = text.match(
-        /^\s*(https?:\/\/.+)\s*$/
-    );
-
-    if (urlOnlyMatch) {
-
-        const url =
-            urlOnlyMatch[1].trim();
+            urlMatch[0];
 
         return `
             <a
