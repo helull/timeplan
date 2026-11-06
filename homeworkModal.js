@@ -1,4 +1,10 @@
 import {
+    saveTeacherHomework,
+    loadTeacherHomework
+}
+from "./teacherHomeworkService.js";
+
+import {
     saveTentamen,
     loadTentamens,
     deleteTentamen
@@ -78,6 +84,16 @@ export async function openHomeworkModal(
             "classId"
         ) || "";
 
+    const teacherHomeworkData =
+    await loadTeacherHomework(
+        classId,
+        lessonId,
+        week
+    );
+
+const teacherHomeworkText =
+    teacherHomeworkData.text || "";
+    
     let examInfo =
         await loadExamFlag(
             classId,
@@ -107,7 +123,7 @@ export async function openHomeworkModal(
                 </h2>
 
                 ${
-                    isAdmin()
+                    teacherMode
                     ? ""
                     :
                     `
@@ -116,11 +132,44 @@ export async function openHomeworkModal(
                         rows="8"
                         style="width:100%;">
 
-${currentText || ""}
+                        ${currentText || ""}
 
                     </textarea>
                     `
                 }
+
+${
+    teacherMode
+    ?
+    `
+    <h3>
+        📚 Lærerlekse
+    </h3>
+
+    <textarea
+        id="teacherHomeworkText"
+        rows="5"
+        style="width:100%;">
+
+${teacherHomeworkText}
+
+    </textarea>
+
+    <br><br>
+
+    <button
+        id="saveTeacherHomework">
+
+        Lagre lærerlekse
+
+    </button>
+
+    <hr>
+    `
+    :
+    ""
+}
+                
 
                 <button
                     id="saveHomework"
@@ -351,6 +400,40 @@ document
             }
         );
 
+    document
+    .getElementById(
+        "saveTeacherHomework"
+    )
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            const text =
+
+                document
+                    .getElementById(
+                        "teacherHomeworkText"
+                    )
+                    .value
+                    .trim();
+
+            await saveTeacherHomework(
+
+                classId,
+                lessonId,
+                week,
+                text
+
+            );
+
+            alert(
+                "Lærerlekse lagret"
+            );
+
+        }
+    );
+
+    
     document
         .getElementById(
             "toggleExam"
