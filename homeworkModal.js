@@ -210,7 +210,7 @@ ${teacherHomeworkText}
 
                 <button
                     id="saveHomework"
-                    ${isAdmin() ? "disabled" : ""}>
+                    ${isTeacher() ? "disabled" : ""}>
 
                     Lagre mine lekser
 
