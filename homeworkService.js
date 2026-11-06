@@ -29,18 +29,6 @@ export async function saveHomework(
     text,
     exam = false
 ) {
-
-
-    
-await saveTeacherHomework(
-    "1STA",
-    "TEST",
-    45,
-    "Dette er en lærerlekse"
-);
-
-
-    
     
     const studentId =
         localStorage.getItem(
