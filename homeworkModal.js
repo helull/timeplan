@@ -188,7 +188,7 @@ ${
         rows="5"
         style="width:100%;">
 
-${teacherHomeworkText}
+${formatTeacherHomework(teacherHomeworkText)}
 
     </textarea>
 
