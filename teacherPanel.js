@@ -15,7 +15,7 @@ import {
     enableAdminMode,
     isAdmin,
     applyAdminMode,
-    removeAdminMode
+    disableAdminMode
 }
 from "./teacher.js";
 
@@ -160,7 +160,7 @@ function logoutUser() {
          return;
     }
 
-    removeAdminMode();
+    disableAdminMode();
     localStorage.clear();
     location.reload();
 }
