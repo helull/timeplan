@@ -1,3 +1,8 @@
+import {
+    finishMagicLogin
+}
+from "./finishMagicLogin.js";
+
 import { db }
 from "./firebase.js";
 
@@ -90,8 +95,9 @@ let startY = 0;
 
 let overviewMode = false;
 
-//disableTeacherMode();
 initializeTeacherMode();
+
+await finishMagicLogin();
 
 const tentamens =
     await loadTentamens();
