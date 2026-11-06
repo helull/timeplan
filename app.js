@@ -150,7 +150,7 @@ function updateDots(){
         );
 }
 
-    colsole.log("før render");
+    console.log("før render");
     console.table({ ...localStorage });
 
 function render(){
