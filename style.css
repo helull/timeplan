@@ -1205,3 +1205,20 @@ h1{
 
     display: block;
 }
+
+.teacher-homework-preview {
+
+    margin-top: 8px;
+
+    padding: 6px;
+
+    border-radius: 8px;
+
+    background: #fff3c2;
+
+    color: #5e4700;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+}
