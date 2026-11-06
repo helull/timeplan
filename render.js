@@ -500,15 +500,7 @@ if (teacherLessonData) {
 
                                 </button>
 
-                                ${
-                                    homework
-                                    ?
-                                    `
-                                    <div
-                                        class="lesson-homework-preview"
-                                        data-homework="${homework.replace(/"/g,"&quot;")}">
-
-${
+                              ${
     teacherHomework
     ?
     `
@@ -524,14 +516,22 @@ ${
     ""
 }
 
+${
+    homework
+    ?
+    `
+    <div
+        class="lesson-homework-preview"
+        data-homework="${homework.replace(/"/g,"&quot;")}">
 
-                                    📖 ${homework}
+        📖 ${homework}
 
-                                    </div>
-                                    `
-                                    :
-                                    ""
-                                }
+    </div>
+    `
+    :
+    ""
+}
+
                             </div>
                         `;
                        
