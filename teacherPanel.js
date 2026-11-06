@@ -58,7 +58,7 @@ export function renderTeacherButton() {
         );
 }
 
-    export function openToolsPanel() {
+export function openToolsPanel() {
 
     const teachersenabled = localStorage.getItem("showTeacherNames") === "true";
     const roomsenabled = localStorage.getItem("showRooms") === "true";
@@ -623,27 +623,22 @@ await setDoc(
 
 function toggleTeacherNames() {
 
-    const current = localStorage.getItem("showTeacherNames") === "true";
-    localStorage.setItem("showTeacherNames", (!current).toString());
+    const newValue = localStorage.getItem("showTeacherNames") !== "true";
 
-    if (current) {
-        document.querySelectorAll(".teacher").forEach(el => el.classList.remove("teacherInvisible"));
-    } else {
-        document.querySelectorAll(".teacher").forEach(el => el.classList.add("teacherInvisible"));
-    }
+    localStorage.setItem("showTeacherNames",newValue.toString());
+
+    document.querySelectorAll(".teacher").forEach(el =>  el.classList.toggle("teacherInvisible",!newValue));
 }
 
 function toggleRooms() {
 
-    const current = localStorage.getItem("showRooms") === "true";
 
-    localStorage.setItem("showRooms",(!current).toString());
+    const newValue = localStorage.getItem("showRooms") !== "true";
 
-    if (current) {
-        document.querySelectorAll(".room").forEach(el => el.classList.remove("roomInvisible"));
-    } else {
-        document.querySelectorAll(".room").forEach(el => el.classList.add("roomInvisible"));
-    }
+    localStorage.setItem("showRooms",newValue.toString());
+
+    document.querySelectorAll(".room").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
+
 }
 
 function closeToolsPanel() {
