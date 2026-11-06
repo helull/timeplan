@@ -523,7 +523,8 @@ ${
     ?
     `
     <div
-        class="teacher-homework-preview">
+        class="teacher-homework-preview"
+        data-homework="${teacherHomework.replace(/"/g,"&quot;")}">
 
         📚 ${teacherHomework}
 
@@ -630,6 +631,27 @@ document.getElementById(
         }
     );
 
+
+    document
+.querySelectorAll(
+    ".teacher-homework-preview"
+)
+.forEach(
+    preview => {
+
+        preview.onclick =
+            event => {
+
+                event.stopPropagation();
+
+                openTeacherHomeworkViewer(
+                    preview.dataset.homework
+                );
+
+            };
+
+    }
+);
     
     /* Slett friuke */
 
@@ -810,4 +832,70 @@ function openHomeworkViewer(
 
         };
 
+}
+
+function openTeacherHomeworkViewer(
+    text
+) {
+
+    if (
+        document.getElementById(
+            "teacherHomeworkViewer"
+        )
+    ) {
+        return;
+    }
+
+    document.body.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+        <div
+            class="modal"
+            id="teacherHomeworkViewer">
+
+            <div
+                class="homework-viewer-card">
+
+                <h2>
+
+                    📚 Lærerlekse
+
+                </h2>
+
+                <div
+                    class="homework-viewer-text">
+
+                    ${text}
+
+                </div>
+
+                <button
+                    id="closeTeacherHomeworkViewer">
+
+                    Lukk
+
+                </button>
+
+            </div>
+
+        </div>
+        `
+    );
+
+    document
+        .getElementById(
+            "closeTeacherHomeworkViewer"
+        )
+        .onclick =
+        () => {
+
+            document
+                .getElementById(
+                    "teacherHomeworkViewer"
+                )
+                ?.remove();
+
+        };
 }
