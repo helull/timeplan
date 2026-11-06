@@ -446,18 +446,10 @@ export function renderSchedule(
            
 
                                 <div class="room-teacher">
-
-                                    ${
-                                        showRooms
-                                        ?
-                                        `
                                         <div class="room">
-                                            ${lesson.roomName || ""}
+                                            ${lesson.roomName}
                                         </div>
-                                        `
-                                        :
-                                        ""
-                                    }
+                                        
 
                                     ${
                                         showTeacherNames
