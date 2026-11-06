@@ -1,4 +1,9 @@
 import {
+    sendMagicLink
+}
+from "./authService.js";
+
+import {
     studentExists,
     createStudent
 }
