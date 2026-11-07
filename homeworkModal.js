@@ -1350,7 +1350,86 @@ data-room="${lesson.roomName}">
 
 
 
+   
+
+
    document
+.getElementById(
+    "blockCourseModal"
+)
+?.remove();
+   
+};
+   
+document.body
+.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div
+        class="modal"
+        id="blockCourseModal">
+
+        <div
+            class="modal-card">
+
+            <h3>
+
+                Etabler blokkfag
+
+            </h3>
+
+            <label>
+
+                Fagnavn
+
+            </label>
+
+            <input
+                id="blockCourseSubject"
+                type="text">
+
+            <br><br>
+
+            <label>
+
+                Rom
+
+            </label>
+
+            <input
+                id="blockCourseRoom"
+                type="text">
+
+            <br><br>
+
+            <div
+                id="blockCourseLessonList">
+               ${lessonHtml}
+            </div>
+
+            <br>
+
+            <button
+                id="saveBlockCourse">
+
+                Opprett fag
+
+            </button>
+
+            <button
+                id="cancelBlockCourse">
+
+                Avbryt
+
+            </button>
+
+        </div>
+
+    </div>
+    `
+);
+
+document
 .getElementById(
     "saveBlockCourse"
 )
@@ -1458,80 +1537,20 @@ alert(
     "Blokkfaget er opprettet"
 );
 
-
    document
 .getElementById(
-    "blockCourseModal"
+    "cancelBlockCourse"
 )
-?.remove();
-   
+.onclick =
+() => {
+
+    document
+    .getElementById(
+        "blockCourseModal"
+    )
+    ?.remove();
+
 };
+
    
-document.body
-.insertAdjacentHTML(
-    "beforeend",
-    `
-    <div
-        class="modal"
-        id="blockCourseModal">
-
-        <div
-            class="modal-card">
-
-            <h3>
-
-                Etabler blokkfag
-
-            </h3>
-
-            <label>
-
-                Fagnavn
-
-            </label>
-
-            <input
-                id="blockCourseSubject"
-                type="text">
-
-            <br><br>
-
-            <label>
-
-                Rom
-
-            </label>
-
-            <input
-                id="blockCourseRoom"
-                type="text">
-
-            <br><br>
-
-            <div
-                id="blockCourseLessonList">
-               ${lessonHtml}
-            </div>
-
-            <br>
-
-            <button
-                id="saveBlockCourse">
-
-                Opprett fag
-
-            </button>
-
-            <button
-                id="cancelBlockCourse">
-
-                Avbryt
-
-            </button>
-
-        </div>
-
-    </div>
-    `
-);
 }
