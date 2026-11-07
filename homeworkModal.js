@@ -1226,6 +1226,245 @@ export function formatTeacherHomework(text) {
 }
 
 async function openBlockCourseModal() {
+
+const classId =
+    localStorage.getItem(
+        "classId"
+    );
+
+   const schedule =
+    await loadSchedule(
+        classId
+    );
+
+
+   const blockLessons =
+    lessons.filter(
+        lesson =>
+            lesson.subject
+                ?.toUpperCase()
+                .includes(
+                    "BLOKK"
+                )
+            ||
+            lesson.roomName
+                ?.toUpperCase()
+                .includes(
+                    "BLOKK"
+                )
+    );
+
+   const weekdayNames = {
+    1: "Mandag",
+    2: "Tirsdag",
+    3: "Onsdag",
+    4: "Torsdag",
+    5: "Fredag"
+};
+
+   const lessonHtml =
+    lessons
+        .sort(
+            (a, b) => {
+
+                if (
+                    a.weekday !==
+                    b.weekday
+                ) {
+
+                    return (
+                        a.weekday -
+                        b.weekday
+                    );
+
+                }
+
+                return a.start.localeCompare(
+                    b.start
+                );
+
+            }
+        )
+        .map(
+            lesson => {
+
+                const isBlock =
+                    lesson.subject
+                        ?.toUpperCase()
+                        .includes(
+                            "BLOKK"
+                        )
+                    ||
+                    lesson.roomName
+                        ?.toUpperCase()
+                        .includes(
+                            "BLOKK"
+                        );
+
+                return `
+                <div
+                    class="block-row">
+
+                    <input
+                        type="checkbox"
+
+                        ${
+                            isBlock
+                            ? ""
+                            : "disabled"
+                        }
+
+                        class="blockLesson"
+
+                        data-id="${lesson.lessonId}"
+data-weekday="${lesson.weekday}"
+data-start="${lesson.start}"
+data-subject="${lesson.subject}"
+data-room="${lesson.roomName}">
+
+                    <span>
+
+                        ${weekdayNames[
+                            lesson.weekday
+                        ]}
+
+                        -
+
+                        ${lesson.start}
+
+                        -
+
+                        ${lesson.subject}
+
+                        (${lesson.roomName})
+
+                    </span>
+
+                </div>
+                `;
+            }
+        )
+        .join("");
+
+
+
+   document
+.getElementById(
+    "saveBlockCourse"
+)
+.onclick =
+async () => {
+   
+const subject =
+    document
+        .getElementById(
+            "blockCourseSubject"
+        )
+        .value
+        .trim();
+   
+   const room =
+    document
+        .getElementById(
+            "blockCourseRoom"
+        )
+        .value
+        .trim();
+   
+   const teacher =
+    localStorage.getItem(
+        "teacherName"
+    );
+
+const sessions =
+Array.from(
+    document.querySelectorAll(
+        ".blockLesson:checked"
+    )
+)
+.map(
+    checkbox => ({
+
+        lessonId:
+            checkbox.dataset.id,
+
+        weekday:
+            Number(
+                checkbox.dataset.weekday
+            ),
+
+        start:
+            checkbox.dataset.start,
+
+        subject:
+            checkbox.dataset.subject,
+
+        room:
+            checkbox.dataset.room
+
+    })
+);
+
+
+   if (!subject) {
+
+    alert(
+        "Skriv inn fagnavn"
+    );
+
+    return; 
+}
+
+
+   if (!room) {
+
+    alert(
+        "Skriv inn rom"
+    );
+
+    return;
+
+}
+
+
+   if (
+    sessions.length === 0
+) {
+
+    alert(
+        "Velg minst én blokkøkt"
+    );
+
+    return;
+
+}
+
+
+   await saveBlockCourse({
+
+    subject,
+
+    room,
+
+    teacher,
+
+    sessions
+
+});
+
+alert(
+    "Blokkfaget er opprettet"
+);
+
+
+   document
+.getElementById(
+    "blockCourseModal"
+)
+?.remove();
+   
+};
+   
 document.body
 .insertAdjacentHTML(
     "beforeend",
@@ -1269,7 +1508,7 @@ document.body
 
             <div
                 id="blockCourseLessonList">
-
+               ${lessonHtml}
             </div>
 
             <br>
