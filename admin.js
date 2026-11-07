@@ -1,6 +1,6 @@
 import {
     collection,
-    getDocs,
+    onSnapshot,
     doc,
     setDoc,
     deleteDoc
@@ -34,85 +34,84 @@ if (
 
 
 
-loadRequests();
+listenForRequests();
 
 
-
-async function loadRequests() {
+function listenForRequests() {
 
     const container =
         document.getElementById(
             "requests"
         );
 
-    container.innerHTML =
-        "";
+    onSnapshot(
 
-    const snapshot =
-        await getDocs(
-            collection(
-                db,
-                "teacherRequests"
-            )
-        );
+        collection(
+            db,
+            "teacherRequests"
+        ),
 
-    if (
-        snapshot.empty
-    ) {
+        snapshot => {
 
-        container.innerHTML =
-            `
-            <div class="empty-message">
-                Ingen ventende forespørsler
-            </div>
-            `;
+            container.innerHTML = "";
 
-        return;
-    }
+            if (
+                snapshot.empty
+            ) {
 
-    snapshot.forEach(
-        request => {
+                container.innerHTML =
+                `
+                <div class="empty-message">
+                    Ingen ventende forespørsler
+                </div>
+                `;
 
-            const data =
-                request.data();
+                return;
+            }
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+            snapshot.forEach(
+                request => {
 
-            card.className =
-                "request-card";
+                    const data =
+                        request.data();
 
-            card.innerHTML =
-            `
-            <h3>
-                ${data.name}
-            </h3>
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-            <p>
-                ${data.email}
-            </p>
+                    card.className =
+                        "request-card";
 
-            <button
-                class="approve-button"
-                data-id="${request.id}"
-                data-email="${data.email}"
-                data-name="${data.name}">
-                Godkjenn
-            </button>
-            `;
+                    card.innerHTML =
+                    `
+                    <h3>
+                        ${data.name}
+                    </h3>
 
-            container.appendChild(
-                card
+                    <p>
+                        ${data.email}
+                    </p>
+
+                    <button
+                        class="approve-button"
+                        data-id="${request.id}"
+                        data-email="${data.email}"
+                        data-name="${data.name}">
+                        Godkjenn
+                    </button>
+                    `;
+
+                    container.appendChild(
+                        card
+                    );
+                }
             );
+
+            addButtonEvents();
         }
     );
-
-    addButtonEvents();
 }
-
-
 
 function addButtonEvents() {
 
@@ -169,7 +168,13 @@ function addButtonEvents() {
                             )
                         );
 
-                        loadRequests();
+                       await deleteDoc(
+                            doc(
+                                db,
+                                "teacherRequests",
+                                requestId
+                            )
+                        );
 
                     }
                     catch (
