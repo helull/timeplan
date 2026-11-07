@@ -3,7 +3,7 @@ import {
     setDoc,
     serverTimestamp
 }
-from "firebase/firestore";
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
     db
