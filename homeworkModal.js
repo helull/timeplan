@@ -1,3 +1,9 @@
+
+import {
+   loadSchedule 
+}
+from "./scheduleService.js";
+
 import {
     saveBlockCourse
 }
