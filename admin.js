@@ -67,3 +67,53 @@ async function loadRequests() {
 
     addButtonEvents();
 }
+
+
+function addButtonEvents() {
+
+    document
+        .querySelectorAll(
+            "button"
+        )
+        .forEach(
+            button => {
+
+                button.onclick =
+                    async () => {
+
+                    const email =
+                        button.dataset.email;
+
+                    const name =
+                        button.dataset.name;
+
+                    const requestId =
+                        button.dataset.id;
+
+                    await setDoc(
+                        doc(
+                            db,
+                            "teachers",
+                            email
+                        ),
+                        {
+                            name,
+                            email,
+                            approved:
+                                true
+                        }
+                    );
+
+                    await deleteDoc(
+                        doc(
+                            db,
+                            "teacherRequests",
+                            requestId
+                        )
+                    );
+
+                    loadRequests();
+                };
+            }
+        );
+}
