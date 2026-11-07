@@ -1471,7 +1471,10 @@ lessons
                     <button
                         id="saveBlockCourse">
 
-                        Opprett fag
+                        ${blockCourse
+                          ? "Lagre endringer"      
+                          : "Opprett fag"
+                      }
 
                     </button>
 
