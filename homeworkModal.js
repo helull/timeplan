@@ -5,7 +5,10 @@ import {
 from "./scheduleService.js";
 
 import {
-    saveBlockCourse
+    saveBlockCourse,
+    loadBlockCourseByLesson,
+    updateBlockCourse,
+    deleteBlockCourse
 }
 from "./blockCourseService.js";
 
@@ -88,6 +91,20 @@ const canCreateBlockCourse =
         isBlockSubject ||
         isBlockRoom
     );
+
+   let existingBlockCourse =
+    null;
+
+if (
+    canCreateBlockCourse
+) {
+
+    existingBlockCourse =
+        await loadBlockCourseByLesson(
+            lessonId
+        );
+
+}
     
     var teacherName = false;   
     if (teacherMode === true) {teacherName =  localStorage.getItem("teacherName");  }
@@ -247,7 +264,13 @@ ${
     <button
         id="createBlockCourse">
 
-        Etabler fag i denne blokka
+        ${
+    existingBlockCourse
+    ?
+    "Rediger blokkfag"
+    :
+    "Etabler fag i denne blokka"
+}
 
     </button>
 
@@ -533,7 +556,9 @@ document
     "click",
     async () => {
 
-        await openBlockCourseModal();
+        await openBlockCourseModal(
+    existingBlockCourse
+);
 
     }
 );
@@ -1225,7 +1250,7 @@ export function formatTeacherHomework(text) {
     return text;
 }
 
-async function openBlockCourseModal() {
+async function openBlockCourseModal(blockCourse = null) {
 
     const classId =
         localStorage.getItem(
@@ -1280,6 +1305,12 @@ lessons
     )
     .forEach(
         lesson => {
+           const checked =
+    blockCourse?.sessions?.some(
+        session =>
+            session.lessonId ===
+            lesson.lessonId
+    );
 
             const isBlock =
                 lesson.subject
@@ -1318,6 +1349,7 @@ lessons
 
                     <input
                         type="checkbox"
+                        ${checked ? "checked" : ""}
                         ${
                             isBlock
                             ? ""
@@ -1372,6 +1404,7 @@ lessons
                     <input
                         id="blockCourseSubject"
                         type="text"
+                        value="${blockCourse?.subject || ""}"
                         style="width:100%;">
 
                     <br><br>
@@ -1385,6 +1418,7 @@ lessons
                     <input
                         id="blockCourseRoom"
                         type="text"
+                        value="${blockCourse?.room || ""}"
                         style="width:100%;">
 
                     <br><br>
@@ -1441,6 +1475,20 @@ lessons
 
                     </button>
 
+${
+    blockCourse
+    ?
+    `
+    <button
+        id="deleteBlockCourse">
+
+        Slett blokkfag
+
+    </button>
+    `
+    :
+    ""
+}
                     <button
                         id="cancelBlockCourse">
 
@@ -1543,18 +1591,44 @@ lessons
 
             }
 
-            await saveBlockCourse({
+if (
+    blockCourse
+) {
 
-                subject,
+    await updateBlockCourse(
 
-                room,
+        blockCourse.id,
 
-                teacher,
+        {
+            subject,
+            room,
+            teacher,
+            sessions
+        }
 
-                sessions
+    );
 
-            });
+    alert(
+        "Blokkfag oppdatert"
+    );
 
+}
+else {
+
+    await saveBlockCourse({
+
+        subject,
+        room,
+        teacher,
+        sessions
+
+    });
+
+    alert(
+        "Blokkfag opprettet"
+    );
+
+}
             alert(
                 "Blokkfaget er opprettet"
             );
@@ -1581,5 +1655,40 @@ lessons
                 ?.remove();
 
         };
+
+   document
+.getElementById(
+    "deleteBlockCourse"
+)
+?.addEventListener(
+    "click",
+    async () => {
+
+        if (
+            !confirm(
+                "Slette blokkfaget?"
+            )
+        ) {
+
+            return;
+
+        }
+
+        await deleteBlockCourse(
+            blockCourse.id
+        );
+
+        alert(
+            "Blokkfag slettet"
+        );
+
+        document
+        .getElementById(
+            "blockCourseModal"
+        )
+        ?.remove();
+
+    }
+);
 
 }
