@@ -1,7 +1,8 @@
 import {
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
@@ -11,15 +12,25 @@ import {
 from "./firebase.js";
 
 export async function saveBlockCourse(
-    data
+    blockCourse
 ) {
 
     await addDoc(
+
         collection(
             db,
             "blockCourses"
         ),
-        data
+
+        {
+
+            ...blockCourse,
+
+            createdAt:
+                serverTimestamp()
+
+        }
+
     );
 
 }
