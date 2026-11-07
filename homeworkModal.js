@@ -1237,6 +1237,8 @@ const classId =
         classId
     );
 
+   const lessons =
+    schedule.lessons || [];
 
    const blockLessons =
     lessons.filter(
