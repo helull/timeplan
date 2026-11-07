@@ -1,4 +1,14 @@
 import {
+    submitTeacherRequest
+}
+from "./teacherRequestService.js";
+
+import {
+    teacherApproved
+}
+from "./teacherService.js";
+
+import {
     sendMagicLink
 }
 from "./authService.js";
@@ -189,49 +199,57 @@ export async function showRegister() {
     );
 
     const teacherButton =
-        document.getElementById(
-            "teacherLoginButton"
-        );
+    document.getElementById(
+        "teacherLoginButton"
+    );
 
-    teacherButton.addEventListener(
-        "click",
-        async () => {
+teacherButton.addEventListener(
+    "click",
+    async () => {
 
-        const password =
+        const email =
             prompt(
-                "Lærerpassord"
+                "AFK e-post"
             );
 
-        if (
-            password !==
-            "NESBRU2025"
-        ) {
+        if (!email) {
+            return;
+        }
 
-            alert(
-                "Feil passord"
+        const approved =
+            await teacherApproved(
+                email.trim()
             );
+
+        if (approved) {
+
+            loginTeacher(
+                email
+            );
+
+            location.reload();
 
             return;
         }
 
-        loginTeacher(
-            "teacher"
-        );
+        const name =
+            prompt(
+                "Navn"
+            );
 
-        location.reload();
-
-            
-/*
-            const selectedClass = document.getElementById("classSelect").value;        
-            localStorage.setItem("classId", selectedClass);
-            const teacherEmail = prompt("Skriv inn AFK-e-post");
-
-            if (!teacherEmail) { return;}
-
-            await sendMagicLink(teacherEmail.trim());
-
-            alert("Sjekk e-posten din.");
-*/
+        if (!name) {
+            return;
         }
-    );
+
+        await submitTeacherRequest({
+            name,
+            email
+        });
+
+        alert(
+            "Forespørsel sendt. Du må godkjennes før første innlogging."
+        );
+    }
+);    
+    
 }
