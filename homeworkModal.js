@@ -1,4 +1,9 @@
 import {
+    saveBlockCourse
+}
+from "./blockCourseService.js";
+
+import {
     saveTeacherHomework,
     loadTeacherHomework
 }
@@ -56,6 +61,28 @@ export async function openHomeworkModal(
     }
 
     var teacherMode = isTeacher();
+
+    const isBlockSubject =
+    subject
+        ?.toUpperCase()
+        .includes(
+            "BLOKK"
+        );
+
+const isBlockRoom =
+    roomName
+        ?.toUpperCase()
+        .includes(
+            "BLOKK"
+        );
+
+const canCreateBlockCourse =
+    teacherMode &&
+    (
+        isBlockSubject ||
+        isBlockRoom
+    );
+    
     var teacherName = false;   
     if (teacherMode === true) {teacherName =  localStorage.getItem("teacherName");  }
     
@@ -205,7 +232,24 @@ ${teacherHomeworkText}
         Lagre lærerlekse
 
     </button>
+${
+    canCreateBlockCourse
+    ?
+    `
+    <br><br>
 
+    <button
+        id="createBlockCourse">
+
+        Etabler fag i denne blokka
+
+    </button>
+
+    <hr>
+    `
+    :
+    ""
+}
     <hr>
     `
     :
@@ -475,6 +519,18 @@ document
         }
     );
 
+    document
+.getElementById(
+    "createBlockCourse"
+)
+?.addEventListener(
+    "click",
+    async () => {
+
+        await openBlockCourseModal();
+
+    }
+);
     
     document
         .getElementById(
@@ -1163,3 +1219,72 @@ export function formatTeacherHomework(text) {
     return text;
 }
 
+async function openBlockCourseModal() {
+document.body
+.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div
+        class="modal"
+        id="blockCourseModal">
+
+        <div
+            class="modal-card">
+
+            <h3>
+
+                Etabler blokkfag
+
+            </h3>
+
+            <label>
+
+                Fagnavn
+
+            </label>
+
+            <input
+                id="blockCourseSubject"
+                type="text">
+
+            <br><br>
+
+            <label>
+
+                Rom
+
+            </label>
+
+            <input
+                id="blockCourseRoom"
+                type="text">
+
+            <br><br>
+
+            <div
+                id="blockCourseLessonList">
+
+            </div>
+
+            <br>
+
+            <button
+                id="saveBlockCourse">
+
+                Opprett fag
+
+            </button>
+
+            <button
+                id="cancelBlockCourse">
+
+                Avbryt
+
+            </button>
+
+        </div>
+
+    </div>
+    `
+);
+}
