@@ -24,3 +24,19 @@ export async function teacherExists(
 
     return snapshot.exists();
 }
+
+export async function teacherApproved(
+    email
+) {
+
+    const snapshot =
+        await getDoc(
+            doc(
+                db,
+                "teachers",
+                email.toLowerCase()
+            )
+        );
+
+    return snapshot.exists();
+}
