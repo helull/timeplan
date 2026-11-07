@@ -37,6 +37,7 @@ if (
 listenForRequests();
 
 
+
 function listenForRequests() {
 
     const container =
@@ -53,7 +54,8 @@ function listenForRequests() {
 
         snapshot => {
 
-            container.innerHTML = "";
+            container.innerHTML =
+                "";
 
             if (
                 snapshot.empty
@@ -95,7 +97,6 @@ function listenForRequests() {
 
                     <button
                         class="approve-button"
-                        data-id="${request.id}"
                         data-email="${data.email}"
                         data-name="${data.name}">
                         Godkjenn
@@ -113,6 +114,8 @@ function listenForRequests() {
     );
 }
 
+
+
 function addButtonEvents() {
 
     const buttons =
@@ -123,18 +126,15 @@ function addButtonEvents() {
     buttons.forEach(
         button => {
 
-            button.addEventListener(
-                "click",
+            button.onclick =
                 async () => {
 
                     const email =
-                        button.dataset.email;
+                        button.dataset.email
+                            .toLowerCase();
 
                     const name =
                         button.dataset.name;
-
-                    const requestId =
-                        button.dataset.id;
 
                     try {
 
@@ -142,15 +142,14 @@ function addButtonEvents() {
                             doc(
                                 db,
                                 "teachers",
-                                email.toLowerCase()
+                                email
                             ),
                             {
                                 name:
                                     name,
 
                                 email:
-                                    email
-                                        .toLowerCase(),
+                                    email,
 
                                 approved:
                                     true,
@@ -164,16 +163,12 @@ function addButtonEvents() {
                             doc(
                                 db,
                                 "teacherRequests",
-                                requestId
+                                email
                             )
                         );
 
-                       await deleteDoc(
-                            doc(
-                                db,
-                                "teacherRequests",
-                                requestId
-                            )
+                        console.log(
+                            `${email} godkjent`
                         );
 
                     }
@@ -189,8 +184,7 @@ function addButtonEvents() {
                             "Kunne ikke godkjenne bruker."
                         );
                     }
-                }
-            );
+                };
         }
     );
 }
