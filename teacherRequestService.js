@@ -1,12 +1,12 @@
 import {
-    addDoc,
-    collection,
+    doc,
+    setDoc,
     serverTimestamp
 }
 from "firebase/firestore";
 
 import {
-   db
+    db
 }
 from "./firebase.js";
 
@@ -14,18 +14,35 @@ export async function submitTeacherRequest(
     request
 ) {
 
-    await addDoc(
-        collection(
+    const email =
+        request.email
+            .trim()
+            .toLowerCase();
+
+    if (
+        !email.endsWith(
+            "@afk.no"
+        )
+    ) {
+
+        throw new Error(
+            "Kun AFK-epost er tillatt"
+        );
+    }
+
+    await setDoc(
+        doc(
             db,
-            "teacherRequests"
+            "teacherRequests",
+            email
         ),
         {
             name:
-                request.name,
+                request.name
+                    .trim(),
 
             email:
-                request.email
-                    .toLowerCase(),
+                email,
 
             approved:
                 false,
