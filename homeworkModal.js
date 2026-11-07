@@ -1227,330 +1227,324 @@ export function formatTeacherHomework(text) {
 
 async function openBlockCourseModal() {
 
-const classId =
-    localStorage.getItem(
-        "classId"
-    );
+    const classId =
+        localStorage.getItem(
+            "classId"
+        );
 
-   const schedule =
-    await loadSchedule(
-        classId
-    );
+    const schedule =
+        await loadSchedule(
+            classId
+        );
 
-   const lessons =
-    schedule.lessons || [];
+    const lessons =
+        schedule.lessons || [];
 
-   const blockLessons =
-    lessons.filter(
-        lesson =>
-            lesson.subject
-                ?.toUpperCase()
-                .includes(
-                    "BLOKK"
-                )
-            ||
-            lesson.roomName
-                ?.toUpperCase()
-                .includes(
-                    "BLOKK"
-                )
-    );
+    const weekdayNames = {
+        1: "Mandag",
+        2: "Tirsdag",
+        3: "Onsdag",
+        4: "Torsdag",
+        5: "Fredag"
+    };
 
-   const weekdayNames = {
-    1: "Mandag",
-    2: "Tirsdag",
-    3: "Onsdag",
-    4: "Torsdag",
-    5: "Fredag"
-};
+    const lessonHtml =
+        lessons
+            .sort(
+                (a, b) => {
 
-   const lessonHtml =
-    lessons
-        .sort(
-            (a, b) => {
-
-                if (
-                    a.weekday !==
-                    b.weekday
-                ) {
-
-                    return (
-                        a.weekday -
+                    if (
+                        a.weekday !==
                         b.weekday
+                    ) {
+
+                        return (
+                            a.weekday -
+                            b.weekday
+                        );
+
+                    }
+
+                    return a.start.localeCompare(
+                        b.start
                     );
 
                 }
+            )
+            .map(
+                lesson => {
 
-                return a.start.localeCompare(
-                    b.start
-                );
+                    const isBlock =
+                        lesson.subject
+                            ?.toUpperCase()
+                            .includes(
+                                "BLOKK"
+                            )
+                        ||
+                        lesson.roomName
+                            ?.toUpperCase()
+                            .includes(
+                                "BLOKK"
+                            );
 
-            }
+                    return `
+                    <div
+                        class="block-row"
+                        style="
+                            margin:4px 0;
+                            display:flex;
+                            align-items:center;
+                            gap:8px;
+                        ">
+
+                        <input
+                            type="checkbox"
+                            ${
+                                isBlock
+                                ? ""
+                                : "disabled"
+                            }
+                            class="blockLesson"
+                            data-id="${lesson.lessonId}"
+                            data-weekday="${lesson.weekday}"
+                            data-start="${lesson.start}"
+                            data-subject="${lesson.subject}"
+                            data-room="${lesson.roomName}">
+
+                        <span>
+
+                            ${weekdayNames[
+                                lesson.weekday
+                            ]}
+
+                            -
+
+                            ${lesson.start}
+
+                            -
+
+                            ${lesson.subject}
+
+                            (${lesson.roomName})
+
+                        </span>
+
+                    </div>
+                    `;
+                }
+            )
+            .join("");
+
+    document
+        .getElementById(
+            "blockCourseModal"
         )
-        .map(
-            lesson => {
+        ?.remove();
 
-                const isBlock =
-                    lesson.subject
-                        ?.toUpperCase()
-                        .includes(
-                            "BLOKK"
-                        )
-                    ||
-                    lesson.roomName
-                        ?.toUpperCase()
-                        .includes(
-                            "BLOKK"
-                        );
+    document.body
+        .insertAdjacentHTML(
+            "beforeend",
+            `
+            <div
+                class="modal"
+                id="blockCourseModal">
 
-                return `
                 <div
-                    class="block-row">
+                    class="modal-card">
+
+                    <h3>
+
+                        Etabler blokkfag
+
+                    </h3>
+
+                    <label>
+
+                        Fagnavn
+
+                    </label>
 
                     <input
-                        type="checkbox"
+                        id="blockCourseSubject"
+                        type="text"
+                        style="width:100%;">
 
-                        ${
-                            isBlock
-                            ? ""
-                            : "disabled"
-                        }
+                    <br><br>
 
-                        class="blockLesson"
+                    <label>
 
-                        data-id="${lesson.lessonId}"
-data-weekday="${lesson.weekday}"
-data-start="${lesson.start}"
-data-subject="${lesson.subject}"
-data-room="${lesson.roomName}">
+                        Rom
 
-                    <span>
+                    </label>
 
-                        ${weekdayNames[
-                            lesson.weekday
-                        ]}
+                    <input
+                        id="blockCourseRoom"
+                        type="text"
+                        style="width:100%;">
 
-                        -
+                    <br><br>
 
-                        ${lesson.start}
+                    <h4>
 
-                        -
+                        Velg øktene som tilhører blokkfaget
 
-                        ${lesson.subject}
+                    </h4>
 
-                        (${lesson.roomName})
+                    <div
+                        id="blockCourseLessonList">
 
-                    </span>
+                        ${lessonHtml}
+
+                    </div>
+
+                    <br>
+
+                    <button
+                        id="saveBlockCourse">
+
+                        Opprett fag
+
+                    </button>
+
+                    <button
+                        id="cancelBlockCourse">
+
+                        Avbryt
+
+                    </button>
 
                 </div>
-                `;
-            }
-        )
-        .join("");
 
-
-
-   
-
-
-   document
-.getElementById(
-    "blockCourseModal"
-)
-?.remove();
-   
-};
-   
-document.body
-.insertAdjacentHTML(
-    "beforeend",
-    `
-    <div
-        class="modal"
-        id="blockCourseModal">
-
-        <div
-            class="modal-card">
-
-            <h3>
-
-                Etabler blokkfag
-
-            </h3>
-
-            <label>
-
-                Fagnavn
-
-            </label>
-
-            <input
-                id="blockCourseSubject"
-                type="text">
-
-            <br><br>
-
-            <label>
-
-                Rom
-
-            </label>
-
-            <input
-                id="blockCourseRoom"
-                type="text">
-
-            <br><br>
-
-            <div
-                id="blockCourseLessonList">
-               ${lessonHtml}
             </div>
+            `
+        );
 
-            <br>
-
-            <button
-                id="saveBlockCourse">
-
-                Opprett fag
-
-            </button>
-
-            <button
-                id="cancelBlockCourse">
-
-                Avbryt
-
-            </button>
-
-        </div>
-
-    </div>
-    `
-);
-
-document
-.getElementById(
-    "saveBlockCourse"
-)
-.onclick =
-async () => {
-   
-const subject =
     document
         .getElementById(
-            "blockCourseSubject"
+            "saveBlockCourse"
         )
-        .value
-        .trim();
-   
-   const room =
+        .onclick =
+        async () => {
+
+            const subject =
+                document
+                    .getElementById(
+                        "blockCourseSubject"
+                    )
+                    .value
+                    .trim();
+
+            const room =
+                document
+                    .getElementById(
+                        "blockCourseRoom"
+                    )
+                    .value
+                    .trim();
+
+            const teacher =
+                localStorage.getItem(
+                    "teacherName"
+                );
+
+            const sessions =
+                Array.from(
+                    document.querySelectorAll(
+                        ".blockLesson:checked"
+                    )
+                )
+                .map(
+                    checkbox => ({
+
+                        lessonId:
+                            checkbox.dataset.id,
+
+                        weekday:
+                            Number(
+                                checkbox.dataset.weekday
+                            ),
+
+                        start:
+                            checkbox.dataset.start,
+
+                        subject:
+                            checkbox.dataset.subject,
+
+                        room:
+                            checkbox.dataset.room
+
+                    })
+                );
+
+            if (!subject) {
+
+                alert(
+                    "Skriv inn fagnavn"
+                );
+
+                return;
+
+            }
+
+            if (!room) {
+
+                alert(
+                    "Skriv inn rom"
+                );
+
+                return;
+
+            }
+
+            if (
+                sessions.length === 0
+            ) {
+
+                alert(
+                    "Velg minst én blokkøkt"
+                );
+
+                return;
+
+            }
+
+            await saveBlockCourse({
+
+                subject,
+
+                room,
+
+                teacher,
+
+                sessions
+
+            });
+
+            alert(
+                "Blokkfaget er opprettet"
+            );
+
+            document
+                .getElementById(
+                    "blockCourseModal"
+                )
+                ?.remove();
+
+        };
+
     document
         .getElementById(
-            "blockCourseRoom"
+            "cancelBlockCourse"
         )
-        .value
-        .trim();
-   
-   const teacher =
-    localStorage.getItem(
-        "teacherName"
-    );
+        .onclick =
+        () => {
 
-const sessions =
-Array.from(
-    document.querySelectorAll(
-        ".blockLesson:checked"
-    )
-)
-.map(
-    checkbox => ({
+            document
+                .getElementById(
+                    "blockCourseModal"
+                )
+                ?.remove();
 
-        lessonId:
-            checkbox.dataset.id,
+        };
 
-        weekday:
-            Number(
-                checkbox.dataset.weekday
-            ),
-
-        start:
-            checkbox.dataset.start,
-
-        subject:
-            checkbox.dataset.subject,
-
-        room:
-            checkbox.dataset.room
-
-    })
-);
-
-
-   if (!subject) {
-
-    alert(
-        "Skriv inn fagnavn"
-    );
-
-    return; 
-}
-
-
-   if (!room) {
-
-    alert(
-        "Skriv inn rom"
-    );
-
-    return;
-
-}
-
-
-   if (
-    sessions.length === 0
-) {
-
-    alert(
-        "Velg minst én blokkøkt"
-    );
-
-    return;
-
-}
-
-
-   await saveBlockCourse({
-
-    subject,
-
-    room,
-
-    teacher,
-
-    sessions
-
-});
-
-alert(
-    "Blokkfaget er opprettet"
-);
-
-   document
-.getElementById(
-    "cancelBlockCourse"
-)
-.onclick =
-() => {
-
-    document
-    .getElementById(
-        "blockCourseModal"
-    )
-    ?.remove();
-
-};
-
-   
 }
