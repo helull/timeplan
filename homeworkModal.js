@@ -1248,92 +1248,97 @@ async function openBlockCourseModal() {
         5: "Fredag"
     };
 
-    const lessonHtml =
-        lessons
-            .sort(
-                (a, b) => {
+    const dayColumns = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: []
+};
 
-                    if (
-                        a.weekday !==
-                        b.weekday
-                    ) {
+lessons
+    .sort(
+        (a, b) => {
 
-                        return (
-                            a.weekday -
-                            b.weekday
-                        );
+            if (
+                a.weekday !==
+                b.weekday
+            ) {
 
-                    }
+                return (
+                    a.weekday -
+                    b.weekday
+                );
 
-                    return a.start.localeCompare(
-                        b.start
+            }
+
+            return a.start.localeCompare(
+                b.start
+            );
+
+        }
+    )
+    .forEach(
+        lesson => {
+
+            const isBlock =
+                lesson.subject
+                    ?.toUpperCase()
+                    .includes(
+                        "BLOKK"
+                    )
+                ||
+                lesson.roomName
+                    ?.toUpperCase()
+                    .includes(
+                        "BLOKK"
                     );
 
-                }
-            )
-            .map(
-                lesson => {
+            const text =
+                isBlock
+                ? "🟢 Blokk"
+                : (
+                    lesson.subject
+                        ?.substring(
+                            0,
+                            5
+                        ) || ""
+                ) + "...";
 
-                    const isBlock =
-                        lesson.subject
-                            ?.toUpperCase()
-                            .includes(
-                                "BLOKK"
-                            )
-                        ||
-                        lesson.roomName
-                            ?.toUpperCase()
-                            .includes(
-                                "BLOKK"
-                            );
+            dayColumns[
+                lesson.weekday
+            ].push(
+                `
+                <div
+                    style="
+                        font-size:11px;
+                        white-space:nowrap;
+                        margin:2px 0;
+                    ">
 
-                    return `
-                    <div
-                        class="block-row"
-                        style="
-                            margin:4px 0;
-                            display:flex;
-                            align-items:center;
-                            gap:8px;
-                        ">
+                    <input
+                        type="checkbox"
+                        ${
+                            isBlock
+                            ? ""
+                            : "disabled"
+                        }
+                        class="blockLesson"
+                        data-id="${lesson.lessonId}"
+                        data-weekday="${lesson.weekday}"
+                        data-start="${lesson.start}"
+                        data-subject="${lesson.subject}"
+                        data-room="${lesson.roomName}">
 
-                        <input
-                            type="checkbox"
-                            ${
-                                isBlock
-                                ? ""
-                                : "disabled"
-                            }
-                            class="blockLesson"
-                            data-id="${lesson.lessonId}"
-                            data-weekday="${lesson.weekday}"
-                            data-start="${lesson.start}"
-                            data-subject="${lesson.subject}"
-                            data-room="${lesson.roomName}">
+                    ${lesson.start}
+                    ${text}
 
-                        <span>
+                </div>
+                `
+            );
 
-                            ${weekdayNames[
-                                lesson.weekday
-                            ]}
-
-                            -
-
-                            ${lesson.start}
-
-                            -
-
-                            ${lesson.subject}
-
-                            (${lesson.roomName})
-
-                        </span>
-
-                    </div>
-                    `;
-                }
-            )
-            .join("");
+        }
+    );
 
     document
         .getElementById(
@@ -1390,12 +1395,42 @@ async function openBlockCourseModal() {
 
                     </h4>
 
-                    <div
-                        id="blockCourseLessonList">
+<div
+    id="blockCourseLessonList"
+    style="
+        display:grid;
+        grid-template-columns:
+            repeat(5, 1fr);
+        gap:10px;
+        margin-top:10px;
+    ">
 
-                        ${lessonHtml}
+    <div>
+        <b>Man</b>
+        ${dayColumns[1].join("")}
+    </div>
 
-                    </div>
+    <div>
+        <b>Tir</b>
+        ${dayColumns[2].join("")}
+    </div>
+
+    <div>
+        <b>Ons</b>
+        ${dayColumns[3].join("")}
+    </div>
+
+    <div>
+        <b>Tor</b>
+        ${dayColumns[4].join("")}
+    </div>
+
+    <div>
+        <b>Fre</b>
+        ${dayColumns[5].join("")}
+    </div>
+
+</div>
 
                     <br>
 
