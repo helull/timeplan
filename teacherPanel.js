@@ -279,8 +279,8 @@ export function openAdminPanel() {
     );
     
     if (isAdmin()) {
-    applyAdminMode();
-}
+        applyAdminMode();
+    }
 }
 
 export function openImportModal() {
@@ -821,9 +821,9 @@ function closeChangeClassModal() {
 function adminModeLogin() {
 
     if (isAdmin()) {
-
-        alert(
-            "Administrator er allerede aktiv."
+        disableAdminMode();
+        prompt (
+            "Administrator er deaktivert."
         );
 
         return;
