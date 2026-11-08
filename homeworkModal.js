@@ -112,8 +112,8 @@ if (
     canCreateBlockCourse
 ) {
 
-    var teacherName = false;   
-    if (teacherMode === true) {teacherName =  localStorage.getItem("teacherName");  }
+    var teacher = false;   
+    if (teacherMode === true) {teacher =  localStorage.getItem("teacherName");  }
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
