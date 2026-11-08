@@ -176,7 +176,7 @@ export function openAdminPanel() {
         return;
     }
 
-    var teacher = await giveTeacherName(giveTeacherId());
+    var teacher = giveTeacherName(giveTeacherId());
     
     if (teacher === "") {
         teacher = "ukjent"
