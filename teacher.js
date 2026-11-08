@@ -40,7 +40,6 @@ export function teacherName(teacherId) {
 }
 
 export function teacherId() {
-
     if isTeacher() {
         return localStorage.getItem("teacherId")
     } else {
@@ -49,7 +48,7 @@ export function teacherId() {
 }
 
 export function loginTeacher(
-    teacherName
+    teacherId
 ) {
 
     localStorage.setItem(
@@ -58,8 +57,8 @@ export function loginTeacher(
     );
 
     localStorage.setItem(
-        "teacherName",
-        teacherName
+        "teacherId",
+        teacherId
     );
     
     sessionStorage.removeItem("adminMode");
@@ -75,7 +74,7 @@ export function logoutTeacher() {
     );
 
     localStorage.removeItem(
-        "teacherName"
+        "teacherId"
     );
 
     removeTeacherMode();
