@@ -1285,7 +1285,7 @@ async function openBlockCourseModal(blockCourse = null) {
                 localStorage.getItem(
                     "teacherName"
                 );
-   
+   /*
    const allBlockCourses =
     await loadBlockCoursesByGradeAndTacher(
         grade,
@@ -1293,7 +1293,7 @@ async function openBlockCourseModal(blockCourse = null) {
     );
 
    if en av timene i allBlockCourses mathcer lærer og grade 
-      blockCOurse = denne som finnes...
+      blockCOurse = denne som finnes...  */
    
     const schedule =
         await loadSchedule(
