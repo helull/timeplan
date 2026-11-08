@@ -175,10 +175,12 @@ export function openAdminPanel() {
     if (document.getElementById("adminModal")) {
         return;
     }
+
+    var teacher = await giveTeacherName(giveTeacherId());
     
-    const teacherName = await giveTeacherName(giveTeacherId());
-    
-    if (!teacherName || teacherName == "") {teacherName = "ukjent"};
+    if (teacher === "") {
+        teacher = "ukjent"
+    };
 
     const classId =
     localStorage.getItem(
@@ -198,7 +200,7 @@ export function openAdminPanel() {
                 class="modal-card">
 
                 <h2>
-                    Administrasjon - ${teacherName}  - ${isAdmin() ? "👑" : ""}  (${classId})
+                    Administrasjon - ${teacher}  - ${isAdmin() ? "👑" : ""}  (${classId})
                 </h2>
                 
                 <button id="logoutUser">
