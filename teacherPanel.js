@@ -33,7 +33,7 @@ from "./app.js";
 
 export function renderButton() {
 
-    if (!is()) {
+    if (!isAdmin()) {
         return;
     }
 
