@@ -112,16 +112,17 @@ if (
     canCreateBlockCourse
 ) {
 
+    var teacherName = false;   
+    if (teacherMode === true) {teacherName =  localStorage.getItem("teacherName");  }
+   
     existingBlockCourse =
         await loadBlockCourseByLesson(
             lessonId,
-            grade
+            grade,
+           teacher
         );
 
 }
-    
-    var teacherName = false;   
-    if (teacherMode === true) {teacherName =  localStorage.getItem("teacherName");  }
     
     const dayHolidayEnabled =
         await hasDayHoliday(
