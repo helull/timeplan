@@ -115,7 +115,7 @@ if (
 ) {
 
     var teacher = false;   
-    if (teacherMode === true) {teacher = giveTeacherName(giveTeacherId();}
+    if (teacherMode === true) {teacher = await giveTeacherName(giveTeacherId();}
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
@@ -1284,7 +1284,7 @@ async function openBlockCourseModal(blockCourse = null) {
    }
 
 
-    const teacher = giveTeacherName(giveTeacherId);
+    const teacher = await giveTeacherName(giveTeacherId);
       
     const schedule =
         await loadSchedule(
