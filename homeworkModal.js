@@ -186,8 +186,8 @@ const teacherHomeworkText =
 
                 <h2>
                     ${isAdmin()
-                        ? "Fridager, prøver og EFP"
-                        : `Lekser og prøveplan (${teacher})`}
+                        ? "Fridager, prøver og EFP (${teacher})"
+                        : `Lekser og prøveplan`}
                 </h2>
 
                 ${
