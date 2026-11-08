@@ -69,6 +69,18 @@ export async function openHomeworkModal(
         return;
     }
 
+    const classId =
+        localStorage.getItem(
+            "classId"
+        ) || "";
+
+   const grade =
+    classId.includes("1") ? "VG1" :
+    classId.includes("2") ? "VG2" :
+    classId.includes("3") ? "VG3" :
+    classId.includes("4") ? "VG4" :
+    null;
+   
     var teacherMode = isTeacher();
 
     const isBlockSubject =
@@ -101,7 +113,8 @@ if (
 
     existingBlockCourse =
         await loadBlockCourseByLesson(
-            lessonId
+            lessonId,
+            grade
         );
 
 }
@@ -129,11 +142,6 @@ if (
 
     const currentText =
         homeworkData.text;
-
-    const classId =
-        localStorage.getItem(
-            "classId"
-        ) || "";
 
     const teacherHomeworkData =
     await loadTeacherHomework(
