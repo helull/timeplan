@@ -7,6 +7,7 @@ from "./scheduleService.js";
 import {
     saveBlockCourse,
     loadBlockCourseByLesson,
+    loadBlockCoursesByGradeAndTeacher,
     updateBlockCourse,
     deleteBlockCourse
 }
@@ -1278,6 +1279,21 @@ async function openBlockCourseModal(blockCourse = null) {
       alert ("Fant ikke trinn, avslutter...")
       return;
    }
+
+
+            const teacher =
+                localStorage.getItem(
+                    "teacherName"
+                );
+   
+   const allBlockCourses =
+    await loadBlockCoursesByGradeAndTacher(
+        grade,
+        teacher
+    );
+
+   if en av timene i allBlockCourses mathcer lærer og grade 
+      blockCOurse = denne som finnes...
    
     const schedule =
         await loadSchedule(
@@ -1549,11 +1565,6 @@ ${
                     )
                     .value
                     .trim();
-
-            const teacher =
-                localStorage.getItem(
-                    "teacherName"
-                );
 
             const sessions =
                 Array.from(
