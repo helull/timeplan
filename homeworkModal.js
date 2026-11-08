@@ -555,10 +555,12 @@ document
 ?.addEventListener(
     "click",
     async () => {
-
-        await openBlockCourseModal(
-    existingBlockCourse
-);
+       if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {           
+        await openBlockCourseModal(existingBlockCourse);
+       } else {
+          alert("Du må være i landskapsmodus på stor skjerm");
+       }
+       
 
     }
 );
@@ -1263,6 +1265,11 @@ async function openBlockCourseModal(blockCourse = null) {
     classId.includes("3") ? "VG3" :
     classId.includes("4") ? "VG4" :
     null;
+   
+   if (!grade) {
+      alert ("Fant ikke trinn, avslutter...")
+      return;
+   }
    
     const schedule =
         await loadSchedule(
