@@ -36,11 +36,7 @@ export async function giveTeacherName(teacherId) {
 }
 
 export function giveTeacherId() {
-    if isTeacher() {
-        return localStorage.getItem("teacherId")
-    } else {
-        return null;
-    }
+    return localStorage.getItem("teacherId")
 }
 
 export function loginTeacher(
