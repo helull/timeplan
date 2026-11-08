@@ -18,7 +18,7 @@ export function isTeacher() {
     );
 }
 
-export function teacherName(teacherId) {
+export function giveTeacherName(giveTeacherId) {
 
     if isTeacher() {
         return null;
@@ -39,7 +39,7 @@ export function teacherName(teacherId) {
     return snapshot.data().name;
 }
 
-export function teacherId() {
+export function giveTeacherId() {
     if isTeacher() {
         return localStorage.getItem("teacherId")
     } else {
