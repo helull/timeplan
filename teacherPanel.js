@@ -175,7 +175,7 @@ export function openAdminPanel() {
     }
 
     var teacherName = giveTeacherName(giveTeacherId())
-    if (!teacherName) {teacherName = "ukjent");
+    if (!teacherName) {teacherName = "ukjent"};
 
     const classId =
     localStorage.getItem(
