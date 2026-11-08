@@ -62,8 +62,10 @@ export function renderButton() {
 
 export function openToolsPanel() {
 
-    const senabled = localStorage.getItem("showNames") === "true";
+    /* kan  umulig fungere
+    const showRoomsenabled = localStorage.getItem("showNames") === "true";
     const roomsenabled = localStorage.getItem("showRooms") === "true";
+    */
     
     if (document.getElementById("toolsModal")) 
     {
@@ -174,6 +176,12 @@ export function openAdminPanel() {
         return;
     }
 
+
+
+    
+    
+
+    
     var teacherName = giveTeacherName(giveTeacherId());
     if (!teacherName || teacherName == "") {teacherName = "ukjent"};
 
