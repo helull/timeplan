@@ -566,7 +566,7 @@ document
        if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {           
         await openBlockCourseModal(existingBlockCourse);
        } else {
-          alert("Du må være i landskapsmodus på stor skjerm");
+          alert("Du må være i landskapsmodus");
        }
        
 
