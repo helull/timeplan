@@ -174,7 +174,7 @@ export function openAdminPanel() {
         return;
     }
 
-    var teacherName = giveTeacherName(giveTeacherId()
+    var teacherName = giveTeacherName(giveTeacherId())
     if (!teacherName) {teacherName = "ukjent");
 
     const classId =
