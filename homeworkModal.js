@@ -49,7 +49,8 @@ from "./holidayService.js";
 
 import {
     isTeacher,
-    isAdmin
+    isAdmin,
+    teacherName
 }
 from "./teacher.js";
 
@@ -113,7 +114,7 @@ if (
 ) {
 
     var teacher = false;   
-    if (teacherMode === true) {teacher =  localStorage.getItem("teacherName");  }
+    if (teacherMode === true) {teacher = localStorage.getItem("teacherName");  }
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
