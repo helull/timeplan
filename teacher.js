@@ -18,11 +18,7 @@ export function isTeacher() {
     );
 }
 
-export function giveTeacherName(giveTeacherId) {
-
-    if isTeacher() {
-        return null;
-    }
+export function giveTeacherName(teacherId) {
 
     const teacherRef = doc(
         db,
