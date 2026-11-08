@@ -115,7 +115,9 @@ if (
 ) {
 
     var teacher = false;   
-    if (teacherMode === true) {teacher = await giveTeacherName(giveTeacherId();}
+    if (teacherMode === true) {
+       teacher = await giveTeacherName(giveTeacherId())
+    }
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
