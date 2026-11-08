@@ -1286,7 +1286,7 @@ async function openBlockCourseModal(blockCourse = null) {
    }
 
 
-    const teacher = await giveTeacherName(giveTeacherId);
+    const teacher = await giveTeacherName(giveTeacherId());
       
     const schedule =
         await loadSchedule(
