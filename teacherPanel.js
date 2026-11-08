@@ -175,14 +175,9 @@ export function openAdminPanel() {
     if (document.getElementById("adminModal")) {
         return;
     }
-
-
-
     
+    const teacherName = await giveTeacherName(giveTeacherId());
     
-
-    
-    var teacherName = giveTeacherName(giveTeacherId());
     if (!teacherName || teacherName == "") {teacherName = "ukjent"};
 
     const classId =
