@@ -18,7 +18,7 @@ export function isTeacher() {
     );
 }
 
-export function giveTeacherName(teacherId) {
+export async function giveTeacherName(teacherId) {
 
     const teacherRef = doc(
         db,
