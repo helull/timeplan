@@ -50,8 +50,8 @@ from "./holidayService.js";
 import {
     isTeacher,
     isAdmin,
-    teacherName,
-    teacherId
+    giveTeacherName,
+    giveTeacherId
 }
 from "./teacher.js";
 
@@ -115,7 +115,7 @@ if (
 ) {
 
     var teacher = false;   
-    if (teacherMode === true) {teacher = teacherName(techerId();}
+    if (teacherMode === true) {teacher = giveTeacherName(giveTeacherId();}
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
@@ -1284,7 +1284,7 @@ async function openBlockCourseModal(blockCourse = null) {
    }
 
 
-    const teacher = teacherName(teacherId);
+    const teacher = giveTeacherName(giveTeacherId);
       
     const schedule =
         await loadSchedule(
