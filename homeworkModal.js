@@ -1257,6 +1257,13 @@ async function openBlockCourseModal(blockCourse = null) {
             "classId"
         );
 
+   const grade =
+    classId.includes("1") ? "VG1" :
+    classId.includes("2") ? "VG2" :
+    classId.includes("3") ? "VG3" :
+    classId.includes("4") ? "VG4" :
+    null;
+   
     const schedule =
         await loadSchedule(
             classId
@@ -1606,6 +1613,7 @@ if (
             subject,
             room,
             teacher,
+            grade,
             sessions
         }
 
@@ -1623,6 +1631,7 @@ else {
         subject,
         room,
         teacher,
+        grade,
         sessions
 
     });
@@ -1632,9 +1641,6 @@ else {
     );
 
 }
-            alert(
-                "Blokkfaget er opprettet"
-            );
 
             document
                 .getElementById(
