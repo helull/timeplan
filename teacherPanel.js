@@ -15,7 +15,9 @@ import {
     enableAdminMode,
     isAdmin,
     applyAdminMode,
-    disableAdminMode
+    disableAdminMode,
+    giveTeacherName,
+    giveTeacherId
 }
 from "./teacher.js";
 
@@ -29,9 +31,9 @@ import {
 }
 from "./app.js";
 
-export function renderTeacherButton() {
+export function renderButton() {
 
-    if (!isTeacher()) {
+    if (!is()) {
         return;
     }
 
@@ -60,7 +62,7 @@ export function renderTeacherButton() {
 
 export function openToolsPanel() {
 
-    const teachersenabled = localStorage.getItem("showTeacherNames") === "true";
+    const senabled = localStorage.getItem("showNames") === "true";
     const roomsenabled = localStorage.getItem("showRooms") === "true";
     
     if (document.getElementById("toolsModal")) 
@@ -94,7 +96,7 @@ const classId =
                     Verktøy - ${studentName} (${classId})
                 </h2>
 
-                <button id="toggleTeacherNames">
+                <button id="toggleNames">
                    Vis/skjul lærer
                 </button>
                 
@@ -127,11 +129,11 @@ const classId =
     
     document
     .getElementById(
-        "toggleTeacherNames"
+        "toggleNames"
     )
     ?.addEventListener(
         "click",
-        toggleTeacherNames
+        toggleNames
     );
 
     document
@@ -172,10 +174,8 @@ export function openAdminPanel() {
         return;
     }
 
-    const teacherName =
-    localStorage.getItem(
-        "teacherName"
-    ) || "";
+    var teacherName = giveTeacherName(giveTeacherId())
+    if (!teacherName) {teacherName = "ukjent");
 
     const classId =
     localStorage.getItem(
