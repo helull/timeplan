@@ -31,10 +31,12 @@ import {
 }
 from "./homeworkService.js";
 
+/*
 import {
     renderTeacherButton
 }
 from "./teacherPanel.js";
+*/
 
 import {
     loginTeacher
