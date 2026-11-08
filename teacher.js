@@ -20,7 +20,7 @@ export function isTeacher() {
 
 export function teacherName(teacherId) {
 
-    if "isTeacher() {
+    if isTeacher() {
         return null;
     }
 
