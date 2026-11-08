@@ -50,7 +50,8 @@ from "./holidayService.js";
 import {
     isTeacher,
     isAdmin,
-    teacherName
+    teacherName,
+    teacherId
 }
 from "./teacher.js";
 
@@ -114,7 +115,7 @@ if (
 ) {
 
     var teacher = false;   
-    if (teacherMode === true) {teacher = localStorage.getItem("teacherName");  }
+    if (teacherMode === true) {teacher = teacherName(techerId();}
    
     existingBlockCourse =
         await loadBlockCourseByLesson(
@@ -1283,20 +1284,8 @@ async function openBlockCourseModal(blockCourse = null) {
    }
 
 
-            const teacher =
-                localStorage.getItem(
-                    "teacherName"
-                );
-   /*
-   const allBlockCourses =
-    await loadBlockCoursesByGradeAndTacher(
-        grade,
-        teacher
-    );
-
-   if en av timene i allBlockCourses mathcer lærer og grade 
-      blockCOurse = denne som finnes...  */
-   
+    const teacher = teacherName(teacherId);
+      
     const schedule =
         await loadSchedule(
             classId
