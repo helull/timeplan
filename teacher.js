@@ -7,6 +7,36 @@ export function isTeacher() {
     );
 }
 
+export function teacherName(teacherId) {
+
+    if "isTeacher() {
+        return null;
+    }
+
+    const teacherRef = doc(
+        db,
+        "teachers",
+        teacherId
+    );
+
+    const snapshot =
+        await getDoc(teacherRef);
+
+    if (!snapshot.exists()) {
+        return null;
+    }
+    return snapshot.data().name;
+}
+
+export function teacherId() {
+
+    if isTeacher() {
+        return localStorage.getItem("teacherId")
+    } else {
+        return null;
+    }
+}
+
 export function loginTeacher(
     teacherName
 ) {
