@@ -109,16 +109,14 @@ const canCreateBlockCourse =
 
    let existingBlockCourse =
     null;
-
-if (
-    canCreateBlockCourse
-) {
-
     var teacher = false;   
     if (teacherMode === true) {
        teacher = await giveTeacherName(giveTeacherId())
     }
    
+   if (
+       canCreateBlockCourse
+   ) {
     existingBlockCourse =
         await loadBlockCourseByLesson(
             lessonId,
