@@ -5,7 +5,9 @@ import {
     serverTimestamp,
     updateDoc,
     deleteDoc,
-    doc
+    doc,
+    query,
+    where
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
