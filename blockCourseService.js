@@ -66,14 +66,16 @@ export async function loadBlockCoursesByGradeAndTeacher(
 
 export async function loadBlockCourseByLesson(
     lessonId,
-    grade
+    grade,
+    teacher
 ) {
 
     const snapshot =
         await getDocs(
             query(
                 collection(db, "blockCourses"),
-                where("grade", "==", grade)
+                where("grade", "==", grade),
+                where("teacher", "==", teacher)
             )
         );
 
