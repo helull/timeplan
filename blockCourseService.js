@@ -42,6 +42,26 @@ export async function saveBlockCourse(
 
 
 
+export async function loadBlockCoursesByGrade(
+    grade
+) {
+    const snapshot =
+        await getDocs(
+            query(
+                collection(db, "blockCourses"),
+                where("grade", "==", grade)
+            )
+        );
+
+    return snapshot.docs.map(
+        document => ({
+            id: document.id,
+            ...document.data()
+        })
+    );
+}
+
+
 export async function loadBlockCourseByLesson(
     lessonId,
     grade
