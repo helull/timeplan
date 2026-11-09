@@ -216,10 +216,14 @@ export async function openAdminPanel() {
                     Endre klasse
                 </button>
 
-                <button id="adminMode">
+                <button id="adminMode"
+                    style="
+                        background:${isAdmin() ? "#ff0000" : ""};
+                        color:${isAdmin() ? "#ffffff" : ""};
+                    ">
                     ${isAdmin() ? "Logg ut av Admin-modus" : "Logg inn som administrator"}
                 </button>
-                
+               
                 <button class="admin-only" disabled id="importSchedule">
                     Importer JSON
                 </button>
