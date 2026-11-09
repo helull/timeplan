@@ -154,9 +154,9 @@ if (
    
 
    
-   let existingBlockCourse =
-    null;
-    var teacher = false;   
+   let existingBlockCourse = null;
+    
+    var teacher = false;
     if (teacherMode === true) {
        teacher = await giveTeacherName(giveTeacherId())
     }
