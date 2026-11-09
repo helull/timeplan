@@ -837,11 +837,11 @@ document
 
                 }
 
-                alert(
+                /* alert(
                     examEnabled
                         ? "Prøve slått PÅ"
                         : "Prøve slått AV"
-                );
+                );*/
 
             }
         );
