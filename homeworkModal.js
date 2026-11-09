@@ -723,7 +723,7 @@ document
             );
         
 //       if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {
-       if (window.matchMedia("(orientation: landscape)) {           
+       if (window.matchMedia("(orientation: landscape)").matches) {           
             await openBlockCourseModal(lessonId, existingBlockCourse);
        } else {
           alert("Du må være i landskapsmodus");
