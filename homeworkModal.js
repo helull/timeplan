@@ -131,10 +131,9 @@ if (
 ) {
 
     availableBlockCourses =
-        await loadBlockCourseByLesson(
+        await loadBlockCoursesForStudentsByLesson(
             lessonId,
-            grade,
-            ""
+            grade
         );
 
 console.log(
