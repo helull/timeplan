@@ -1764,6 +1764,13 @@ ${
 
             }
 
+            if (!sessions.some(session => session.lessonId === lessonId)) {
+                alert("Du må minst velge timen du kom fra...");
+                return;
+
+            }
+            
+
 if (
     blockCourse
 ) {
