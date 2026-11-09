@@ -169,7 +169,7 @@ function logoutUser() {
     location.reload();
 }
 
-export function openAdminPanel() {
+export async function openAdminPanel() {
 
     // Ikke åpne flere modaler samtidig
     if (document.getElementById("adminModal")) {
