@@ -196,6 +196,7 @@ export function applyAdminMode() {
                 item.disabled = false;
             }
         );
+        updateAdminButton();
 }
 
 export function removeAdminMode() {
@@ -214,4 +215,34 @@ export function removeAdminMode() {
                 item.disabled = true;
             }
         );
+        updateAdminButton();
+}
+
+export function updateAdminButton() {
+
+    const button =
+        document.getElementById(
+            "adminMode"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    if (isAdmin()) {
+
+        button.style.background =
+            "#ff0000";
+
+        button.style.color =
+            "#ffffff";
+
+    } else {
+
+        button.style.background =
+            "";
+
+        button.style.color =
+            "";
+    }
 }
