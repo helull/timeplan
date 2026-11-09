@@ -1,8 +1,7 @@
 import {
     loadStudentBlockCourses,
     saveStudentBlockCourse,
-    removeStudentBlockCourse,
-    loadBlockCoursesForStudentsByLesson
+    removeStudentBlockCourse
 }
 from "./studentBlockCourseService.js";
 
@@ -14,6 +13,7 @@ from "./scheduleService.js";
 import {
     saveBlockCourse,
     loadBlockCourseByLesson,
+    loadBlockCoursesForStudentsByLesson,
     loadBlockCoursesByGradeAndTeacher,
     updateBlockCourse,
     deleteBlockCourse
