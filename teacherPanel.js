@@ -205,7 +205,7 @@ export async function openAdminPanel() {
                 class="modal-card">
 
                 <h2>
-                    Administrasjon - ${teacher}  - ${isAdmin() ? "👑" : ""}  (${classId})
+                    Administrasjon - ${teacher}  -  (${classId})
                 </h2>
                 
                 <button id="logoutUser">
@@ -217,11 +217,7 @@ export async function openAdminPanel() {
                 </button>
 
                 <button id="adminMode"
-                    style="
-                        background:${isAdmin() ? "#ff0000" : ""};
-                        color:${isAdmin() ? "#ffffff" : ""};
-                    ">
-                    Admin-modus
+                     ${isAdmin() ? "Logg ut av Admin": "Logg inn som Admin"}
                 </button>
                
                 <button class="admin-only" disabled id="importSchedule">
