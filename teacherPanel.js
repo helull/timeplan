@@ -216,7 +216,7 @@ export async function openAdminPanel() {
                     Bytt klasse
                 </button>
 
-                <button id="adminMode"
+                <button id="adminMode">
                      ${isAdmin() ? "Logg ut av Admin": "Logg inn som Admin"}
                 </button>
                
