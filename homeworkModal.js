@@ -1,3 +1,9 @@
+import {
+    loadStudentBlockCourses,
+    saveStudentBlockCourse,
+    removeStudentBlockCourse
+}
+from "./studentBlockCourseService.js";
 
 import {
    loadSchedule 
@@ -64,6 +70,9 @@ export async function openHomeworkModal(
     startTime
 ) {
 
+   
+
+   
     if (
         document.getElementById(
             "homeworkModal"
@@ -107,6 +116,44 @@ const canCreateBlockCourse =
         isBlockRoom
     );
 
+
+
+   let availableBlockCourses = [];
+
+let selectedBlockCourses = [];
+
+if (
+    !teacherMode &&
+    (
+        isBlockSubject ||
+        isBlockRoom
+    )
+) {
+
+    availableBlockCourses =
+        await loadBlockCourseByLesson(
+            lessonId,
+            grade,
+            ""
+        );
+
+    const studentId =
+        localStorage.getItem(
+            "studentId"
+        );
+
+    if (studentId) {
+
+        selectedBlockCourses =
+            await loadStudentBlockCourses(
+                studentId
+            );
+
+    }
+}
+   
+
+   
    let existingBlockCourse =
     null;
     var teacher = false;   
@@ -172,6 +219,66 @@ const teacherHomeworkText =
     let examEnabled =
         examInfo.exam;
 
+
+
+
+   const blockCourseHtml =
+(
+    !teacherMode &&
+    availableBlockCourses.length > 0
+)
+?
+`
+<label>
+    Fag
+</label>
+
+<select
+    id="blockCourseSelect"
+    style="
+        width:100%;
+        margin-bottom:10px;
+    "
+>
+
+    <option value="">
+        Velg fag
+    </option>
+
+    ${
+        availableBlockCourses
+            .map(
+                course =>
+                `
+                <option
+                    value="${course.id}"
+                    ${
+                        selectedBlockCourses.includes(
+                            course.id
+                        )
+                        ? "selected"
+                        : ""
+                    }
+                >
+                    ${course.subject}
+                    (${course.teacher})
+                </option>
+                `
+            )
+            .join("")
+    }
+
+</select>
+
+<br>
+`
+:
+"";
+
+
+   
+
+   
     document.body.insertAdjacentHTML(
 
         "beforeend",
@@ -222,6 +329,8 @@ const teacherHomeworkText =
         :
         ""
     }
+
+${blockCourseHtml}
 
     <div
         class="student-homework-title">
@@ -367,6 +476,41 @@ ${
         `
     );
 
+
+   document
+.getElementById(
+    "blockCourseSelect"
+)
+?.addEventListener(
+    "change",
+    async e => {
+
+        const studentId =
+            localStorage.getItem(
+                "studentId"
+            );
+
+        if (!studentId) {
+            return;
+        }
+
+        const selectedId =
+            e.target.value;
+
+        if (!selectedId) {
+            return;
+        }
+
+        await saveStudentBlockCourse(
+            studentId,
+            selectedId
+        );
+
+    }
+);
+
+
+   
     document
     .getElementById(
         "manageTentamens"
