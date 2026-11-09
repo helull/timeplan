@@ -714,7 +714,7 @@ document
     "click",
     async () => {
        if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {           
-        await openBlockCourseModal(existingBlockCourse);
+        await openBlockCourseModal(lessonId, existingBlockCourse);
        } else {
           alert("Du må være i landskapsmodus");
        }
@@ -1410,7 +1410,7 @@ export function formatTeacherHomework(text) {
     return text;
 }
 
-async function openBlockCourseModal(blockCourse = null) {
+async function openBlockCourseModal(lessonId, blockCourse = null) {
 
     const classId =
         localStorage.getItem(
