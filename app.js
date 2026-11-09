@@ -97,7 +97,7 @@ let startY = 0;
 
 let overviewMode = false;
 
-ializeTeacherMode();
+initalizeTeacherMode();
 
 await finishMagicLogin();
 
