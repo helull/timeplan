@@ -98,12 +98,12 @@ const classId =
                     Verktøy - ${studentName} (${classId})
                 </h2>
 
-                <button id="toggleNames">
+                <button id="toggleTeacherNames">
                    Vis/skjul lærer
                 </button>
                 
                 <button id="toggleRooms">
-                  vis/skjul rom
+                  Vis/skjul rom
                 </button>
 
                 <button id="logoutUserFromTools">
@@ -131,11 +131,11 @@ const classId =
     
     document
     .getElementById(
-        "toggleNames"
+        "toggleTeacherNames"
     )
     ?.addEventListener(
         "click",
-        toggleNames
+        toggleTeacherNames
     );
 
     document
