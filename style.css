@@ -1262,11 +1262,11 @@ h1{
 }
 
 .teacher-homework-link {
-
+    font-size: 0.7rem;
     display: inline-block;
-    margin-top: 6px;
+    margin-top: 2px;
 
-    padding: 8px 12px;
+    padding: 2px 4px;
 
     background: #0078d4;
     color: white;
