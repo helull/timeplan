@@ -176,7 +176,7 @@ export function openAdminPanel() {
         return;
     }
 
-    var teacher = giveTeacherName(giveTeacherId());
+    var teacher = await giveTeacherName(await giveTeacherId());
     console.log("teacher er", teacher)
 
     const classId =
