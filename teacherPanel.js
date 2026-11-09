@@ -176,7 +176,7 @@ export async function openAdminPanel() {
         return;
     }
 
-    const teacherId = giveTeacherId();
+    const teacherId = await giveTeacherId();
 
     console.log("teacherId", teacherId);
     
