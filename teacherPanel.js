@@ -176,8 +176,28 @@ export function openAdminPanel() {
         return;
     }
 
-    var teacher = await giveTeacherName(await giveTeacherId());
-    console.log("teacher er", teacher)
+    
+
+    const teacherId =
+    giveTeacherId();
+
+console.log(
+    "teacherId",
+    teacherId
+);
+
+const teacher =
+    await giveTeacherName(
+        teacherId
+    );
+
+console.log(
+    "teacher",
+    teacher
+);
+
+
+    
 
     const classId =
     localStorage.getItem(
