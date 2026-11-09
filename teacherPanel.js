@@ -829,10 +829,6 @@ function adminModeLogin() {
 
     if (isAdmin()) {
         disableAdminMode();
-        alert (
-            "Administrator er deaktivert."
-        );
-
         return;
     }
 
@@ -854,8 +850,4 @@ function adminModeLogin() {
     }
 
     enableAdminMode();
-
-    alert(
-        "Administrator aktivert."
-    );
 }
