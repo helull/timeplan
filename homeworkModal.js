@@ -424,7 +424,7 @@ ${
                         color:${examEnabled ? "#ffffff" : ""};
                     ">
 
-                    Inn/ut av prøveplan
+                    Prøve denne timen
 
                 </button>
 
@@ -439,7 +439,7 @@ ${
                             color:${dayHolidayEnabled ? "#ffffff" : ""};
                         ">
 
-                        For alle klasser:
+                        For skolen:
                         Gjør denne dagen undervisningsfri
 
                     </button>
@@ -451,14 +451,14 @@ ${
                             color:${weekHolidayEnabled ? "#ffffff" : ""};
                         ">
 
-                        For alle klasser:
+                        For skolen:
                         Gjør hele uken til friuke
 
                     </button>
                     <button
                         id="manageTentamens">
 
-                        Legg inn/fjern Eksamensforberedende Prøve
+                        For skolen: EFP
                     </button>
                     `
                     :
