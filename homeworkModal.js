@@ -713,13 +713,20 @@ document
 ?.addEventListener(
     "click",
     async () => {
+        
+        // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
+        let currentBlockCourse =
+            await loadBlockCourseByLesson(
+                lessonId,
+                grade,
+                teacher
+            );
+        
        if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {           
         await openBlockCourseModal(lessonId, existingBlockCourse);
        } else {
           alert("Du må være i landskapsmodus");
        }
-       
-
     }
 );
     
