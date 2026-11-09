@@ -221,7 +221,7 @@ export async function openAdminPanel() {
                         background:${isAdmin() ? "#ff0000" : ""};
                         color:${isAdmin() ? "#ffffff" : ""};
                     ">
-                    ${isAdmin() ? "Logg ut av Admin-modus" : "Logg inn som administrator"}
+                    Admin-modus
                 </button>
                
                 <button class="admin-only" disabled id="importSchedule">
