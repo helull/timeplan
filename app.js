@@ -457,7 +457,7 @@ if (isTeacher()) {
     const newValue = localStorage.getItem("showRooms") !== "false";
     document.querySelectorAll(".room").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
 
-    const newValue = localStorage.getItem("showTeacherNames") !== "false";
+    newValue = localStorage.getItem("showTeacherNames") !== "false";
     document.querySelectorAll(".teacher").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
 }
 
