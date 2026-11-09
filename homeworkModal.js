@@ -296,7 +296,7 @@ const teacherHomeworkText =
                 <h2>
                     ${isAdmin()
                         ? "Fridager, prøver og EFP (${teacher})"
-                        : `Lekser og prøveplan`}
+                        : `Lekser og prøve for dette fag`}
                 </h2>
 
                 ${
@@ -313,7 +313,7 @@ const teacherHomeworkText =
             <div
                 class="teacher-homework-title">
 
-                📚 Lærerlekse (${classId})
+                📚 Lekse til i dag (${classId})
 
             </div>
 
