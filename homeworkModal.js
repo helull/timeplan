@@ -137,6 +137,11 @@ if (
             ""
         );
 
+console.log(
+    typeof availableBlockCourses,
+    availableBlockCourses
+);
+    
     const studentId =
         localStorage.getItem(
             "studentId"
@@ -222,7 +227,8 @@ const teacherHomeworkText =
         examInfo.exam;
 
 
-
+console.log("classId", classId);
+console.log("grade", grade);
 
    const blockCourseHtml =
 (
