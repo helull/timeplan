@@ -41,7 +41,7 @@ export async function giveTeacherName(teacherId) {
     return snapshot.data().name;
 }
 
-export function giveTeacherId() {
+export async function giveTeacherId() {
     return localStorage.getItem("teacherId")
 }
 
