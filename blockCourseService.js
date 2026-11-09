@@ -70,7 +70,18 @@ export async function loadBlockCourseByLesson(
     teacher
 ) {
 
-    const snapshot =
+    let snapshot;
+    if (teacher === "") {
+    snapshot =
+        await getDocs(
+            query(
+                collection(db, "blockCourses"),
+                where("grade", "==", grade)
+                )
+        );
+    } else {
+
+    snapshot =
         await getDocs(
             query(
                 collection(db, "blockCourses"),
@@ -78,7 +89,9 @@ export async function loadBlockCourseByLesson(
                 where("teacher", "==", teacher)
             )
         );
+    }
 
+    
     for (
         const document of
         snapshot.docs
