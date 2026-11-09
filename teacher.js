@@ -25,13 +25,19 @@ export async function giveTeacherName(teacherId) {
         "teachers",
         teacherId
     );
+    
+   console.log("teacherId: ",teacherId);
+       console.log("teacherRef: ",teacherRef);
 
+    
     const snapshot =
         await getDoc(teacherRef);
 
     if (!snapshot.exists()) {
         return null;
     }
+    
+    console.log("snapshot.data().name er",snapshot.data().name)
     return snapshot.data().name;
 }
 
