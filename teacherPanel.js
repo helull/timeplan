@@ -213,7 +213,7 @@ export async function openAdminPanel() {
                 </button>
 
                 <button id="changeClass">
-                    Endre klasse
+                    Bytt klasse
                 </button>
 
                 <button id="adminMode"
@@ -225,11 +225,11 @@ export async function openAdminPanel() {
                 </button>
                
                 <button class="admin-only" disabled id="importSchedule">
-                    Importer JSON
+                    Lag en timeplan
                 </button>
                 
                 <button class="admin-only" disabled  id="howToImport">
-                    Bruk AI !
+                    AI-prompt
                 </button>
 
                 <button id="closeAdmin">    
