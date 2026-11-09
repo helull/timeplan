@@ -377,7 +377,7 @@ export function openImportHelpModal() {
                 </h2>
 
                 <p>
-                    1. Ta skjermbilde av timeplanen.
+                    1. Ta skjermbilde av timeplanen til EN klasse i inSchool, velg timeplanvisning, så f.eks "1STA". Bildet må få med alle øktene i ett og samme bilde, forminsk visningen nok!
                 </p>
 
                 <p>
@@ -390,6 +390,9 @@ export function openImportHelpModal() {
 
                 <p>
                     4. Kopier prompten nedenfor.
+                </p>
+                <p>
+                    5. Lim JSON-koden inn i "Lag en timeplan" i forrig meny.
                 </p>
 
                 <textarea
