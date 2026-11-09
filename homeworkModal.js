@@ -715,7 +715,7 @@ document
     async () => {
         
         // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
-        let currentBlockCourse =
+        existingBlockCourse =
             await loadBlockCourseByLesson(
                 lessonId,
                 grade,
