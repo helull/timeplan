@@ -824,7 +824,7 @@ function adminModeLogin() {
 
     if (isAdmin()) {
         disableAdminMode();
-        prompt (
+        alert (
             "Administrator er deaktivert."
         );
 
