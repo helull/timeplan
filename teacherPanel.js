@@ -217,7 +217,7 @@ export async function openAdminPanel() {
                 </button>
 
                 <button id="adminMode">
-                     ${isAdmin() ? "Logg ut av Admin": "Logg inn som Admin"}
+                     Admin
                 </button>
                
                 <button class="admin-only" disabled id="importSchedule">
