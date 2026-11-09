@@ -97,7 +97,7 @@ let startY = 0;
 
 let overviewMode = false;
 
-initializeTeacherMode();
+ializeTeacherMode();
 
 await finishMagicLogin();
 
@@ -453,7 +453,12 @@ if (isTeacher()) {
 }
     
     render();
-    //renderTeacherButton();
+
+    const newValue = localStorage.getItem("showRooms") !== "false";
+    document.querySelectorAll(".room").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
+
+    const newValue = localStorage.getItem("showTeacherNames") !== "false";
+    document.querySelectorAll(".teacherNames").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
 }
 
 export async function reloadScheduleForClass(
