@@ -893,7 +893,7 @@ async function openBlockExamModal(
 
                             <h3>
 
-                                BLOKK-prøver
+                                BLOKK-prøver for ditt fag
 
                             </h3>
 
@@ -953,7 +953,7 @@ async function openBlockExamModal(
                                 id="blockExamText"
                                 type="text"
                                 maxlength="20"
-                                placeholder="Ny prøve"
+                                placeholder="Fagnavn..."
                                 style="
                                     width:100%;
                                     box-sizing:border-box;
