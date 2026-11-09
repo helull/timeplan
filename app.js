@@ -458,7 +458,7 @@ if (isTeacher()) {
     document.querySelectorAll(".room").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
 
     const newValue = localStorage.getItem("showTeacherNames") !== "false";
-    document.querySelectorAll(".teacherNames").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
+    document.querySelectorAll(".teacher").forEach(el =>  el.classList.toggle("roomInvisible",!newValue));
 }
 
 export async function reloadScheduleForClass(
