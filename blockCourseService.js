@@ -127,6 +127,42 @@ export async function loadBlockCourseByLesson(
 }
 
 
+export async function loadBlockCoursesForStudentsByLesson(
+    lessonId,
+    grade
+) {
+    const snapshot =
+        await getDocs(
+            query(
+                collection(db, "blockCourses"),
+                where("grade", "==", grade)
+            )
+        );
+
+    const results = [];
+
+    snapshot.docs.forEach(docSnap => {
+
+        const data = docSnap.data();
+
+        const found =
+            data.sessions?.some(
+                session =>
+                    session.lessonId === lessonId
+            );
+
+        if (found) {
+            results.push({
+                id: docSnap.id,
+                ...data
+            });
+        }
+    });
+
+    return results;
+}
+
+
 
 export async function updateBlockCourse(
     id,
