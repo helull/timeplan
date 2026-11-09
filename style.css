@@ -432,6 +432,10 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
+.teacher-homework-link {
+    font-size: 0.4rem !important;
+}
+    
 .lesson-homework-preview{
 
     font-size:.45rem;
