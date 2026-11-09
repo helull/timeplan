@@ -176,25 +176,13 @@ export function openAdminPanel() {
         return;
     }
 
+    const teacherId = giveTeacherId();
+
+    console.log("teacherId", teacherId);
     
+    const teacher = await giveTeacherName(teacherId);
 
-    const teacherId =
-    giveTeacherId();
-
-console.log(
-    "teacherId",
-    teacherId
-);
-
-const teacher =
-    await giveTeacherName(
-        teacherId
-    );
-
-console.log(
-    "teacher",
-    teacher
-);
+    console.log("teacher", teacher);
 
 
     
