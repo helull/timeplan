@@ -270,7 +270,7 @@ console.log("grade", grade);
                     }
                 >
                     ${course.subject}
-                    (${course.teacher})
+                    (${course.giveTeacherName(teacherId}))
                 </option>
                 `
             )
@@ -302,7 +302,7 @@ console.log("grade", grade);
 
                 <h2>
                     ${isAdmin()
-                        ? `Fridager, prøver og EFP (${teacher})`
+                        ? `Fridager, prøver og EFP`
                         : "Lekser og prøve for dette fag"}
                 </h2>
 
