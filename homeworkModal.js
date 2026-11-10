@@ -175,7 +175,7 @@ console.log(
         await loadBlockCourseByLesson(
             lessonId,
             grade,
-           teacher
+           teacherId
         );
 
 }
