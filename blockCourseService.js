@@ -44,14 +44,14 @@ export async function saveBlockCourse(
 
 export async function loadBlockCoursesByGradeAndTeacher(
     grade,
-    teacher
+    teacherId
 ) {
     const snapshot =
         await getDocs(
             query(
                 collection(db, "blockCourses"),
                 where("grade", "==", grade),
-                where("teacher", "==", teacher)
+                where("teacherId", "==", teacherId)
             )
         );
 
@@ -67,11 +67,11 @@ export async function loadBlockCoursesByGradeAndTeacher(
 export async function loadBlockCourseByLesson(
     lessonId,
     grade,
-    teacher
+    teacherId
 ) {
 
     let snapshot;
-    if (teacher === "") {
+    if (teacherId === "") {
     snapshot =
         await getDocs(
             query(
@@ -86,7 +86,7 @@ export async function loadBlockCourseByLesson(
             query(
                 collection(db, "blockCourses"),
                 where("grade", "==", grade),
-                where("teacher", "==", teacher)
+                where("teacherId", "==", teacherId)
             )
         );
     }
