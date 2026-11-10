@@ -1815,7 +1815,7 @@ else {
 
         subject,
         room,
-        teacher,
+        teacherId,
         grade,
         sessions
 
