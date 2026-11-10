@@ -15,7 +15,8 @@ export async function saveTeacherHomework(
     classId,
     lessonId,
     week,
-    text
+    text,
+    teacherId
 ) {
 
     const documentId =
@@ -34,6 +35,7 @@ export async function saveTeacherHomework(
             lessonId,
             week,
             text,
+            teacherId,
             updatedAt:
                 serverTimestamp()
         }
@@ -44,7 +46,8 @@ export async function saveTeacherHomework(
 export async function loadTeacherHomework(
     classId,
     lessonId,
-    week
+    week,
+    teacherId
 ) {
 
     const documentId =
@@ -69,7 +72,16 @@ export async function loadTeacherHomework(
         };
     }
 
-    return snapshot.data();
+    const snapshot.data();
+    
+    // Hvis teacherId er satt, returner kun data som matcher
+    if (teacherId !== "" && data.teacherId !== teacherId) {
+        return {
+            text: ""
+        };
+    }
+
+    return data;
 }
 
 export async function loadAllTeacherHomework() {
