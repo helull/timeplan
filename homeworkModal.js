@@ -270,7 +270,7 @@ console.log("grade", grade);
                     }
                 >
                     ${course.subject}
-                    (${course.giveTeacherName(teacherId}))
+                    (${course.teacherName}))
                 </option>
                 `
             )
@@ -1797,6 +1797,7 @@ if (
         {
             subject,
             room,
+            teacherId,
             teacher,
             grade,
             sessions
@@ -1816,6 +1817,7 @@ else {
         subject,
         room,
         teacherId,
+        teacher,
         grade,
         sessions
 
