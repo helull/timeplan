@@ -205,7 +205,8 @@ console.log(
     await loadTeacherHomework(
         classId,
         lessonId,
-        week
+        week,
+        teacherId
     );
 
 const teacherHomeworkText =
@@ -701,7 +702,8 @@ document
                 classId,
                 lessonId,
                 week,
-                text
+                text,
+                teacherId
 
             );
 
