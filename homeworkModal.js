@@ -727,7 +727,7 @@ document
             await loadBlockCourseByLesson(
                 lessonId,
                 grade,
-                teacher
+                teacherId
             );
         
        if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {
