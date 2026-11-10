@@ -1798,7 +1798,7 @@ if (
             subject,
             room,
             teacherId,
-            teacher,
+            teacherName,
             grade,
             sessions
         }
@@ -1817,7 +1817,7 @@ else {
         subject,
         room,
         teacherId,
-        teacher,
+        teacherName,
         grade,
         sessions
 
