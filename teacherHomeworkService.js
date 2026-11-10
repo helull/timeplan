@@ -72,7 +72,7 @@ export async function loadTeacherHomework(
         };
     }
 
-    const snapshot.data();
+    const data = snapshot.data();
     
     // Hvis teacherId er satt, returner kun data som matcher
     if (teacherId !== "" && data.teacherId !== teacherId) {
