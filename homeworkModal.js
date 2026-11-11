@@ -1793,7 +1793,7 @@ ${
 
             }
 
-            var thisTheachesBlockCourses = async loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+            var thisTheachesBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
             const lessonIds = new Set(thisTheachesBlockCourses.map(course => course.lessonId));
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
 
