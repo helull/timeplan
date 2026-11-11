@@ -197,7 +197,7 @@ export async function openHomeworkModal(
 
 </select>
 
-<br>
+
 `
 :
 "";
@@ -258,7 +258,7 @@ export async function openHomeworkModal(
 
         </div>
 
-        <br>
+        
         `
         :
         ""
@@ -301,9 +301,7 @@ ${
 ${teacherHomeworkText}
 
     </textarea>
-
-    <br><br>
-
+    
     <button
         id="saveTeacherHomework">
 
@@ -314,7 +312,7 @@ ${
     canCreateBlockCourse
     ?
     `
-    <br><br>
+    
 
     <button
         id="createBlockCourse">
@@ -869,7 +867,7 @@ async function openBlockExamModal(
                                     box-sizing:border-box;
                                 ">
 
-                            <br><br>
+                            
 
                             <button
                                 id="saveBlockExam">
@@ -1113,7 +1111,7 @@ async function openTentamenModal(
 
                             </select>
 
-                            <br><br>
+                            
 
                             <label>
                                 Fag
@@ -1130,7 +1128,7 @@ async function openTentamenModal(
                                     box-sizing:border-box;
                                 ">
 
-                            <br><br>
+                            
 
                             <label>
                                 Oppstart
@@ -1146,7 +1144,7 @@ async function openTentamenModal(
                                     box-sizing:border-box;
                                 ">
 
-                            <br><br>
+                            
 
                             <button
                                 id="saveTentamen">
@@ -1536,7 +1534,7 @@ lessons
 
 </div>
 
-                    <br>
+                    
 
                     <button
                         id="saveBlockCourse">
