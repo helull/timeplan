@@ -1663,8 +1663,8 @@ ${
 
             }
 
-            var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
-                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachesBlockCourses)
+            var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);                                                                                
+                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)                   
             const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));
                 console.log ("lessonIds",lessonIds)
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
