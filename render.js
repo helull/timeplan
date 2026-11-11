@@ -461,11 +461,11 @@ if (teacherLessonData) {
            
 
                                 <div class="room-teacher">
-                                        <div class="room ${showRooms ? "" : "roomInvisible"}"}>
+                                        <div class="room"}>
                                             ${lesson.roomName}
                                         </div>
                                         
-                                        <div class="teacher ${showTeacherNames ? "" : "teacherNameInvisible"}"}>
+                                        <div class="teacher"}>
                                             ${lesson.teacherName}
                                         </div>
                                 </div>
@@ -701,6 +701,18 @@ document.getElementById(
 
             }
         );
+
+        if (!showRooms) {
+            document.querySelectorAll(".room").forEach(el => {
+                el.classList.add("roomInvisible");
+            });
+        }
+
+        if (!showTeacherNames) {
+            document.querySelectorAll(".teacher").forEach(el => {
+            el.classList.add("teacherNameInvisible");
+            });
+        }
 }
 
 export function renderHomework(homework) {
