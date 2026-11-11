@@ -547,9 +547,13 @@ h1{
         text-overflow:ellipsis;
     }
 
-    /* Skjul lærer */
+    
     .teacher{
-        display:none !important;
+        font-size:.5rem;
+        text-align: right;
+        margin: 1px 0 -5px;
+   /* Skjul lærer 
+        display:none !important; */
     }
 
     .room-teacher{
