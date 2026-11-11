@@ -36,8 +36,10 @@ export function renderSchedule(
     console.log("blockExams:", blockExams);
     console.log("schedule er", schedule)
 
-    const totalDays =
-    document.querySelectorAll(".day").length;
+    const showTeacherNames = localStorage.getItem("showTeacherNames") === "true";
+    const showRooms = localStorage.getItem("showRooms") === "true";
+    
+    const totalDays = document.querySelectorAll(".day").length;
 
     let completed = 0;
     
@@ -414,18 +416,6 @@ if (teacherLessonData) {
 ``
 
                         
-                  const showTeacherNames =
-                    localStorage.getItem(
-                      "showTeacherNames"
-                    ) === "true";
-
-                const showRooms =
-                      localStorage.getItem(
-                      "showRooms"
-                    ) === "true";
-
-
-
 
 
                         //day.innerHTML += `                    
