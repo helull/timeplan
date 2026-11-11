@@ -433,6 +433,14 @@ h1{
     margin-bottom: 2px !important;
 }
 
+
+.modal-card div {
+    margin: 0px;
+}
+    
+.modal-card button {
+    margin: 2px 0 2px;
+}
     
 .modal-card h3,
 .modal-card h4,
