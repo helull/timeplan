@@ -1665,9 +1665,12 @@ ${
 
             }
 
-            var thisTheachesBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
-            const lessonIds = new Set(thisTheachesBlockCourses.map(course => course.lessonId));
+            var thisTeachesBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)
+            const lessonIds = new Set(thisTeachesBlockCourses.map(course => course.lessonId));
+                console.log ("lessonIds",lessonIds)
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
+                console.log ("hasMatch", hasMatch)
 
             if (hasMatch) {                
                 alert("Du har valgt en økt fra et av dine anndre fag, denne må fjernes...");
