@@ -1484,11 +1484,11 @@ lessons
                     <div class="block-course-row">
                         <div class="field-group">
                             <label for="blockCourseSubject">Fagnavn </label>
-                            <input  id="blockCourseSubject" type="text" value="${blockCourse?.subject || ""}">
+                            <input  id="blockCourseSubject" placeholder="Fagnavn..." type="text" value="${blockCourse?.subject || ""}">
                         </div>
                         <div class="field-group">
                             <label for="blockCourseRoom"> Rom</label>
-                            <input id="blockCourseRoom" type="text" value="${blockCourse?.room || ""}">
+                            <input id="blockCourseRoom" type="text" placeholder="Rom..." value="${blockCourse?.room || ""}">
                         </div>
                     </div>
                     <h4>
