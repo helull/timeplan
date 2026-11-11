@@ -429,8 +429,14 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
+.block-course-row {
+    margin-bottom: 2px !important;
+}
+
+    
 .modal-card h3,
-.modal-card h4 {
+.modal-card h4,
+.modal-card label{
     display: none !important;
 }  
     
@@ -1345,13 +1351,6 @@ h1{
     color: white;
 
     font-size: 16px;
-}
-
-
-.block-course-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
 }
 
 .field-group {
