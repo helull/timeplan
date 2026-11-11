@@ -74,18 +74,11 @@ export async function openHomeworkModal(
    
 
    
-    if (
-        document.getElementById(
-            "homeworkModal"
-        )
-    ) {
+    if (document.getElementById("homeworkModal")) {
         return;
     }
 
-    const classId =
-        localStorage.getItem(
-            "classId"
-        ) || "";
+    const classId =  localStorage.getItem("classId") || "";
 
    const grade =
     classId.includes("1") ? "VG1" :
@@ -96,70 +89,31 @@ export async function openHomeworkModal(
    
     var teacherMode = isTeacher();
 
-    const isBlockSubject =
-    subject
-        ?.toUpperCase()
-        .includes(
-            "BLOKK"
-        );
+    const isBlockSubject = subject?.toUpperCase().includes("BLOKK");
+    const isBlockRoom = roomName?.toUpperCase().includes("BLOKK");
 
-const isBlockRoom =
-    roomName
-        ?.toUpperCase()
-        .includes(
-            "BLOKK"
-        );
-
-const canCreateBlockCourse =
-    teacherMode &&
-    (
-        isBlockSubject ||
-        isBlockRoom
-    );
-
-
+    const canCreateBlockCourse =
+    teacherMode &&  (isBlockSubject ||  isBlockRoom);
 
    let availableBlockCourses = [];
 
-let selectedBlockCourses = [];
+    let selectedBlockCourses = [];
 
-if (
-    !teacherMode &&
-    (
-        isBlockSubject ||
-        isBlockRoom
-    )
-) {
+    if (!teacherMode && (isBlockSubject ||  isBlockRoom)) {
+        availableBlockCourses =  await loadBlockCoursesForStudentsByLesson(lessonId, grade);
 
-    availableBlockCourses =
-        await loadBlockCoursesForStudentsByLesson(
-            lessonId,
-            grade
-        );
-
-console.log(
-    typeof availableBlockCourses,
-    availableBlockCourses
-);
+        console.log(typeof availableBlockCourses,availableBlockCourses);
     
-    const studentId =
-        localStorage.getItem(
-            "studentId"
-        );
+        const studentId =  localStorage.getItem("studentId");
 
-    if (studentId) {
-
-        selectedBlockCourses =
-            await loadStudentBlockCourses(
-                studentId
-            );
-
+        if (studentId) {
+            selectedBlockCourses =  await loadStudentBlockCourses(studentId);
+        }
     }
-}
    
 
    
-   let existingBlockCourse = null;
+    let existingBlockCourse = null;
     
     var teacher = false;
     var teacherId;
@@ -168,74 +122,38 @@ console.log(
         teacher = await giveTeacherName(teacherId)
     }
    
-   if (
-       canCreateBlockCourse
-   ) {
-    existingBlockCourse =
-        await loadBlockCourseByLesson(
-            lessonId,
-            grade,
-           teacherId
-        );
-
-}
+   if (canCreateBlockCourse) {
+        existingBlockCourse =  await loadBlockCourseByLesson(lessonId, grade, teacherId);
+    }
     
-    const dayHolidayEnabled =
-        await hasDayHoliday(
-            week,
-            weekday
-        );
-
-    const weekHolidayEnabled =
-        await hasWeekHoliday(
-            week
-        );
-
+    const dayHolidayEnabled =  await hasDayHoliday(week, weekday);
+    const weekHolidayEnabled =  await hasWeekHoliday(week);
+    const homeworkData =  await loadHomework(lessonId, week);
+    const currentText =  homeworkData.text;
     
-    const homeworkData =
-        await loadHomework(
-            lessonId,
-            week
-        );
-
-    const currentText =
-        homeworkData.text;
-
-    const teacherHomeworkData =
-    await loadTeacherHomework(
+    const teacherHomeworkData = await loadTeacherHomework(
         classId,
         lessonId,
         week,
         teacherId
     );
 
-const teacherHomeworkText =
-    teacherHomeworkData.text || "";
+    const teacherHomeworkText = teacherHomeworkData.text || "";
     
-    console.log(
-    "teacherHomeworkText råverdi",
-    JSON.stringify(teacherHomeworkText)
-);
+    console.log("teacherHomeworkText råverdi",JSON.stringify(teacherHomeworkText));
     
-    let examInfo =
-        await loadExamFlag(
+    let examInfo =  await loadExamFlag(
             classId,
             lessonId,
             week
-        );
+    );
 
-    let examEnabled =
-        examInfo.exam;
+    let examEnabled =  examInfo.exam;
 
+    console.log("classId", classId);
+    console.log("grade", grade);
 
-console.log("classId", classId);
-console.log("grade", grade);
-
-   const blockCourseHtml =
-(
-    !teacherMode &&
-    availableBlockCourses.length > 0
-)
+   const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
 ?
 `
 <label>
@@ -286,15 +204,14 @@ console.log("grade", grade);
 
 
    
-const blockCourseSelect = document.getElementById("blockCourseSelect");
+    const blockCourseSelect = document.getElementById("blockCourseSelect");
+    blockCourseSelect.addEventListener("change", function () {
+        const selectedCourseId = this.value;
 
-blockCourseSelect.addEventListener("change", function () {
-    const selectedCourseId = this.value;
-
-    if (selectedCourseId !== "") {
-        saveLessonIds(selectedCourseId);
-    }
-});
+        if (selectedCourseId !== "") {
+            saveLessonIds(selectedCourseId);
+        }
+    });
    
     document.body.insertAdjacentHTML(
 
@@ -494,48 +411,25 @@ ${
     );
 
 
-   document
-.getElementById(
-    "blockCourseSelect"
-)
-?.addEventListener(
-    "change",
-    async e => {
-
-        const studentId =
-            localStorage.getItem(
-                "studentId"
-            );
+   document.getElementById("blockCourseSelect")?.addEventListener("change", async e => {
+        const studentId =  localStorage.getItem("studentId");
 
         if (!studentId) {
             return;
         }
 
-        const selectedId =
-            e.target.value;
+        const selectedId =  e.target.value;
 
         if (!selectedId) {
             return;
         }
 
-        await saveStudentBlockCourse(
-            studentId,
-            selectedId
-        );
+        await saveStudentBlockCourse(studentId, selectedId);
 
-    }
-);
+    });
 
-
-   
-    document
-    .getElementById(
-        "manageTentamens"
-    )
-    ?.addEventListener(
-        "click",
-        async () => {
-
+  
+    document.getElementById("manageTentamens")?.addEventListener("click", async () => {
             await openTentamenModal(
                 week,
                 weekday
@@ -544,8 +438,7 @@ ${
         }
     );
     
-let dayHolidayState =
-    dayHolidayEnabled;
+let dayHolidayState =  dayHolidayEnabled;
 
 document
     .getElementById(
