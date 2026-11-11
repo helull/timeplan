@@ -738,7 +738,7 @@ h1{
     border: 1px solid #dbeafe;
     box-shadow: 0 5px 10px rgba(0,0,0,.10);
     border-radius: 8px;
-    padding: 6px;
+    padding: 6px 12px 6px 12px;
 }
 /* ========================
    FERIE
