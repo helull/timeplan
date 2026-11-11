@@ -1480,40 +1480,18 @@ lessons
                 <div
                     class="modal-card">
 
-                    <h3>
-
-                        Etabler blokkfag
-
-                    </h3>
-
-                    <label>
-
-                        Fagnavn
-
-                    </label>
-
-                    <input
-                        id="blockCourseSubject"
-                        type="text"
-                        value="${blockCourse?.subject || ""}"
-                        style="width:100%;">
-
-                    <br><br>
-
-                    <label>
-
-                        Rom
-
-                    </label>
-
-                    <input
-                        id="blockCourseRoom"
-                        type="text"
-                        value="${blockCourse?.room || ""}"
-                        style="width:100%;">
-
-                    <br><br>
-
+                    <h3> Etabler blokkfag </h3>
+                    
+                    <div class="block-course-row">
+                        <div class="field-group">
+                            <label for="blockCourseSubject">Fagnavn </label>
+                            <input  id="blockCourseSubject" type="text" value="${blockCourse?.subject || ""}">
+                        </div>
+                        <div class="field-group">
+                            <label for="blockCourseRoom"> Rom</label>
+                            <input id="blockCourseRoom" type="text" value="${blockCourse?.room || ""}">
+                        </div>
+                    </div>
                     <h4>
 
                         Velg øktene som tilhører blokkfaget
