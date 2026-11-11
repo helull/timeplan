@@ -1664,7 +1664,7 @@ ${
             }
 
             var thisTeachesBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
-                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)
+                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachesBlockCourses)
             const lessonIds = new Set(thisTeachesBlockCourses.map(course => course.lessonId));
                 console.log ("lessonIds",lessonIds)
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
