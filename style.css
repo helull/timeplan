@@ -368,9 +368,6 @@ h1{
         padding:12px;
     }
 
-    .subject{
-        font-size:1rem;
-    }
 
     .subject{
         flex:1;
@@ -893,11 +890,11 @@ h1{
     z-index:100;
     position:absolute;
 
-    right:8px;
-    bottom:8px;
+    right:5px;
+    bottom:5px;
 
-    width:28px;
-    height:28px;
+    width:20px;
+    height:20px;
 
     border:none;
 
@@ -1269,7 +1266,7 @@ h1{
 
 .teacher-homework-link {
     font-size: 0.7rem;
-    display: inline-block;
+    /* display: inline-block; */
     margin-top: 2px;
 
     padding: 2px 2px;
@@ -1279,7 +1276,14 @@ h1{
 
     text-decoration: none;
     border-radius: 2px;
+
+        flex:1;
+        min-width:0;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
 }
+
 
 .teacher-homework-link:hover {
 
