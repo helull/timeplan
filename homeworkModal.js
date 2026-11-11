@@ -6,7 +6,7 @@ import {
 from "./studentBlockCourseService.js";
 
 import {
-   loadSchedule 
+   loadSchedule
 }
 from "./scheduleService.js";
 
@@ -1445,7 +1445,7 @@ async function openBlockCourseModal(lessonId, blockCourse = null) {
    }
 
     var teacherId = await giveTeacherId();
-    var teacher = await giveTeacherName(teacherId);
+    var teacherName = await giveTeacherName(teacherId);
       
     const schedule =
         await loadSchedule(
