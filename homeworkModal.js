@@ -631,8 +631,8 @@ document
                 teacherId
             );
 
-//       if (window.matchMedia("(orientation: landscape) and (min-width: 901px)").matches) {
-       if (window.matchMedia("(orientation: landscape)").matches) {
+       if (window.matchMedia("(orientation: landscape) and (max-width: 900px)").matches) {
+//       if (window.matchMedia("(orientation: landscape)").matches) {
             await openBlockCourseModal(lessonId, existingBlockCourse);
        } else {
           alert("Du må være i landskapsmodus");
