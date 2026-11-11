@@ -429,6 +429,11 @@ h1{
 
 @media (orientation:landscape) and (max-width:900px){
 
+.modal-card h3,
+.modal-card h4 {
+    display: none !important;
+}  
+    
 .teacher-homework-link {
     font-size: 0.4rem !important;
 }
