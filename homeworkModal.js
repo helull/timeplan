@@ -286,7 +286,15 @@ console.log("grade", grade);
 
 
    
+const blockCourseSelect = document.getElementById("blockCourseSelect");
 
+blockCourseSelect.addEventListener("change", function () {
+    const selectedCourseId = this.value;
+
+    if (selectedCourseId !== "") {
+        saveLessonIds(selectedCourseId);
+    }
+});
    
     document.body.insertAdjacentHTML(
 
@@ -1415,7 +1423,7 @@ export function formatTeacherHomework(text) {
                 rel="noopener noreferrer"
                 class="teacher-homework-link">
 
-                📓 Åpne OneNote-side
+                📓OneNote/lenke
 
             </a>
         `;
@@ -1897,3 +1905,55 @@ else {
 );
 
 }
+
+function saveLessonIds(ids) {
+
+    const lessonIds = JSON.parse(
+        localStorage.getItem("lessonIds") || "[]"
+    );
+
+    const idsToAdd = Array.isArray(ids)
+        ? ids
+        : [ids];
+
+    idsToAdd.forEach(id => {
+
+        if (!lessonIds.includes(id)) {
+            lessonIds.push(id);
+        }
+
+    });
+
+    localStorage.setItem(
+        "lessonIds",
+        JSON.stringify(lessonIds)
+    );
+}
+
+
+/*
+//hent alle lessonIder
+const lessonIds = JSON.parse(
+    localStorage.getItem("lessonIds") || "[]"
+);
+
+console.log(lessonIds);
+
+
+//sjekke om en lessonId finnes
+function hasLessonId(lessonId) {
+
+    const lessonIds = JSON.parse(
+        localStorage.getItem("lessonIds") || "[]"
+    );
+
+    return lessonIds.includes(lessonId);
+}
+
+
+//bruk:
+if (hasLessonId(123)) {
+    console.log("Finnes");
+}
+
+*/
