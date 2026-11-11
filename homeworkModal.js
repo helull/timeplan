@@ -635,7 +635,7 @@ document
 //       if (window.matchMedia("(orientation: landscape)").matches) {
             await openBlockCourseModal(lessonId, existingBlockCourse);
        } else {
-          alert("Du må være i landskapsmodus");
+          alert("Snu enheten til landskapsmodus...");
        }
     }
 );
