@@ -202,16 +202,16 @@ export async function openHomeworkModal(
 :
 "";
 
-
-   
     const blockCourseSelect = document.getElementById("blockCourseSelect");
-    blockCourseSelect.addEventListener("change", function () {
-        const selectedCourseId = this.value;
+    if (blockCourseSelect) {
+        blockCourseSelect.addEventListener("change", function () {
+            const selectedCourseId = this.value;
 
-        if (selectedCourseId !== "") {
-            saveLessonIds(selectedCourseId);
-        }
-    });
+            if (selectedCourseId !== "") {
+                saveLessonIds(selectedCourseId);
+            }
+        });
+    }
    
     document.body.insertAdjacentHTML(
 
