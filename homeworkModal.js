@@ -1666,7 +1666,11 @@ ${
             var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);                                                                                
                 console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)    //onsdag: Denne virker OK!!!!  
             console.log(JSON.stringify(thisTeachersBlockCourses, null, 2));  // fra kopilot
-            const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));     //onsdag: Dette settet er tomt!!!!
+
+            const lessonIds = new Set(thisTeachersBlockCourses.flatMap(course =>  course.sessions.map(session => session.lessonId)));
+
+            
+            /*const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));     //onsdag: Dette settet er tomt!!!!*/
                 console.log ("lessonIds",lessonIds)
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
                 console.log ("hasMatch", hasMatch)
