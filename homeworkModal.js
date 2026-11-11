@@ -1784,6 +1784,9 @@ ${
                 return;
 
             }
+
+            var thisTheachesBlockCourses =  loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+            
             if (    ...  "sessions.some(session => session.lessonId" er en eller annen time i (denne lærers)? blokkfag ...) {
                 
                 alert("Du har valgt en økt fra et av dine anndre fag, denne må fjernes...");
