@@ -566,7 +566,7 @@ h1{
     .room{
         font-size:.5rem;
         font-style:italic;
-        text-align: right;
+        text-align: left;
         margin: 1px 0 -5px;
     }
    
