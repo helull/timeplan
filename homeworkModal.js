@@ -1667,7 +1667,7 @@ ${
                           session => !lessonIdsToRemove.has(session.lessonId)
                 )
             }));
-            console.log("otherBlockCourses: ",otherBlockCourses);
+            console.log("otherBlockCourses, etter justering: ",otherBlockCourses);
             
             const hasConflict = otherBlockCourses.some(course =>
                 course.sessions.some(otherSession =>
