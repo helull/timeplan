@@ -1650,18 +1650,23 @@ ${
 */
 
 
+            
+
             const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
 
-            // Finn alle lessonId i blockCourse
-            const lessonIdsToRemove = new Set(blockCourse.sessions.map(session => session.lessonId));
-
-            console.log("lessonIdsToRemove: ",lessonIdsToRemove);
+            // Hent lessonId fra blockCourse, hvis det finnes
+            const lessonIdsToRemove = new Set((blockCourse?.sessions ?? []).map(session => session.lessonId));
+                 console.log("lessonIdsToRemove: ",lessonIdsToRemove);
             
-            // Lag en ny liste med de andre kursene, og fjern de aktuelle timene fra hvert kurs
-            const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse.id).map(course => ({
-                ...course,sessions: (course.sessions ?? []).filter(session => !lessonIdsToRemove.has(session.lessonId))
-           }));
-
+            // Fjern blockCourse og aktuelle sessions
+            const otherBlockCourses = thisTeachersBlockCourses
+                .filter(course => course.id !== blockCourse?.id)
+                  .map(course => ({
+                     ...course,
+                     sessions: (course.sessions ?? []).filter(
+                          session => !lessonIdsToRemove.has(session.lessonId)
+                )
+            }));
             console.log("otherBlockCourses: ",otherBlockCourses);
             
             const hasConflict = otherBlockCourses.some(course =>
