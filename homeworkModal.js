@@ -154,7 +154,47 @@ export async function openHomeworkModal(
     console.log("classId", classId);
     console.log("grade", grade);
 
-   const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
+    const blockCourseFromLocalStorage = await loadStudentsBlockCourseByLesson(lessonId);
+
+    if (blockCourseFromLocalStorage) {
+        console.log("Fant blokkurs:", blockCourse);
+    } else {
+        console.log("Fant ingen blokkurs for denne timen");
+    }
+
+
+    // Finn elevens tidligere valgte blokkurs
+const savedBlockCourse = !teacherMode
+    ? await loadStudentsBlockCourseByLesson(lessonId)
+    : null;
+
+const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
+    ?
+    `
+    <label>Fag</label>
+
+    <select id="blockCourseSelect"
+            style="width:100%; margin-bottom:10px;">
+
+        <option value="" ${!savedBlockCourse ? "selected" : ""}>
+            Velg fag
+        </option>
+
+        ${availableBlockCourses.map(course =>
+            `<option value="${course.id}"
+                ${savedBlockCourse?.id === course.id ? "selected" : ""}>
+                ${course.subject}
+                (${course.teacherName})
+            </option>`
+        ).join("")}
+
+    </select>
+    `
+    :
+    "";
+
+    
+  /* const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
    ?
         `
         <label>  Fag  </label>
@@ -169,7 +209,7 @@ export async function openHomeworkModal(
             ).join("")}
         </select> `
     :
-    "";
+    "";*/
   
     document.body.insertAdjacentHTML(
 
