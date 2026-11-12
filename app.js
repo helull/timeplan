@@ -1,7 +1,7 @@
 import {
     loadStudentsBlockCourseMap
 }
-from "./.js";
+from "./studentBlockCourseService.js";
 
 
 import {
