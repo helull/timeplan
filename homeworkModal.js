@@ -1868,32 +1868,7 @@ function saveLessonIds(availableBlockCourses, ids) {
         "lessonIds",
         JSON.stringify(updatedLessonIds)
     );
+    
+    location.reload();
 }
 
-
-/*
-//hent alle lessonIder
-const lessonIds = JSON.parse(
-    localStorage.getItem("lessonIds") || "[]"
-);
-
-console.log(lessonIds);
-
-
-//sjekke om en lessonId finnes
-function hasLessonId(lessonId) {
-
-    const lessonIds = JSON.parse(
-        localStorage.getItem("lessonIds") || "[]"
-    );
-
-    return lessonIds.includes(lessonId);
-}
-
-
-//bruk:
-if (hasLessonId(123)) {
-    console.log("Finnes");
-}
-
-*/
