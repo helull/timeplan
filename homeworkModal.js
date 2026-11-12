@@ -373,7 +373,7 @@ ${
             const selectedCourseId = this.value;
 
             if (selectedCourseId !== "") {
-                saveLessonIds(selectedCourseId);
+                saveLessonIds(availableBlockCourses, selectedCourseId);
             }
         });
     }
@@ -1807,7 +1807,7 @@ else {
 
 }
 
-function saveLessonIds(ids) {
+function saveLessonIds(availableBlockCourses, ids) {
 
     const lessonIds = JSON.parse(
         localStorage.getItem("lessonIds") || "[]"
