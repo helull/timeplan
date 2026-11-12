@@ -99,6 +99,9 @@ export async function loadStudentsBlockCourseByLesson(lessonId) {
         return null;
     }
 
+    const validIds = [];
+    let matchingBlockCourse = null;
+
     // Gå gjennom alle lagrede blokkurs
     for (const id of blockCourseIds) {
 
@@ -106,26 +109,40 @@ export async function loadStudentsBlockCourseByLesson(lessonId) {
             doc(db, "blockCourses", id)
         );
 
-        // Hopp over blokkurs som ikke finnes i Firebase
+        // Hvis blokkurset ikke finnes i Firebase,
+        // skal ID-en ikke beholdes i localStorage
         if (!docSnap.exists()) {
+            console.log("Fjerner ugyldig blokkurs-ID:", id);
             continue;
         }
 
+        // Blokkurset finnes, behold ID-en
+        validIds.push(id);
+
         const data = docSnap.data();
 
-        // Undersøk om blokkurs inneholder lessonId
+        // Undersøk om blokkurset inneholder lessonId
         const found = data.sessions?.some(
             session => session.lessonId === lessonId
         );
 
-        if (found) {
-            return {
+        if (found && !matchingBlockCourse) {
+            matchingBlockCourse = {
                 id: docSnap.id,
                 ...data
             };
         }
     }
 
-    // Ingen blokkurs inneholdt lessonId
-    return null;
+    // Oppdater localStorage dersom ugyldige ID-er ble funnet
+    if (validIds.length !== blockCourseIds.length) {
+
+        localStorage.setItem(
+            "lessonIds",
+            JSON.stringify(validIds)
+        );
+    }
+
+    // Returner matchende blokkurs, eller null
+    return matchingBlockCourse;
 }
