@@ -146,3 +146,49 @@ export async function loadStudentsBlockCourseByLesson(lessonId) {
     // Returner matchende blokkurs, eller null
     return matchingBlockCourse;
 }
+
+
+
+export async function loadStudentsBlockCourseMap() {
+
+    const ids = JSON.parse(
+        localStorage.getItem("lessonIds") || "[]"
+    );
+
+    const blockCourseMap = new Map();
+    const validIds = [];
+
+    for (const id of ids) {
+
+        const docSnap = await getDoc(
+            doc(db, "blockCourses", id)
+        );
+
+        if (!docSnap.exists()) {
+            continue;
+        }
+
+        validIds.push(id);
+
+        const blockCourse = {
+            id: docSnap.id,
+            ...docSnap.data()
+        };
+
+        for (const session of blockCourse.sessions ?? []) {
+            blockCourseMap.set(
+                session.lessonId,
+                blockCourse
+            );
+        }
+    }
+
+    if (validIds.length !== ids.length) {
+        localStorage.setItem(
+            "lessonIds",
+            JSON.stringify(validIds)
+        );
+    }
+
+    return blockCourseMap;
+}
