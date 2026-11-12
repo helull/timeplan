@@ -6,6 +6,7 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    getDoc,
     query,
     where
 }
@@ -211,4 +212,46 @@ export async function deleteBlockCourse(
 
     );
 
+}
+
+export async function loadStudentsBlockCourseByLesson(lessonId) {
+
+    // Hent lagrede blokkurs-ID-er fra localStorage
+    const blockCourseIds = JSON.parse(
+        localStorage.getItem("lessonIds") || "[]"
+    );
+
+    if (blockCourseIds.length === 0) {
+        return null;
+    }
+
+    // Gå gjennom alle lagrede blokkurs
+    for (const id of blockCourseIds) {
+
+        const docSnap = await getDoc(
+            doc(db, "blockCourses", id)
+        );
+
+        // Hopp over blokkurs som ikke finnes i Firebase
+        if (!docSnap.exists()) {
+            continue;
+        }
+
+        const data = docSnap.data();
+
+        // Undersøk om blokkurs inneholder lessonId
+        const found = data.sessions?.some(
+            session => session.lessonId === lessonId
+        );
+
+        if (found) {
+            return {
+                id: docSnap.id,
+                ...data
+            };
+        }
+    }
+
+    // Ingen blokkurs inneholdt lessonId
+    return null;
 }
