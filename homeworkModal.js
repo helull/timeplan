@@ -1635,7 +1635,7 @@ ${
             }
 
             var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);                                                                                
-                console.log ("this, grade, teacher",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)    //onsdag: Denne virker OK!!!!  
+                console.log ("grade, teacher, this...",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)    //onsdag: Denne virker OK!!!!  
             const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse);  //fra kopilot før jeg legger meg onsdag
             //const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse.id);  //fra kopilot før jeg legger meg onsdag
                 console.log(JSON.stringify(thisTeachersBlockCourses, null, 2));  // fra kopilot
