@@ -154,55 +154,20 @@ export async function openHomeworkModal(
     console.log("grade", grade);
 
    const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
-?
-`
-<label>
-    Fag
-</label>
+   ?
+        `
+        <label>  Fag  </label>
 
-<select
-    id="blockCourseSelect"
-    style="
-        width:100%;
-        margin-bottom:10px;
-    "
->
-
-    <option value="">
-        Velg fag
-    </option>
-
-    ${
-        availableBlockCourses
-            .map(
-                course =>
-                `
-                <option
-                    value="${course.id}"
-                    ${
-                        selectedBlockCourses.includes(
-                            course.id
-                        )
-                        ? "selected"
-                        : ""
-                    }
-                >
-                    ${course.subject}
-                    (${course.teacherName}))
-                </option>
-                `
-            )
-            .join("")
-    }
-
-</select>
-
-
-`
-:
-"";
-
-    const blockCourseSelect = document.getElementById("blockCourseSelect");
+        <select  id="blockCourseSelect" style="  width:100%;   margin-bottom:10px;  ">
+            <option value="">  Velg fag </option>
+            ${ availableBlockCourses.map(course =>
+                `<option value="${course.id}"  ${selectedBlockCourses.includes(course.id) ? "selected" : "" }>
+                     ${course.subject}
+                     (${course.teacherName})
+                </option> `
+            ).join("")}
+        </select> `
+           const blockCourseSelect = document.getElementById("blockCourseSelect");
     if (blockCourseSelect) {
         blockCourseSelect.addEventListener("change", function () {
             const selectedCourseId = this.value;
@@ -212,7 +177,9 @@ export async function openHomeworkModal(
             }
         });
     }
-   
+    :
+    "";
+  
     document.body.insertAdjacentHTML(
 
         "beforeend",
@@ -408,7 +375,21 @@ ${
         `
     );
 
+    
+    /* Denne blokka tilhører nedtrekksmenyen hvor bruker velger fag dersom bruker er på et blokkurs */
+    const blockCourseSelect = document.getElementById("blockCourseSelect");
+    if (blockCourseSelect) {
+        blockCourseSelect.addEventListener("change", function () {
+            const selectedCourseId = this.value;
 
+            if (selectedCourseId !== "") {
+                saveLessonIds(selectedCourseId);
+            }
+        });
+    }
+    /* SLUTT Denne blokka tilhører nedtrekksmenyen hvor bruker velger fag dersom bruker er på et blokkurs */
+
+    
    document.getElementById("blockCourseSelect")?.addEventListener("change", async e => {
         const studentId =  localStorage.getItem("studentId");
 
