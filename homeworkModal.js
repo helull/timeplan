@@ -1648,7 +1648,7 @@ ${
                 console.log ("hasMatch", hasMatch)
 
             if (hasMatch) {                
-                alert("Du har valgt en økt fra et av dine anndre fag, denne må fjernes...");
+                alert("Du har valgt minst en økt fra et av dine anndre fag, denne må fjernes...");
                 return;
             }
             
