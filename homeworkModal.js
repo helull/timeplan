@@ -1651,7 +1651,7 @@ ${
 
 
             
-
+/*
             const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
 
             // Hent lessonId fra blockCourse, hvis det finnes
@@ -1681,7 +1681,28 @@ ${
                 alert("Du har valgt minst en økt fra et av dine anndre fag, denne må fjernes...");
                 return;
             }
-            
+       */     
+
+
+         // Hent alle blokkursene til læreren
+        const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+
+        // Utelat blokkurs vi eventuelt redigerer
+        const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse?.id);
+
+        // Kontroller om noen av de valgte timene finnes i andre blokkurs
+        const hasConflict = otherBlockCourses.some(course =>
+            (course.sessions ?? []).some(otherSession =>
+                sessions.some(session =>
+                    session.lessonId === otherSession.lessonId
+                )
+            )
+        );
+
+        if (hasConflict) {
+            alert("Du har valgt minst en økt fra et av dine anndre fag, denne må fjernes...");
+            return;
+        }   
 
 if (
     blockCourse
