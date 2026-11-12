@@ -70,6 +70,11 @@ export async function loadBlockCourseByLesson(
     teacherId
 ) {
 
+    console.log(
+    "Søker etter lessonId:",
+    lessonId
+);
+    
     let snapshot;
     if (teacherId === "") {
     snapshot =
@@ -121,6 +126,15 @@ export async function loadBlockCourseByLesson(
         }
 
     }
+    
+console.log(
+    "Fant ikke lessonId:",
+    lessonId,
+    "grade:",
+    grade,
+    "teacher:",
+    teacherId
+);
 
     return null;
 
