@@ -408,7 +408,7 @@ async function init(){
 
     const userType = localStorage.getItem("userType");
     const studentId = localStorage.getItem("studentId");
-
+   
     if (userType === "teacher") {
         const classId = localStorage.setItem("classId", "1STA");
         initializeTeacherMode();
@@ -439,13 +439,16 @@ const teacherHomeworkMap =
 const examMap =
     await loadAllExamFlags();
 
+const studentBlockCourseMap = await loadStudentsBlockCourseMap();
+    
 renderSchedule(
     schedule,
     homeworkMap,
     teacherHomeworkMap,
     examMap,
     blockExams,
-    tentamens
+    tentamens,
+    studentBlockCourseMap
 );
 
 if (isTeacher()) {
@@ -465,6 +468,8 @@ export async function reloadScheduleForClass(
     classId
 ) {
 
+    const studentBlockCourseMap = await loadStudentsBlockCourseMap();
+    
     localStorage.setItem(
         "classId",
         classId
@@ -489,7 +494,8 @@ export async function reloadScheduleForClass(
         homeworkMap,
         examMap,
         blockExams,
-        tentamens
+        tentamens,
+        studentBlockCourseMap
     );
 }
 
