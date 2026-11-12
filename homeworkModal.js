@@ -1634,6 +1634,7 @@ ${
 
             }
 
+            /*
             var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);                                                                                
                 console.log ("grade, teacher, this...",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)    //onsdag: Denne virker OK!!!!  
             const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse);  //fra kopilot før jeg legger meg onsdag
@@ -1642,12 +1643,32 @@ ${
 
             const lessonIds = new Set(otherBlockCourses.flatMap(course =>  course.sessions.map(session => session.lessonId)));
             
-            /*const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));     //onsdag: Dette settet er tomt!!!!*/
+            /*const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));     //onsdag: Dette settet er tomt!!!!
                 console.log ("lessonIds",lessonIds)
             const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
                 console.log ("hasMatch", hasMatch)
+*/
 
-            if (hasMatch) {                
+
+            const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+
+            // Finn alle lessonId i blockCourse
+            const lessonIdsToRemove = new Set(blockCourse.sessions.map(session => session.lessonId));
+
+            // Lag en ny liste med de andre kursene, og fjern de aktuelle timene fra hvert kurs
+            const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse.id).map(course => ({
+                ...course,sessions: (course.sessions ?? []).filter(session => !lessonIdsToRemove.has(session.lessonId))
+           }));
+
+            const hasConflict = otherBlockCourses.some(course =>
+                course.sessions.some(otherSession =>
+                    sessions.some(session =>
+                        session.lessonId === otherSession.lessonId
+                    )
+                )
+            );
+            
+            if (hasConflict) {                
                 alert("Du har valgt minst en økt fra et av dine anndre fag, denne må fjernes...");
                 return;
             }
