@@ -295,6 +295,17 @@ export function renderSchedule(
                 let lunchRendered = false;
                 lessons.forEach(
                     lesson => {
+
+                        const selectedBlockCourse =  studentBlockCourseMap.get(lesson.lessonId);
+
+                        // Behold de opprinnelige timeplandataene
+                        const isBlockLesson = lesson.subject?.toUpperCase().includes("BLOKK") || lesson.roomName?.toUpperCase().includes("BLOKK");
+
+                        // Bestem hva eleven skal se
+                        const displaySubject = isBlockLesson && selectedBlockCourse ? selectedBlockCourse.subject : lesson.subject;
+                        const displayRoom = isBlockLesson && selectedBlockCourse ? selectedBlockCourse.room  : lesson.roomName;
+                        const displayTeacher = isBlockLesson && selectedBlockCourse ? selectedBlockCourse.teacherName : lesson.teacherName;
+                        
                         if (
                             !lunchRendered &&
                             lesson.start >= "12:00"
@@ -433,12 +444,9 @@ if (teacherLessonData) {
 
                                 <div class="lesson-top">
 
-                                    <div class="subject">
-
-
-                                        ${lesson.subject}
-
-                                    </div>
+                                 <div class="subject">
+                                    ${escapeHtml(displaySubject)}
+                                </div>
 
                                     <div class="time">
 
@@ -451,14 +459,14 @@ if (teacherLessonData) {
                                  </div>
            
 
-                                <div class="room-teacher">
-                                        <div class="room"}>
-                                            ${lesson.roomName}
-                                        </div>
-                                        
-                                        <div class="teacher"}>
-                                            ${lesson.teacherName}
-                                        </div>
+                                 <div class="room-teacher">
+                                    <div class="room">
+                                        ${escapeHtml(displayRoom)}
+                                    </div>
+
+                                    <div class="teacher">
+                                        ${escapeHtml(displayTeacher)}
+                                    </div>
                                 </div>
 
 
