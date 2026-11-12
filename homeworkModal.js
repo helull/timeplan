@@ -157,7 +157,7 @@ export async function openHomeworkModal(
     const blockCourseFromLocalStorage = await loadStudentsBlockCourseByLesson(lessonId);
 
     if (blockCourseFromLocalStorage) {
-        console.log("Fant blokkurs:", blockCourse);
+        console.log("Fant blokkurs:", blockCourseFromLocalStorage);
     } else {
         console.log("Fant ingen blokkurs for denne timen");
     }
