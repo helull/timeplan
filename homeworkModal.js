@@ -162,6 +162,17 @@ const savedBlockCourse = !teacherMode
     ? await loadStudentsBlockCourseByLesson(lessonId)
     : null;
 
+//feilsøking 12.11.2026
+    console.table(
+    availableBlockCourses.map(course => ({
+        id: course.id,
+        subject: course.subject,
+        teacherName: course.teacherName,
+        selected: savedBlockCourse?.id === course.id
+    }))
+);
+
+    
 const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
     ?
     `
