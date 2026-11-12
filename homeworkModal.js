@@ -1,5 +1,4 @@
 import {
-    loadStudentBlockCourses,
     saveStudentBlockCourse,
     removeStudentBlockCourse,
     loadStudentsBlockCourseByLesson
@@ -98,8 +97,6 @@ export async function openHomeworkModal(
 
    let availableBlockCourses = [];
 
-    let selectedBlockCourses = [];
-
     if (!teacherMode && (isBlockSubject ||  isBlockRoom)) {
         availableBlockCourses =  await loadBlockCoursesForStudentsByLesson(lessonId, grade);
 
@@ -107,9 +104,6 @@ export async function openHomeworkModal(
     
         const studentId =  localStorage.getItem("studentId");
 
-        if (studentId) {
-            selectedBlockCourses =  await loadStudentBlockCourses(studentId);
-        }
     }
    
 
@@ -192,24 +186,6 @@ const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
     `
     :
     "";
-
-    
-  /* const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
-   ?
-        `
-        <label>  Fag  </label>
-
-        <select  id="blockCourseSelect" style="  width:100%;   margin-bottom:10px;  ">
-            <option value="">  Velg fag </option>
-            ${ availableBlockCourses.map(course =>
-                `<option value="${course.id}"  ${selectedBlockCourses.includes(course.id) ? "selected" : "" }>
-                     ${course.subject}
-                     (${course.teacherName})
-                </option> `
-            ).join("")}
-        </select> `
-    :
-    "";*/
   
     document.body.insertAdjacentHTML(
 
