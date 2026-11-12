@@ -1813,21 +1813,32 @@ function saveLessonIds(availableBlockCourses, ids) {
         localStorage.getItem("lessonIds") || "[]"
     );
 
+    // Sørg for at ids alltid er en array
     const idsToAdd = Array.isArray(ids)
         ? ids
         : [ids];
 
+    // Hent ID-ene til alle tilgjengelige blokkurs
+    const availableIds = availableBlockCourses.map(
+        course => course.id
+    );
+
+    // Fjern eksisterende ID-er som finnes blant blokkursene
+    const updatedLessonIds = lessonIds.filter(
+        id => !availableIds.includes(id)
+    );
+
+    // Legg til de nye ID-ene uten duplikater
     idsToAdd.forEach(id => {
-
-        if (!lessonIds.includes(id)) {
-            lessonIds.push(id);
+        if (!updatedLessonIds.includes(id)) {
+            updatedLessonIds.push(id);
         }
-
     });
 
+    // Lagre den oppdaterte listen
     localStorage.setItem(
         "lessonIds",
-        JSON.stringify(lessonIds)
+        JSON.stringify(updatedLessonIds)
     );
 }
 
