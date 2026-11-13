@@ -16,30 +16,25 @@ export async function saveTeacherHomework(
     lessonId,
     week,
     text,
-    teacherId
+    teacherId,
+    blockCourseId = null
 ) {
 
-    const documentId =
-        `${classId}_${lessonId}_${week}`;
+    const documentId = blockCourseId
+        ? `${classId}_${lessonId}_${week}_${blockCourseId}`
+        : `${classId}_${lessonId}_${week}`;
 
     await setDoc(
-
-        doc(
-            db,
-            "teacherHomework",
-            documentId
-        ),
-
+        doc(db, "teacherHomework", documentId),
         {
             classId,
             lessonId,
             week,
             text,
             teacherId,
-            updatedAt:
-                serverTimestamp()
+            blockCourseId,
+            updatedAt: serverTimestamp()
         }
-
     );
 }
 
@@ -47,38 +42,29 @@ export async function loadTeacherHomework(
     classId,
     lessonId,
     week,
-    teacherId
+    teacherId,
+    blockCourseId = null
 ) {
 
-    const documentId =
-        `${classId}_${lessonId}_${week}`;
+    const documentId = blockCourseId
+        ? `${classId}_${lessonId}_${week}_${blockCourseId}`
+        : `${classId}_${lessonId}_${week}`;
 
-    const snapshot =
-        await getDoc(
+    const snapshot = await getDoc(
+        doc(db, "teacherHomework", documentId)
+    );
 
-            doc(
-                db,
-                "teacherHomework",
-                documentId
-            )
-        );
-
-    if (
-        !snapshot.exists()
-    ) {
-
-        return {
-            text: ""
-        };
+    if (!snapshot.exists()) {
+        return { text: "" };
     }
 
     const data = snapshot.data();
-    
-    // Hvis teacherId er satt, returner kun data som matcher
-    if (teacherId !== "" && data.teacherId !== teacherId) {
-        return {
-            text: ""
-        };
+
+    if (
+        teacherId !== "" &&
+        data.teacherId !== teacherId
+    ) {
+        return { text: "" };
     }
 
     return data;
