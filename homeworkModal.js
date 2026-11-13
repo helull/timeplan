@@ -106,8 +106,7 @@ export async function openHomeworkModal(
 
     }
    
-
-   
+  
     let existingBlockCourse = null;
     
     var teacher = false;
@@ -125,12 +124,15 @@ export async function openHomeworkModal(
     const weekHolidayEnabled =  await hasWeekHoliday(week);
     const homeworkData =  await loadHomework(lessonId, week);
     const currentText =  homeworkData.text;
+
+    const blockCourse = teacherId  ? await loadBlockCourseByLesson(lessonId, grade, teacherId ) : null;
     
     const teacherHomeworkData = await loadTeacherHomework(
         classId,
         lessonId,
         week,
-        teacherId
+        teacherId,
+        blockCourse?.id ?? null
     );
 
     const teacherHomeworkText = teacherHomeworkData.text || "";
@@ -594,15 +596,15 @@ document
                     )
                     .value
                     .trim();
-
+            
+            // Lagre leksen med eller uten blokkurs-tilknytning
             await saveTeacherHomework(
-
                 classId,
                 lessonId,
                 week,
                 text,
-                teacherId
-
+                teacherId,
+                blockCourse?.id ?? null
             );
 
             alert(
