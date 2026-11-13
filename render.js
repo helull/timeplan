@@ -363,7 +363,7 @@ export function renderSchedule(
                                 `${lesson.lessonId}_${weekNo}`
                             ];
 
-                       const selectedBlockCourse = studentBlockCourseMap.get(lesson.lessonId);
+                       //const selectedBlockCourse = studentBlockCourseMap.get(lesson.lessonId);
 
                         const isBlockLesson =  lesson.subject?.toUpperCase().includes("BLOKK") ||   lesson.roomName?.toUpperCase().includes("BLOKK");
 
