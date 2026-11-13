@@ -116,16 +116,17 @@ export async function openHomeworkModal(
         teacher = await giveTeacherName(teacherId)
     }
    
-   if (canCreateBlockCourse) {
-        existingBlockCourse =  await loadBlockCourseByLesson(lessonId, grade, teacherId);
-    }
-    
+
     const dayHolidayEnabled =  await hasDayHoliday(week, weekday);
     const weekHolidayEnabled =  await hasWeekHoliday(week);
     const homeworkData =  await loadHomework(lessonId, week);
     const currentText =  homeworkData.text;
 
     const blockCourse = teacherId  ? await loadBlockCourseByLesson(lessonId, grade, teacherId ) : null;
+
+   if (canCreateBlockCourse) {
+        existingBlockCourse =  blockCourse;
+    }
     
     const teacherHomeworkData = await loadTeacherHomework(
         classId,
@@ -149,15 +150,6 @@ export async function openHomeworkModal(
 
     console.log("classId", classId);
     console.log("grade", grade);
-
-    const blockCourseFromLocalStorage = await loadStudentsBlockCourseByLesson(lessonId);
-
-    if (blockCourseFromLocalStorage) {
-        console.log("Fant blokkurs:", blockCourseFromLocalStorage);
-    } else {
-        console.log("Fant ingen blokkurs for denne timen");
-    }
-
 
     // Finn elevens tidligere valgte blokkurs
 const savedBlockCourse = !teacherMode
@@ -238,9 +230,7 @@ const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
 
             <div
                 class="teacher-homework-text">
-                    $(formatTeacherHomework(
-                    teacherHomeworkText)
-                    )
+                    ${formatTeacherHomework(teacherHomeworkText)}
             </div>
 
         </div>
