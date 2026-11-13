@@ -1662,56 +1662,6 @@ ${
 
             }
 
-            /*
-            var thisTeachersBlockCourses = await loadBlockCoursesByGradeAndTeacher(grade, teacherId);                                                                                
-                console.log ("grade, teacher, this...",grade, "  ", teacherId,"  ",thisTeachersBlockCourses)    //onsdag: Denne virker OK!!!!  
-            const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse);  //fra kopilot før jeg legger meg onsdag
-            //const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse.id);  //fra kopilot før jeg legger meg onsdag
-                console.log(JSON.stringify(thisTeachersBlockCourses, null, 2));  // fra kopilot
-
-            const lessonIds = new Set(otherBlockCourses.flatMap(course =>  course.sessions.map(session => session.lessonId)));
-            
-            /*const lessonIds = new Set(thisTeachersBlockCourses.map(course => course.lessonId));     //onsdag: Dette settet er tomt!!!!
-                console.log ("lessonIds",lessonIds)
-            const hasMatch = sessions.some(session => lessonIds.has(session.lessonId));
-                console.log ("hasMatch", hasMatch)
-*/
-
-
-            
-/*
-            const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
-
-            // Hent lessonId fra blockCourse, hvis det finnes
-            const lessonIdsToRemove = new Set((blockCourse?.sessions ?? []).map(session => session.lessonId));
-                 console.log("lessonIdsToRemove: ",lessonIdsToRemove);
-            
-            // Fjern blockCourse og aktuelle sessions
-            const otherBlockCourses = thisTeachersBlockCourses
-                .filter(course => course.id !== blockCourse?.id)
-                  .map(course => ({
-                     ...course,
-                     sessions: (course.sessions ?? []).filter(
-                          session => !lessonIdsToRemove.has(session.lessonId)
-                )
-            }));
-            console.log("otherBlockCourses, etter justering: ",otherBlockCourses);
-            
-            const hasConflict = otherBlockCourses.some(course =>
-                course.sessions.some(otherSession =>
-                    sessions.some(session =>
-                        session.lessonId === otherSession.lessonId
-                    )
-                )
-            );
-            
-            if (hasConflict) {                
-                alert("Du har valgt minst en økt fra et av dine anndre fag, denne må fjernes...");
-                return;
-            }
-       */     
-
-
          // Hent alle blokkursene til læreren
         const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
 
@@ -1872,3 +1822,28 @@ function saveLessonIds(availableBlockCourses, ids) {
     location.reload();
 }
 
+/* Brukes ikke???
+async function getTeachersBlockCoursesForLesson(
+    lessonId,
+    grade,
+    teacherId
+) {
+
+    if (!teacherId) {
+        return [];
+    }
+
+    const courses =
+        await loadBlockCoursesByGradeAndTeacher(
+            grade,
+            teacherId
+        );
+
+    return courses.filter(course =>
+        (course.sessions ?? []).some(
+            session => session.lessonId === lessonId
+        )
+    );
+}
+
+*/
