@@ -614,13 +614,14 @@ document
     async () => {
         
         // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
-        existingBlockCourse =
+        //FJernet 15.11.2026 for å teste om denne ødelegger slik at det ble tomt i redigeringsvinduet...
+/*        existingBlockCourse =
             await loadBlockCoursesForSession(
                 grade,
                 weekday,
                 startTime,
                 teacherId
-            );
+            );*/
 
 //       if (window.matchMedia("(orientation: landscape) and (max-width: 900px)").matches) {
        if (window.matchMedia("(orientation: landscape)").matches) {
