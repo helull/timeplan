@@ -16,7 +16,8 @@ import {
     loadBlockCoursesForStudentsByLesson,
     loadBlockCoursesByGradeAndTeacher,
     updateBlockCourse,
-    deleteBlockCourse
+    deleteBlockCourse,
+    loadBlockCoursesForSession
 }
 from "./blockCourseService.js";
 
@@ -98,7 +99,7 @@ export async function openHomeworkModal(
    let availableBlockCourses = [];
 
     if (!teacherMode && (isBlockSubject ||  isBlockRoom)) {
-        availableBlockCourses =  await loadBlockCoursesForStudentsByLesson(lessonId, grade);
+        availableBlockCourses =  await loadBlockCoursesForSession(grade, weekday, startTime);
 
         console.log(typeof availableBlockCourses,availableBlockCourses);
     
