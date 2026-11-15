@@ -1657,7 +1657,7 @@ ${
             }
 
          // Hent alle blokkursene til læreren
-        const thisTeachersBlockCourses =  await  loadBlockCoursesByGradeAndTeacher(grade, weekday, teacherId);
+        const thisTeachersBlockCourses =  await  loadBlockCoursesByGradeAndTeacher(grade, teacherId);
 
         // Utelat blokkurs vi eventuelt redigerer
         const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse?.id);
