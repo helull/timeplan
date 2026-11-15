@@ -123,7 +123,7 @@ export async function openHomeworkModal(
     const homeworkData =  await loadHomework(lessonId, week);
     const currentText =  homeworkData.text;
 
-    const blockCourse = teacherId  ? await loadBlockCourseByLesson(lessonId, grade, teacherId ) : null;
+    const blockCourse = teacherId  ? await loadBlockCoursesForSession(grade, weekday, startTime, teacherId ) : null;
 
    if (canCreateBlockCourse) {
         existingBlockCourse =  blockCourse;
@@ -615,9 +615,10 @@ document
         
         // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
         existingBlockCourse =
-            await loadBlockCourseByLesson(
-                lessonId,
+            await loadBlockCoursesForSession(
                 grade,
+                weekday,
+                startTime,
                 teacherId
             );
 
@@ -1656,7 +1657,7 @@ ${
             }
 
          // Hent alle blokkursene til læreren
-        const thisTeachersBlockCourses =  await loadBlockCoursesByGradeAndTeacher(grade, teacherId);
+        const thisTeachersBlockCourses =  await loadBlockCoursesForSession(grade, weekday, startTime, teacherId);
 
         // Utelat blokkurs vi eventuelt redigerer
         const otherBlockCourses = thisTeachersBlockCourses.filter(course => course.id !== blockCourse?.id);
@@ -1814,29 +1815,3 @@ function saveLessonIds(availableBlockCourses, ids) {
     
     location.reload();
 }
-
-/* Brukes ikke???
-async function getTeachersBlockCoursesForLesson(
-    lessonId,
-    grade,
-    teacherId
-) {
-
-    if (!teacherId) {
-        return [];
-    }
-
-    const courses =
-        await loadBlockCoursesByGradeAndTeacher(
-            grade,
-            teacherId
-        );
-
-    return courses.filter(course =>
-        (course.sessions ?? []).some(
-            session => session.lessonId === lessonId
-        )
-    );
-}
-
-*/
