@@ -213,3 +213,44 @@ export async function deleteBlockCourse(
 
 }
 
+export async function loadBlockCoursesForSession(
+    grade,
+    weekday,
+    start,
+    teacherId = null
+) {
+
+    const snapshot = await getDocs(
+        query(
+            collection(db, "blockCourses"),
+            where("grade", "==", grade)
+        )
+    );
+
+    const results = [];
+
+    snapshot.forEach(docSnap => {
+
+        const data = docSnap.data();
+
+        // Hvis lærer er oppgitt, filtrer på lærer
+        if (teacherId && data.teacherId !== teacherId) {
+            return;
+        }
+
+        // Finn blokkurs på samme dag og tidspunkt
+        const found = (data.sessions ?? []).some(session =>
+            Number(session.weekday) === Number(weekday) &&
+            session.start === start
+        );
+
+        if (found) {
+            results.push({
+                id: docSnap.id,
+                ...data
+            });
+        }
+    });
+
+    return results;
+}
