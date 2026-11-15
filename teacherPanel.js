@@ -427,7 +427,7 @@ Regler:
 - lessonId skal være unik
 - Ta med subject
 -- Hvis subject eller tekst nedenfor denne er "Blokk", skal subject være "<subject> - Blokk"
--- Hvis det er flere økter på samme tidspunkt skal du kun lage en eneste økt.  Økten skal få subject "Blokk"
+-- Hvis det en dag er flere økter på SAMME tidspunkt, skal du kun lage en eneste økt.  Økten skal få subject "Blokk".  Det er viktig at du ikke hopper over denne timen, den skal være med, men siden subjectnavn er uklart pga flere muligheter, skal du gi subject navnet "Blokk"
 - Ta med teacherName hvis synlig.  Hvis det finnes flere lærere, skal teacherName være tom
 - Ta med roomName hvis synlig.  Hvis det finnes flere rom, skal roomName være tom
 - Ta med start og end. Hvis start og end ikke er synlig, sammenlign med tidene i nabodagene.
