@@ -306,7 +306,8 @@ export function renderSchedule(
                 lessons.forEach(
                     lesson => {
 
-                        const selectedBlockCourse = studentBlockCourseMap.get( `${lesson.weekday}_${lesson.start}`  );
+                        const key = `${grade}_${lesson.weekday}_${lesson.start}`;
+                        const selectedBlockCourse = studentBlockCourseMap.get(key);
 
                         // Behold de opprinnelige timeplandataene
                         const isBlockLesson = lesson.subject?.toUpperCase().includes("BLOKK") || lesson.roomName?.toUpperCase().includes("BLOKK");
