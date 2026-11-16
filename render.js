@@ -377,9 +377,7 @@ export function renderSchedule(
 
                         const isExam =
                             examData?.exam ?? false;
-                        
-                        const grade = `VG${schedule.className.charAt(0)}`;                    
-                        
+                                               
                     const blockExamMap =
                         {};
 
