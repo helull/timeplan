@@ -123,7 +123,7 @@ export async function openHomeworkModal(
     const homeworkData =  await loadHomework(lessonId, week);
     const currentText =  homeworkData.text;
 
-    const blockCourse = teacherId  ? await loadBlockCoursesForSession(grade, weekday, startTime, teacherId ) : null;
+    const blockCourse = teacherId  ? await loadBlockCourseBtLesson(lessonId, grade, teacherId ) : null;
 
    if (canCreateBlockCourse) {
         existingBlockCourse =  blockCourse;
@@ -615,13 +615,12 @@ document
         
         // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
         //FJernet 15.11.2026 for å teste om denne ødelegger slik at det ble tomt i redigeringsvinduet...
-/*        existingBlockCourse =
-            await loadBlockCoursesForSession(
+        existingBlockCourse =
+            await loadBlockCourseByLesson(
+                lessonId,
                 grade,
-                weekday,
-                startTime,
                 teacherId
-            );*/
+            );
 
 //       if (window.matchMedia("(orientation: landscape) and (max-width: 900px)").matches) {
        if (window.matchMedia("(orientation: landscape)").matches) {
