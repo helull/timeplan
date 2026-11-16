@@ -169,10 +169,8 @@ export async function loadStudentsBlockCourseMap() {
         };
 
         for (const session of blockCourse.sessions ?? []) {
-            blockCourseMap.set(
-                session.lessonId,
-                blockCourse
-            );
+            const key = `${session.weekday}_${session.start}`;
+            blockCourseMap.set(key, blockCourse);
         }
     }
 
