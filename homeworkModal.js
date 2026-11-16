@@ -261,11 +261,7 @@ ${blockCourseHtml}
     <textarea
         id="homeworkText"
         rows="8"
-        style="width:100%;">
-
-${currentText || ""}
-
-    </textarea>
+        style="width:100%;">${currentText || ""} </textarea>
     `
     :
     ""
@@ -282,9 +278,7 @@ ${
         id="teacherHomeworkText"
         rows="5"
         style="width:100%;">
-
 ${teacherHomeworkText}
-
     </textarea>
     
     <button
