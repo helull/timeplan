@@ -1391,3 +1391,11 @@ h1{
 .field-group:first-child {
     flex: 1;
 }
+
+#homeworkText,
+#teacherHomeworkText {
+    text-align: left;
+    vertical-align: top;
+    padding: 8px;
+    box-sizing: border-box;
+}
