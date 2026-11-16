@@ -1647,8 +1647,8 @@ ${
 
             }
 
-            const originLesson = lessons.find(lesson => lesson.lessonId === lessonId);
             const lessons = schedule.lessons || [];
+            const originLesson = lessons.find(lesson => lesson.lessonId === lessonId);
             
             if (!originLesson || !sessions.some(session =>   Number(session.weekday) === Number(originLesson.weekday) &&  session.start === originLesson.start )) {
                 alert("Du må minst velge timen du kom fra...");
