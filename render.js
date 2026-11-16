@@ -54,6 +54,8 @@ export function renderSchedule(
 
     let completed = 0;
     
+    const grade =    `VG${schedule.className.charAt(0)}`;
+
     const weeks =
         document.querySelectorAll(
             ".week"
@@ -76,9 +78,7 @@ export function renderSchedule(
 
                 const weekday =
                     index + 1;
-
-                const grade =    `VG${schedule.className.charAt(0)}`;
-                
+               
                 const dayName = [
                     "Mandag",
                     "Tirsdag",
