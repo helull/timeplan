@@ -1389,27 +1389,23 @@ lessons
     )
     .forEach(
         lesson => {
-           const checked =
-    blockCourse?.sessions?.some(
-        session =>
-            session.start ===
-            lesson.start
-    );
 
-            const isBlock =
-                lesson.subject
-                    ?.toUpperCase()
-                    .includes(
-                        "BLOKK"
-                    )
-                ||
-                lesson.roomName
-                    ?.toUpperCase()
-                    .includes(
-                        "BLOKK"
-                    );
+    // Er dette en blokkøkt?
+    const isBlock =
+        lesson.subject?.toUpperCase().includes("BLOKK") ||
+        lesson.roomName?.toUpperCase().includes("BLOKK");
 
-            const text =
+    // Forhåndsvelg bare blokkøkter
+    const checked =
+        isBlock &&
+        (
+            blockCourse?.sessions?.some(session =>
+                Number(session.weekday) === Number(lesson.weekday) &&
+                session.start === lesson.start
+            ) ?? false
+        );
+
+             const text =
                 isBlock
                 ? "🟢 Blokk"
                 : (
