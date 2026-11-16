@@ -306,7 +306,7 @@ export function renderSchedule(
                 lessons.forEach(
                     lesson => {
 
-                        const selectedBlockCourse =  studentBlockCourseMap.get(lesson.lessonId);
+                        const selectedBlockCourse = studentBlockCourseMap.get( `${lesson.weekday}_${lesson.start}`  );
 
                         // Behold de opprinnelige timeplandataene
                         const isBlockLesson = lesson.subject?.toUpperCase().includes("BLOKK") || lesson.roomName?.toUpperCase().includes("BLOKK");
@@ -362,10 +362,6 @@ export function renderSchedule(
                             homeworkMap[
                                 `${lesson.lessonId}_${weekNo}`
                             ];
-
-                       //const selectedBlockCourse = studentBlockCourseMap.get(lesson.lessonId);
-
-                        //const isBlockLesson =  lesson.subject?.toUpperCase().includes("BLOKK") ||   lesson.roomName?.toUpperCase().includes("BLOKK");
 
                         const homeworkKey =  isBlockLesson && selectedBlockCourse
                             ? `${schedule.className}_${lesson.lessonId}_${weekNo}_${selectedBlockCourse.id}`
