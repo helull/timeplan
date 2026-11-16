@@ -1392,8 +1392,8 @@ lessons
            const checked =
     blockCourse?.sessions?.some(
         session =>
-            session.lessonId ===
-            lesson.lessonId
+            session.start ===
+            lesson.start
     );
 
             const isBlock =
@@ -1651,10 +1651,12 @@ ${
 
             }
 
-            if (!sessions.some(session => session.lessonId === lessonId)) {
+            const originLesson = lessons.find(lesson => lesson.lessonId === lessonId);
+            const lessons = schedule.lessons || [];
+            
+            if (!originLesson || !sessions.some(session =>   Number(session.weekday) === Number(originLesson.weekday) &&  session.start === originLesson.start )) {
                 alert("Du må minst velge timen du kom fra...");
                 return;
-
             }
 
          // Hent alle blokkursene til læreren
@@ -1667,7 +1669,8 @@ ${
         const hasConflict = otherBlockCourses.some(course =>
             (course.sessions ?? []).some(otherSession =>
                 sessions.some(session =>
-                    session.lessonId === otherSession.lessonId
+                    Number(session.weekday) === Number(otherSession.weekday) &&
+                    session.start === otherSession.start
                 )
             )
         );
