@@ -123,7 +123,7 @@ export async function openHomeworkModal(
     const homeworkData =  await loadHomework(lessonId, week);
     const currentText =  homeworkData.text;
 
-    const blockCourse = teacherId  ? await loadBlockCourseBtLesson(lessonId, grade, teacherId ) : null;
+    const blockCourse = teacherId  ? await loadBlockCourseByLesson(lessonId, grade, teacherId ) : null;
 
    if (canCreateBlockCourse) {
         existingBlockCourse =  blockCourse;
