@@ -491,13 +491,17 @@ export async function reloadScheduleForClass(
 
     const homeworkMap =
         await loadAllHomework();
-
+    
+    const teacherHomeworkMap =
+        await loadAllTeacherHomework();
+    
     const examMap =
         await loadAllExamFlags();
 
     renderSchedule(
         schedule,
         homeworkMap,
+        teacherHomeworkMap,
         examMap,
         blockExams,
         tentamens,
