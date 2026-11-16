@@ -157,7 +157,11 @@ export async function openHomeworkModal(
 
     // Finn elevens tidligere valgte blokkurs
 const savedBlockCourse = !teacherMode
-    ? await loadStudentsBlockCourseByLesson(lessonId)
+    ? await loadStudentsBlockCourseByLesson(
+        lessonId,
+        weekday,
+        startTime
+    )
     : null;
 
 //feilsøking 12.11.2026
