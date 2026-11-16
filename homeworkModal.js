@@ -124,7 +124,9 @@ export async function openHomeworkModal(
     const currentText =  homeworkData.text;
 
     //const blockCourse = teacherId  ? await loadBlockCourseByLesson(lessonId, grade, teacherId ) : null;
-    const blockCourse = teacherId  ? await loadBlockCoursesForSession(grade, weekday, startTime,teacherId) : null;
+    const teachersBlockCourses = teacherId ? await loadBlockCoursesForSession(grade, weekday, startTime, teacherId ) : [];
+
+    const blockCourse = teachersBlockCourses[0] ?? null;
 
    if (canCreateBlockCourse) {
         existingBlockCourse =  blockCourse;
@@ -615,14 +617,9 @@ document
     async () => {
         
         // Les dataene på nytt, i tilfelle bruker har vært inne og endret, og så går tilbake før homework-modalen forlates.
-        //FJernet 15.11.2026 for å teste om denne ødelegger slik at det ble tomt i redigeringsvinduet...
-        /*existingBlockCourse =
-            await loadBlockCourseByLesson(
-                lessonId,
-                grade,
-                teacherId
-            );*/
-        existingBlockCourse =  await loadBlockCoursesForSession(grade, weekday, startTime, teacherId);
+        const courses = await loadBlockCoursesForSession(grade, weekday, startTime, teacherId);
+
+        existingBlockCourse = courses[0] ?? null;
 
 
         
