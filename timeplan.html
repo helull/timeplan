@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeplan</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="modern_modals.css">
+</head>
+<body>
+<button class="menu-button" id="menuButton" type="button">☰</button>
+<div class="weeks"></div>
+<div id="loadingOverlay">
+  <div class="hourglass">⏳</div>
+  <div id="loadingText">Laster...</div>
+  <div class="progress"><div id="progressBar"></div></div>
+</div>
+<div class="dots">
+  <span class="dot active"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
+<script type="module" src="app.js"></script>
+<script type="module" src="quickMenu.js"></script>
+</body>
+</html>
