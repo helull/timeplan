@@ -82,3 +82,31 @@
 @media (prefers-reduced-motion:reduce) {
   .quick-menu-actions,.menu-button { transition:none; }
 }
+
+/* Samme diskrete kryss som i Prøveplan, i alle modalvinduer. */
+.modal .modal-card { position:relative; padding-top:clamp(44px, 5vw, 54px); }
+.modal .modal-card > h2:first-child { margin-top:-29px; padding-right:45px; min-height:26px; }
+.modal .modal-card > .proveplan-header:first-child { margin-top:-29px; padding-right:0; }
+.modal .modal-card button.modal-close-icon,
+.modal .modal-card #proveplanClose {
+  position:absolute !important; top:10px; right:10px;
+  width:30px !important; height:30px !important; min-height:30px !important;
+  display:grid !important; place-items:center !important;
+  padding:0 !important; margin:0 !important;
+  border:1px solid #e2e8f0 !important; border-radius:10px !important;
+  background:#f1f5f9 !important; color:#475569 !important;
+  font-size:18px !important; font-weight:400 !important; line-height:1 !important;
+  box-shadow:none !important; transform:none !important;
+  cursor:pointer; z-index:5;
+}
+.modal .modal-card button.modal-close-icon:hover,
+.modal .modal-card #proveplanClose:hover { background:#e2e8f0 !important; color:#0f172a !important; }
+.modal .modal-card button.modal-close-icon:focus-visible,
+.modal .modal-card #proveplanClose:focus-visible { outline:3px solid #93c5fd !important; outline-offset:2px; }
+@media (orientation:landscape) and (max-height:550px) {
+  .modal .modal-card { padding-top:40px; }
+  .modal .modal-card > h2:first-child,
+  .modal .modal-card > .proveplan-header:first-child { margin-top:-27px; }
+  .modal .modal-card button.modal-close-icon,
+  .modal .modal-card #proveplanClose { top:6px; right:7px; }
+}
