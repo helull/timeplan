@@ -105,8 +105,8 @@ if (!document.getElementById("today-day-style")) {
     todayStyle.id = "today-day-style";
     todayStyle.textContent = `
         .day.is-today {
-            background-color: #f0f5fc;
-            box-shadow: inset 0 0 0 1px #c9d9f0;
+            background-color: #e3ecf8;
+            box-shadow: inset 0 0 0 1px #a8c2e3;
             border-radius: 14px;
         }
     `;
