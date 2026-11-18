@@ -1,7 +1,7 @@
 // Informasjon for både elev og lærer.
 // REDIGER BARE TEKSTEN MELLOM AKSENTTEGNENE (`) NEDENFOR.
 // Linjeskift og avsnitt vises slik de er skrevet.
-const INFORMASJONSTEKST = `Om timeplan!
+const INFORMASJONSTEKST = `
 Dette er et forsøk på å gi elevene en oversikt over egen skoletid.  Man kan legge inn lekser og markere når det er vurdering i egne fag. Prøveplanen gir en oversikt over hva som finnes av informasjon om planlagte vurderinger.
 
 Velg dag og uke ved sveipe opp og ned eller piltaster opp/ned på datamaskin
