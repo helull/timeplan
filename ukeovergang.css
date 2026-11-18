@@ -1,15 +1,16 @@
-/* Ukeovergang: kortstokk. Ingen endring av fagkort eller modaler. */
-.week.week-card-exiting {
-  visibility: visible !important;
-  opacity: 1;
-  z-index: 21;
-  pointer-events: none;
+/* Myk ukeovergang og store, diskrete ukenumre */
+.week.week-card-exiting { visibility:visible !important; opacity:1; z-index:21; pointer-events:none; }
+.week.week-card-entering { visibility:visible !important; opacity:1; z-index:22; }
+.week-transition-number {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  z-index:100; pointer-events:none; user-select:none;
+  font:800 clamp(6rem,24vw,15rem)/1 system-ui,sans-serif;
+  letter-spacing:-.07em; color:#1e3a8a;
+  text-shadow:0 4px 35px rgba(255,255,255,.9);
+  opacity:0;
 }
-.week.week-card-entering {
-  visibility: visible !important;
-  opacity: 1;
-  z-index: 22;
+.week-card-entering .week-transition-number { color:#2563eb; }
+@media (orientation:landscape) and (max-height:550px) {
+  .week-transition-number {font-size:clamp(4rem,20vh,8rem);}
 }
-@media (prefers-reduced-motion: reduce) {
-  .week { transition: none !important; }
-}
+@media (prefers-reduced-motion:reduce) { .week {transition:none !important;} .week-transition-number{display:none;} }
