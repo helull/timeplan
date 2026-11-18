@@ -9,17 +9,18 @@ Legg inn lekse/prøve ved å trykke på blyanten på fagkortet
 
 Innlogging elev:
 - Bruk ditt eget navn eller noe som ligner. Leksene lagres i en database, men det er ingen kobling mot noe annet. Neste gang du logger inn fra samme enhet kommer du inn som samme bruker.  Da får du tilgang til de leksene du selv har lagt inn.
-- Hvis du logger ut mister du tilgang til leksene du har lagt inn fra denne enheten, men alt annet vil være der.
+- Hvis du logger ut mister du tilgang til leksene du har lagt inn fra denne enheten og brukerens kobling til blokkfag.
+- Du må gjerne ha en bruker på telefon, og en annen på datamaskin, men det er INGEN kobling mellom dem!
 
 Innlogging lærer:
-- Bruk ditt afk email-adresse (f.eks karinormann@afk.no).  Du må godkjennes av admin for å komme inn som lærer.
+- Bruk ditt afk email-adresse (f.eks karinormann@afk.no).  Du må godkjennes av admin for å komme inn som lærer. Send derfor melding til helgeul@afk.no med spørsmål om tilgang.
 - Når du er godkjent, kan du logge inn som denne brukeren (f.eks karinormann@afk.no) og nettleser vil kjenne deg igjen neste gang.
 
 Elev:
 - Kan legge inn og endre egne lekser.  Kun synlig for deg.
-- Kan sette opp og slette prøve i en vanlig økt.  Synlig for hele klassen (f.eks 1 STA)
-- Kan sette opp og slette prøve i blokk-økt.  Synlig for hele trinnet (f.eks hele VG1)
-- Kan velge tilhørighet til gruppe i blokk-økt dersom lærer har lagt inn sine fag.
+- Kan sette opp og slette prøve i en vanlig økt.  Synlig for hele klassen (f.eks 1 STA). Passordet er hemmelig!
+- Kan sette opp og slette prøve i blokk-økt.  Synlig for hele trinnet (f.eks hele VG1).  Passordet er hemmelig!
+- Kan velge tilhørighet til gruppe i blokk-økt dersom lærer har lagt inn blokk-fag.
 - Hvis lærer har lagt inn lekser kan alle elever i faget se disse.
 
 Lærer:
