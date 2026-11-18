@@ -320,8 +320,26 @@ function changeWeek(direction, initialOffset = 0) {
         {transform:`translate3d(0,${newStart}px,0) scale(.985)`, opacity:.65},
         {transform:'translate3d(0,0,0) scale(1)', opacity:1}
     ], timing);
-    const numberOldAnimation = oldNumber.animate([{opacity:0, transform:'translate(-50%,-42%) scale(.85)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}], {duration:duration*.4,fill:'forwards'});
-    const numberNewAnimation = newNumber.animate([{opacity:1, transform:'translate(-50%,-42%) scale(1.12)'},{opacity:0,transform:'translate(-50%,-55%) scale(.95)'}], timing);
+    const numberOldAnimation = oldNumber.animate([{opacity:0.8, transform:'translate(-50%,-42%) scale(.85)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}], {duration:duration*.4,fill:'forwards'});
+
+    const numberNewAnimation = newNumber.animate([
+    {
+        opacity: 1,
+        transform: 'translate(-50%,-42%) scale(1.12)',
+        offset: 0
+    },
+    {
+        opacity: 1,
+        transform: 'translate(-50%,-50%) scale(1)',
+        offset: 0.75
+    },
+    {
+        opacity: 0,
+        transform: 'translate(-50%,-55%) scale(.95)',
+        offset: 1
+    }
+], timing);
+    
     newAnimation.finished.then(() => {
         oldAnimation.cancel(); newAnimation.cancel();
         numberOldAnimation.cancel(); numberNewAnimation.cancel();
