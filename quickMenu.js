@@ -15,10 +15,10 @@ if (trigger) {
     menu.className = 'quick-menu-actions';
     menu.setAttribute('aria-label', 'Hurtigmeny');
     menu.innerHTML = `
-      <button type="button" class="quick-menu-action" id="quickExamPlan">▦ <span>Prøveplan</span></button>
-      <button type="button" class="quick-menu-action quick-info-action" id="quickInfo" aria-label="Informasjon" title="Informasjon"><span class="quick-info-mark" aria-hidden="true">?</span><span>Info</span></button>
+      <button type="button" class="quick-menu-action" id="quickExamPlan">▦ <span>Plan</span></button>
       <button type="button" class="quick-menu-action quick-display-action" id="quickDisplay" title="Endre visning av lærer og rom" aria-label="Endre visning"><span class="quick-display-icon" aria-hidden="true">◉</span><span class="quick-display-label">Begge</span></button>
-      <button type="button" class="quick-menu-action" id="quickMore">⋯ <span>Mer</span></button>`;
+      <button type="button" class="quick-menu-action quick-info-action" id="quickInfo" aria-label="Informasjon" title="Informasjon"><span class="quick-info-mark" aria-hidden="true">?</span></button>
+      <button type="button" class="quick-menu-action" id="quickMore">⋯</button>`;
     trigger.insertAdjacentElement('afterend', menu);
 
     // Bruk de SAMME lagringsnøklene som timeplanen og «Mer»-menyen.
