@@ -1,0 +1,124 @@
+/* Felles, rolig utseende for modaler og lekseutdrag.
+   Legges inn ETTER style.css og modern_modals.css. */
+:root { --modal-soft:#f2f6fc; --modal-edge:#d9e4f2; --modal-ink:#263a53; }
+
+/* Alle vanlige modalvinduer */
+.modal .modal-card,
+.modal .homework-viewer-card {
+  background:linear-gradient(155deg,#f9fbff 0%,var(--modal-soft) 100%) !important;
+  border:1px solid var(--modal-edge) !important;
+  border-radius:18px !important;
+  color:var(--modal-ink);
+  box-shadow:0 18px 55px rgba(30,50,85,.20),0 2px 8px rgba(30,50,85,.06);
+}
+/* Andre navngitte modal-kort får også en tilsvarende lys overflate. */
+.modal .proveplan-card {
+  background:linear-gradient(155deg,#f9fbff 0%,var(--modal-soft) 100%) !important;
+  border-color:var(--modal-edge) !important;
+}
+
+/* Små, like lekseutdrag: kun den synlige teksten er klikkbar. */
+.lesson .teacher-homework-preview,
+.lesson .lesson-homework-preview {
+  display:table !important;
+  width:max-content !important;
+  max-width:calc(100% - 33px) !important;
+  box-sizing:border-box;
+  margin:3px 0 2px !important;
+  padding:3px 7px !important;
+  border-radius:7px !important;
+  border:1px solid rgba(255,255,255,.34) !important;
+  background:rgba(255,255,255,.22) !important;
+  color:inherit !important;
+  font-size:.72rem !important;
+  font-weight:500;
+  line-height:1.35 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  cursor:pointer;
+  position:relative;
+  z-index:1;
+}
+.lesson .teacher-homework-preview:hover,
+.lesson .lesson-homework-preview:hover { background:rgba(255,255,255,.35) !important; }
+.lesson .homework-button { z-index:4; }
+
+/* Lekseforhåndsvisning: kompakt vindu, tekst oppe til venstre. */
+#homeworkViewer,#teacherHomeworkViewer { align-items:center; padding:12px; }
+#homeworkViewer .homework-viewer-card,
+#teacherHomeworkViewer .homework-viewer-card {
+  position:relative;
+  display:block !important;
+  width:min(92vw,460px) !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:min(78dvh,620px) !important;
+  overflow-y:auto !important;
+  padding:18px !important;
+  text-align:left !important;
+}
+#homeworkViewer .homework-viewer-card h2,
+#teacherHomeworkViewer .homework-viewer-card h2 {
+  margin:0 38px 10px 0 !important;
+  font-size:1.08rem !important;
+  line-height:1.3 !important;
+  text-align:left !important;
+  color:#29486e !important;
+}
+#homeworkViewer .homework-viewer-text,
+#teacherHomeworkViewer .homework-viewer-text {
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:12px 13px !important;
+  border:1px solid #e2eaf4 !important;
+  border-radius:11px !important;
+  background:rgba(255,255,255,.68) !important;
+  color:#263a53 !important;
+  text-align:left !important;
+  font-size:.91rem !important;
+  line-height:1.55 !important;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  box-shadow:none !important;
+}
+/* Leksevisningens Lukk-knapp ligger utenfor .modal-card. */
+#closeHomeworkViewer,#closeTeacherHomeworkViewer {
+  position:absolute !important;top:12px;right:12px;
+  width:30px !important;height:30px !important;
+  margin:0 !important;padding:0 !important;
+  display:grid !important;place-items:center !important;
+  border:1px solid #dbe4f0 !important;border-radius:10px !important;
+  background:#e8eef7 !important;color:#415570 !important;
+  font-size:0 !important;box-shadow:none !important;
+}
+#closeHomeworkViewer::after,#closeTeacherHomeworkViewer::after {
+  content:'✕';font-size:17px;line-height:1;
+}
+#closeHomeworkViewer:hover,#closeTeacherHomeworkViewer:hover { background:#dce6f2 !important; }
+@media (orientation:landscape) and (max-height:550px) {
+ #homeworkViewer .homework-viewer-card,#teacherHomeworkViewer .homework-viewer-card {
+   max-height:92dvh !important;padding:12px !important;
+ }
+ .lesson .teacher-homework-preview,.lesson .lesson-homework-preview {
+   font-size:.55rem !important;padding:1px 4px !important;margin:1px 0 !important;
+ }
+}
+
+/* Ett enkelt, avkortet utdrag per lekse, aldri over blyantknappen. */
+.lesson .teacher-homework-preview,
+.lesson .lesson-homework-preview {
+  display:block !important;
+  width:fit-content !important;
+  max-width:calc(100% - 44px) !important;
+  min-width:0 !important;
+  max-height:1.8em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  box-sizing:border-box !important;
+  flex:0 1 auto !important;
+  align-self:flex-start !important;
+}
+.lesson .homework-button { z-index:5 !important; }
