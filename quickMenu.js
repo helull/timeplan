@@ -15,10 +15,15 @@ if (trigger) {
     menu.className = 'quick-menu-actions';
     menu.setAttribute('aria-label', 'Hurtigmeny');
     menu.innerHTML = `
+      <button type="button" class="quick-menu-action" id="quickExamPlan">▦</button>
+      <button type="button" class="quick-menu-action quick-info-action" id="quickInfo" aria-label="Informasjon" title="Informasjon"><span class="quick-info-mark" aria-hidden="true">?</span></button>
+      <button type="button" class="quick-menu-action" id="quickMore">⋯ <span>Mer</span></button>`;
+    trigger.insertAdjacentElement('afterend', menu); 
+   /* menu.innerHTML = `
       <button type="button" class="quick-menu-action" id="quickExamPlan">▦ <span>Prøveplan</span></button>
       <button type="button" class="quick-menu-action quick-info-action" id="quickInfo" aria-label="Informasjon" title="Informasjon"><span class="quick-info-mark" aria-hidden="true">?</span><span>Info</span></button>
       <button type="button" class="quick-menu-action" id="quickMore">⋯ <span>Mer</span></button>`;
-    trigger.insertAdjacentElement('afterend', menu);
+    trigger.insertAdjacentElement('afterend', menu); */
 
     const close = () => {
         menu.classList.remove('is-open');
