@@ -1,9 +1,37 @@
 // Informasjon for både elev og lærer.
 // REDIGER BARE TEKSTEN MELLOM AKSENTTEGNENE (`) NEDENFOR.
 // Linjeskift og avsnitt vises slik de er skrevet.
-const INFORMASJONSTEKST = `Skriv informasjonsteksten din her.
+const INFORMASJONSTEKST = `Om timeplan!
+Dette er et forsøk på å gi elevene en oversikt over egen skoletid.  Man kan legge inn lekser og markere når det er vurdering i egne fag. Prøveplanen gir en oversikt over hva so finnes av informasjon om planlagte vurderinger.
 
-Du kan bruke flere avsnitt. Vinduet tilpasser seg korte tekster og blir rullbart når teksten er lang.`;
+Velg dag og uke ved sveipe opp og ned eller piltaster opp/ned på datamaskin
+Legg inn lekse ved å trykke på blyanten på fagkortet
+
+Innlogging elev:
+- Bruk ditt eget navn eller noe som ligner. Leksene lagres i en database, men det er ingen kobling mot noe annet. Neste gang du logger inn fra samme enhet kommer du inn som samme bruker.  Da får du tilgang til de leksene du selv har lagt inn.
+- Hvis du logger ut mister du tilgang til leksene du har lagt inn fra denne enheten, men alt annet vil være der.
+
+Innlogging lærer:
+- Bruk ditt afk email-adresse (f.eks karinormann@afk.no).  Du må godkjennes av admin for å komme inn som lærer.
+- Når du er godkjent, kan du logge inn som denne brukeren (f.eks karinormann@afk.no) og nettleser vil kjenne deg igjen neste gang.
+
+Elev:
+- Kan legge inn og endre egne lekser.  Kun synlig for deg.
+- Kan sette opp og slette prøve i en vanlig økt.  Synlig for hele klassen (f.eks 1 STA)
+- Kan sette opp og slette prøve i blokk-økt.  Synlig for hele trinnet (f.eks hele VG1)
+- Kan velge tilhørighet til gruppe i blokk-økt dersom lærer har lagt inn sine fag.
+- Hvis lærer har lagt inn lekser kan alle elever i faget se disse.
+
+Lærer:
+- Kan sette opp/bestemme sine fag i blokkøktene.
+- Kan sette opp og slette prøve i et fag i en vanlig økt.  Kan bare slettes av lærer, ikke elev.
+- Kan sette opp og slette prøve i en blokkøkt.  Synlig for hele trinnet som har denne blokka i dette trinnet.
+
+Admin:
+- Trenger bare jeg å vite om, som er admin, det er ikke meningen lærere skal ha tilgang!
+
+Innspill/Ris/Ros? Kontakt Helge Ullern, -> helgeul@afk.no
+`;
 
 let previousFocus = null;
 let keyHandler = null;
