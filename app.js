@@ -223,7 +223,7 @@ let swipeAllowed = false;
 let swipeAxis = null;
 let swipeOffset = 0;
 let startTime = 0;
-const WEEK_DURATION = 410;
+const WEEK_DURATION = 300;
 
 function canNavigateFrom(target) {
     return target instanceof Element && !target.closest('.modal, .proveplan-overlay, .register-screen, button, input, textarea, select, [contenteditable="true"]');
