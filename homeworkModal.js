@@ -302,7 +302,7 @@ ${
     ?
     "Rediger blokkfag"
     :
-    "Etabler fag i denne blokka"
+    "Etabler fag for meg i denne blokka"
 }
 
     </button>
