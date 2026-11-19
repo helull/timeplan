@@ -623,7 +623,7 @@ h1{
         font-size:1rem;
         letter-spacing:2px;
     }
-
+/*
     .tentamen-card .subject {
     font-size: 0.8rem !important;
     font-weight: 700 !important;
@@ -633,6 +633,7 @@ h1{
         font-size: 0.6rem !important;
         line-height: 1 !important;
     }
+    */
 }
 
 /* ========================
@@ -1175,17 +1176,34 @@ h1{
 }
 
 .tentamen-card .subject {
-    font-size: clamp(1rem, 2vw, 3rem);
-    /*font-size: 2rem;*/
+    font-size: clamp(1rem, 2vw, 2rem);
     font-weight: 700;
 
     margin-bottom: 1rem;
-
     color: #5d4037;
+
+    max-width: 100%;
+    min-width: 0;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+    line-height: 1.25;
 }
 
+//Særbehandling på smale skjermer
+@media (max-width: 600px) {
+    .tentamen-card {
+        padding: 1.25rem;
+    }
+
+    .tentamen-card .subject {
+        font-size: 1.25rem;
+    }
+}
+//Særbehanding slutt
+
 .tentamen-card .homework {
-/*    font-size: 1.2rem;*/
     font-size: clamp(0.4rem, 1.2vw, 1.5rem);
     line-height: 1.6;
 
