@@ -1,3 +1,5 @@
+import {openTeacherLinkDialog} from "./teacherScheduleLink.js";
+import {showScheduleView} from "./app.js";
 import { visLitePassordvindu } from "./litePassordvindu.js";
 import { openProveplan } from "./proveplan.js";
 
@@ -223,6 +225,8 @@ export async function openAdminPanel() {
                     Logg ut
                 </button>
 
+                <button id="changeTeacherScheduleLink">Min tilknytning til timeplanen</button>
+
                 <button id="changeClass">
                     Bytt klasse
                 </button>
@@ -257,6 +261,15 @@ export async function openAdminPanel() {
         adminModeLogin
     );
     
+    document.getElementById("changeTeacherScheduleLink")?.addEventListener("click", async () => {
+        document.getElementById("adminModal")?.remove();
+        try {
+            await openTeacherLinkDialog({force:true,onSaved: async status => {
+                await showScheduleView(status==="bekreftet"?"teacher":"class",true);
+            }});
+        } catch(error) {console.error(error);alert("Kunne ikke åpne navnevalg.");}
+    });
+
     document
     .getElementById(
         "changeClass"
