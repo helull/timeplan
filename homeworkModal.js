@@ -593,10 +593,6 @@ document
                     text
                 );
 
-                alert(
-                    "Lagret"
-                );
-
                 document
                     .getElementById(
                         "homeworkModal"
