@@ -5,7 +5,7 @@ const INFORMASJONSTEKST =
 `Dette er et forsøk på å gi elevene en oversikt over egen skoletid.  Man kan legge inn lekser og markere når det er vurdering i egne fag. Prøveplanen gir en oversikt over hva som finnes av informasjon om planlagte vurderinger.
 
 Velg dag og uke ved sveipe opp og ned eller piltaster opp/ned på datamaskin. Roter telefon til landskap for en enkel ukeoversikt.
-Legg inn lekse/prøve ved å trykke på blyanten på fagkortet.
+Legg inn lekse/prøve ved å trykke på blyanten på fagkortet. SKriver du ordet "prøve", "vurdering" eller "høring" i teksten, kommer det også i prøveplanen din.
 Elevene kan bruke systemet uavhengig av om lærer bruker det. Men hvis lærer(e) bruker systemet vil det være en effektiv måte for elevene å se lekser og vurderinger.
 
 Innlogging elev:
