@@ -1,0 +1,88 @@
+/* Lenker og tekstutdrag i timekort – samme stil for elev og lærer. */
+.lesson .teacher-homework-preview,
+.lesson .lesson-homework-preview {
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  gap:4px !important;
+  width:fit-content !important;
+  max-width:calc(100% - 44px) !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  pointer-events:none !important;
+}
+.lesson .homework-excerpt {
+  display:inline-block !important;
+  min-width:0 !important;
+  flex:0 1 auto !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  cursor:pointer;
+  pointer-events:auto !important;
+}
+.lesson .homework-inline-link {
+  display:inline-block !important;
+  flex:0 0 auto !important;
+  padding:1px 5px !important;
+  border-radius:6px !important;
+  background:#dbeafe !important;
+  color:#1e40af !important;
+  font-size:inherit !important;
+  font-weight:600 !important;
+  text-decoration:none !important;
+  white-space:nowrap !important;
+  pointer-events:auto !important;
+}
+.lesson .homework-inline-link:hover { background:#bfdbfe !important; }
+.homework-viewer-text .homework-inline-link {
+  display:inline-block;
+  margin:2px 3px;
+  padding:5px 9px;
+  background:#dbeafe;
+  color:#1e40af;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* Prøvemarkering: lærer = heltrukken kant og fylt prikk,
+   elev = stiplet kant og åpen prikk. Overstyrer style.css. */
+.lesson.exam-lesson.exam-teacher {
+  border: 2px solid #b75a53 !important;
+}
+.lesson.exam-lesson.exam-student {
+  border: 2px dashed #b75a53 !important;
+}
+/* Liten prøveetikett plassert på nedre ramme, uten å dekke blyantknappen. */
+.lesson.exam-lesson.exam-teacher::before,
+.lesson.exam-lesson.exam-student::before {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 0 !important;
+  right: 44px !important;
+  left: auto !important;
+  width: max-content !important;
+  max-width: 68px !important;
+  transform: none !important;
+  padding: 0 4px !important;
+  border-radius: 4px 4px 0 0 !important;
+  background: #a96863 !important;
+  color: #fff8f7 !important;
+  font-size: 9px !important;
+  font-weight: 550 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.05 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
+}
+.lesson.exam-lesson.exam-teacher::before { content: "● PRØVE" !important; }
+.lesson.exam-lesson.exam-student::before { content: "○ PRØVE" !important; }
+
+/* Personlig vurdering: identisk med elevprøve, bare annen etikett. */
+.lesson.exam-lesson.exam-student.personal-assessment-lesson::before {
+  content: "○ ANNET" !important;
+}
