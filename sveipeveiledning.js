@@ -6,6 +6,35 @@
   const label = document.getElementById('loadingText');
   if (!overlay) return;
 
+  // Bruk faktisk peketype, ikke bare skjermbredde (PC-vinduer kan være smale).
+  const guide = overlay.querySelector('.swipe-guide');
+  const touchDevice = window.matchMedia('(pointer: coarse)').matches ||
+    (navigator.maxTouchPoints > 0 && window.matchMedia('(hover: none)').matches);
+  let mode = 'desktop';
+  if (touchDevice) {
+    // Hver nye oppstart på samme enhet veksler mellom sveiping og rotasjon.
+    try {
+      const previous = localStorage.getItem('timeplanStartupGuide');
+      mode = previous === 'swipe' ? 'rotate' : 'swipe';
+      localStorage.setItem('timeplanStartupGuide', mode);
+    } catch (_) { mode = 'swipe'; }
+  }
+  if (guide) guide.dataset.guideMode = mode;
+  const stage = guide?.querySelector('.swipe-guide-stage');
+  const horizontal = guide?.querySelector('.swipe-guide-instruction-h');
+  const vertical = guide?.querySelector('.swipe-guide-instruction-v');
+  if (mode === 'desktop') {
+    if (horizontal) horizontal.textContent = '';
+    if (vertical) vertical.innerHTML = 'Bruk piltastene ↑ og ↓ <small>for å bytte uke</small>';
+  } else if (mode === 'rotate') {
+    if (stage) {
+      const card = stage.querySelector('.swipe-guide-card');
+      if (card) card.innerHTML = '<div class="guide-phone-content"><i></i><i></i><i></i></div><div class="guide-week-content"><i></i><i></i><i></i><i></i><i></i></div>';
+    }
+    if (horizontal) horizontal.innerHTML = 'Portrett: dag · Landskap: uke <small>Roter telefonen for å se hele uken</small>';
+    if (vertical) vertical.textContent = '';
+  }
+
   const started = performance.now();
   const minDisplay = 350;
   let finished = false;
