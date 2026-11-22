@@ -1,48 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="no">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timeplan</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="modern_modals.css">
-<link rel="stylesheet" href="dato_i_timeplan.css">
-<link rel="stylesheet" href="ukeovergang.css">
-<link rel="stylesheet" href="polert_modaler.css">
-<link rel="stylesheet" href="lekse_lenker.css">
-<link rel="stylesheet" href="infoModal.css">
-<link rel="stylesheet" href="sveipeveiledning.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Under utvikling – Helge-lull</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17283c}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:#f5f7fb;display:grid;place-items:center;padding:20px}
+    main{width:min(600px,100%);background:linear-gradient(125deg,#14283c,#294a67);color:#fff;border-radius:17px;padding:36px 24px;text-align:center;box-shadow:0 8px 20px #14283c20}
+    h1{font-size:clamp(1.35rem,5vw,2rem);margin:0}
+  </style>
 </head>
 <body>
-<button class="menu-button" id="menuButton" type="button">☰</button>
-<div class="weeks"></div>
-<div id="loadingOverlay" role="status" aria-live="polite">
-  <div class="swipe-guide" aria-label="Slik navigerer du i timeplanen">
-    <div class="swipe-guide-brand">TIMEPLAN</div>
-    <div class="swipe-guide-stage" aria-hidden="true">
-      <div class="swipe-guide-card"><span></span><span></span><span></span></div>
-      <div class="swipe-guide-hand">☝</div>
-      <div class="swipe-guide-horizontal">↔</div>
-      <div class="swipe-guide-vertical">↕</div>
-    </div>
-    <div class="swipe-guide-instructions">
-      <div class="swipe-guide-instruction swipe-guide-instruction-h">Sveip sidelengs <small>for å bytte dag</small></div>
-      <div class="swipe-guide-instruction swipe-guide-instruction-v">Sveip opp eller ned <small>for å bytte uke</small></div>
-    </div>
-    <div id="loadingText">Laster timeplanen …</div>
-    <div class="progress"><div id="progressBar"></div></div>
-  </div>
-</div>
-<div class="dots">
-  <span class="dot active"></span>
-  <span class="dot"></span>
-  <span class="dot"></span>
-  <span class="dot"></span>
-  <span class="dot"></span>
-</div>
-<script type="module" src="app.js"></script>
-<script type="module" src="quickMenu.js"></script>
-<script defer src="modalClose.js"></script>
-<script defer src="sveipeveiledning.js"></script>
+  <main><h1>Under utvikling, kommer snart...</h1></main>
 </body>
 </html>
