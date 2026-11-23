@@ -11,6 +11,8 @@ import {
 }
 from "./teacher.js";
 
+import { getTeacherLink } from "./teacherScheduleLink.js";
+
 import {
     loadHolidays,
     removeDayHoliday,
@@ -25,6 +27,48 @@ from "./colors.js";
 
 const holidays =
     await loadHolidays();
+
+// Vis bare lekseblyanten for egne fag. Blokkfag og admin er unntak.
+let homeworkAccessTeacherId = null;
+let homeworkAccessName = "";
+let homeworkAccessPromise = null;
+const normalizeHomeworkTeacher = value => String(value || "").trim().toLocaleLowerCase("nb-NO").replace(/\s+/g, " ");
+
+function refreshHomeworkPencils() {
+    document.querySelectorAll(".homework-button[data-homework-access]").forEach(button => {
+        const allowed = isAdmin() || (isTeacher() && (
+            button.dataset.homeworkAccess === "block" ||
+            (homeworkAccessName && normalizeHomeworkTeacher(button.dataset.lessonTeacher) === homeworkAccessName)
+        ));
+        button.hidden = !allowed;
+        button.style.display = allowed ? "" : "none";
+    });
+}
+
+function loadHomeworkAccess() {
+    const teacherId = isTeacher() ? localStorage.getItem("teacherId") : null;
+    if (teacherId === homeworkAccessTeacherId) return;
+    homeworkAccessTeacherId = teacherId;
+    homeworkAccessName = "";
+    const pending = teacherId ? getTeacherLink(teacherId) : Promise.resolve(null);
+    homeworkAccessPromise = pending;
+    pending.then(record => {
+        if (homeworkAccessPromise !== pending) return;
+        const link = record?.link;
+        homeworkAccessName = link?.status === "bekreftet" ? normalizeHomeworkTeacher(link.navn) : "";
+        refreshHomeworkPencils();
+    }).catch(error => {
+        if (homeworkAccessPromise !== pending) return;
+        console.error("Kunne ikke kontrollere lærertilknytning:", error);
+        refreshHomeworkPencils();
+    });
+}
+
+window.addEventListener("schedule-view-changed", () => {
+    homeworkAccessTeacherId = null;
+    loadHomeworkAccess();
+    refreshHomeworkPencils();
+});
 
 function escapeHtml(text) {
     return String(text ?? "").replace(/[&<>"']/g, char => ({
@@ -134,6 +178,7 @@ export function renderSchedule(
 
     let completed = 0;
     
+    loadHomeworkAccess();
     const teacherView = options.teacherView === true;
     const grade = `VG${String(schedule.className||"").charAt(0)}`;
     // EFP gjelder ikke bygg- eller IB-klassene angitt med disse prefiksene.
@@ -635,6 +680,8 @@ if (teacherLessonData) {
 
                                 <button
                                     class="homework-button"
+                                    data-homework-access="${isBlockLesson || lesson.blockCourseId ? 'block' : 'ordinary'}"
+                                    data-lesson-teacher="${escapeHtml(lesson.teacherName)}"
                                     data-lesson="${escapeHtml(lesson.lessonId)}"
                                      data-class-id="${escapeHtml(lessonClassId)}"
                                     data-week="${weekNo}"
@@ -711,6 +758,8 @@ document.getElementById(
         );
     });
   
+    refreshHomeworkPencils();
+
     /* Lekseknapper */
 
     document
