@@ -34,6 +34,28 @@ import {
 }
 from "./teacher.js";
 
+function askTeacherName() {
+    return new Promise(resolve => {
+        const backdrop=document.createElement('div');
+        backdrop.style.cssText='position:fixed;inset:0;z-index:3000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box';
+        const panel=document.createElement('div');
+        panel.style.cssText='background:white;color:#172033;border-radius:16px;padding:24px;max-width:420px;width:100%;box-shadow:0 15px 45px #0003';
+        const title=document.createElement('h2');title.textContent='Hva heter du?';title.style.margin='0 0 10px';
+        const description=document.createElement('p');description.textContent='Skriv inn navnet ditt. Hvis du finnes i skolens importerte timeplan, kan du velge navnet ditt der i neste steg.';
+        const field=document.createElement('input');field.placeholder='Fornavn og etternavn';field.type='text';field.autocomplete='name';field.style.cssText='box-sizing:border-box;width:100%;padding:12px;border:1px solid #94a3b8;border-radius:9px;font-size:16px';
+        const actions=document.createElement('div');actions.style.cssText='display:flex;gap:12px;justify-content:flex-end;margin-top:18px';
+        const cancel=document.createElement('button');cancel.textContent='Avbryt';cancel.type='button';
+        const ok=document.createElement('button');ok.textContent='Fortsett';ok.type='button';ok.disabled=true;
+        const finish=value=>{document.removeEventListener('keydown',onKey);backdrop.remove();resolve(value);};
+        const onKey=e=>{if(e.key==='Escape')finish(null);};
+        field.oninput=()=>{ok.disabled=!field.value.trim();};
+        field.onkeydown=e=>{if(e.key==='Enter'&&field.value.trim())finish(field.value.trim());};
+        cancel.onclick=()=>finish(null);ok.onclick=()=>finish(field.value.trim());
+        document.addEventListener('keydown',onKey);
+        actions.append(cancel,ok);panel.append(title,description,field,actions);backdrop.append(panel);document.body.append(backdrop);field.focus();
+    });
+}
+
 export async function showRegister() {
 
     document.body.insertAdjacentHTML(
@@ -232,10 +254,7 @@ teacherButton.addEventListener(
             return;
         }
 
-        const name =
-            prompt(
-                "Navn"
-            );
+        const name = await askTeacherName();
 
         if (!name) {
             return;

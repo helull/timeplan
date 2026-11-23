@@ -1,7 +1,8 @@
 // Kobling mellom godkjent lærer (AFK-epost) og navnet i importerte timeplaner.
 import {db} from './firebase.js';
-import {doc,getDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
+import {doc,getDoc,updateDoc,serverTimestamp,collection,query,where,getDocs,writeBatch} from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
 import {loadAllSchedules} from './scheduleService.js';
+import {invalidateTeacherScheduleCache} from './teacherSchedule.js';
 
 const normalize = s => String(s||'').trim().toLocaleLowerCase('nb-NO').replace(/\s+/g,' ');
 const field = 'timeplanTilknytning';
@@ -33,6 +34,17 @@ export async function saveTeacherLink(id,status,name='') {
     if(!name)throw new Error('Lærernavn mangler');
   } else name='';
   await updateDoc(doc(db,'teachers',id),{[field]:{status,navn:name,oppdatert:serverTimestamp()}});
+  // Synkroniser eksisterende blokkfag med bekreftet visningsnavn.
+  // Dette skjer bare ved eksplisitt bekreftelse, ikke ved hver timeplanvisning.
+  if(status==='bekreftet') {
+    const blocks=await getDocs(query(collection(db,'blockCourses'),where('teacherId','==',id)));
+    const changed=blocks.docs.filter(d=>d.data().teacherName!==name);
+    for(let i=0;i<changed.length;i+=400) {
+      const batch=writeBatch(db);
+      changed.slice(i,i+400).forEach(d=>batch.update(d.ref,{teacherName:name}));
+      await batch.commit();
+    }
+  }
 }
 // Rangering er kun et forslag. Læreren må alltid bekrefte selv.
 function tokens(value) {
@@ -176,6 +188,7 @@ export async function openTeacherLinkDialog({force=false,onSaved}={}) {
     status.textContent='';
     try {
       await saveTeacherLink(id,statusValue,name);
+      invalidateTeacherScheduleCache();
       backdrop.remove();
       if(onSaved)await onSaved(statusValue);
     } catch(err) {

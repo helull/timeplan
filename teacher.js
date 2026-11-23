@@ -43,7 +43,11 @@ export async function giveTeacherName(teacherId) {
     }
     
     console.log("snapshot.data().name er",snapshot.data().name)
-    return snapshot.data().name;
+    const profile = snapshot.data();
+    const link = profile.timeplanTilknytning;
+    return (link?.status === "bekreftet" && String(link.navn || "").trim())
+        ? link.navn.trim()
+        : profile.name;
 }
 
 export async function giveTeacherId() {

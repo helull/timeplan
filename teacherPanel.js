@@ -170,7 +170,10 @@ const classId =
 }
 
 function logoutUser() {
-    let svar = confirm("Du logger nå ut og får du mulighet til å knytte deg til en annen klasse. NB: Har du lagret lekser på din bruker blir de nå borte!");
+    const message = isTeacher()
+        ? "Vil du logge ut som lærer?\n\nLærerlekser, blokkfag og andre lagrede opplysninger blir ikke slettet."
+        : "Vil du logge ut og velge en annen klasse?\n\nPersonlige lekser på denne enheten kan bli utilgjengelige etter utlogging.";
+    let svar = confirm(message);
     if (!svar) {
          return;
     }

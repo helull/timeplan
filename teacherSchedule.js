@@ -40,7 +40,7 @@ export async function loadTeacherSchedule(teacherId, force=false) {
                 if(!(weekday>=1&&weekday<=5)||!Number.isFinite(time(start)))continue;
                 // Én blokkøkt skal vises én gang, selv om samme økt ligger i
                 // timeplanene til flere klasser på samme trinn.
-                const candidates=schedules.flatMap(s=>(s.lessons||[]).filter(l=>Number(l.weekday)===weekday&&l.start===start&&gradeFor(s.classId)===block.grade&&(String(l.subject||"").toUpperCase().includes("BLOKK")||String(l.roomName||"").toUpperCase().includes("BLOKK"))).map(l=>({...l,classId:s.classId,grade:block.grade,source:"block",blockCourseId:block.id,displaySubject:block.subject||l.subject,displayRoom:block.room||l.roomName,teacherName:block.teacherName||teacher.name||""})));
+                const candidates=schedules.flatMap(s=>(s.lessons||[]).filter(l=>Number(l.weekday)===weekday&&l.start===start&&gradeFor(s.classId)===block.grade&&(String(l.subject||"").toUpperCase().includes("BLOKK")||String(l.roomName||"").toUpperCase().includes("BLOKK"))).map(l=>({...l,classId:s.classId,grade:block.grade,source:"block",blockCourseId:block.id,displaySubject:block.subject||l.subject,displayRoom:block.room||l.roomName,teacherName:(confirmed?.status==="bekreftet" && confirmed.navn)||block.teacherName||teacher.name||""})));
                 // Bruk lessonId fra blokkregistreringen dersom det finnes.
                 // Da får lekse-/prøvevinduet riktig opprinnelig time.
                 const preferred=candidates.find(c=>session.lessonId!=null&&String(c.lessonId)===String(session.lessonId))||candidates[0];
@@ -56,7 +56,7 @@ export async function loadTeacherSchedule(teacherId, force=false) {
             }
         }
         lessons.sort((a,b)=>Number(a.weekday)-Number(b.weekday)||time(a.start)-time(b.start)||a.classId.localeCompare(b.classId));
-        const data={lessons,aliases,teacherName:teacher.name||"",unmatchedBlockSessions:blocks.reduce((n,b)=>n+(b.sessions||[]).filter(session=>!lessons.some(l=>l.source==="block"&&l.grade===b.grade&&Number(l.weekday)===Number(session.weekday)&&l.start===session.start)).length,0)};
+        const data={lessons,aliases,teacherName:(confirmed?.status==="bekreftet" && confirmed.navn)||teacher.name||"",unmatchedBlockSessions:blocks.reduce((n,b)=>n+(b.sessions||[]).filter(session=>!lessons.some(l=>l.source==="block"&&l.grade===b.grade&&Number(l.weekday)===Number(session.weekday)&&l.start===session.start)).length,0)};
         cache={teacherId,data};return data;
     })();
     pending={teacherId,promise};
