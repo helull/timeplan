@@ -1,6 +1,6 @@
 import { loadTeacherSchedule } from "./teacherSchedule.js";
 import { loadTeacherHomework, saveTeacherHomework } from "./teacherHomeworkService.js";
-import { listProgressImports, saveProgressImport, undoProgressImport, homeworkDocumentId } from "./progressPlanService.js";
+import { listProgressImports, saveProgressImport, undoProgressImport, homeworkDocumentId, markImportedHomework } from "./progressPlanService.js";
 
 const weekdays = ["", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"];
 const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -134,7 +134,10 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                         if (String(latest?.text||"").trim()) continue;
                         await saveTeacherHomework(l.classId || classId,l.lessonId,x.week,x.text,teacherId,blockCourse?.id || null,l.weekday,l.start);
                         count++;
-                        imported.push({id:homeworkDocumentId(l.classId || classId,l.lessonId,x.week,blockCourse?.id || null,l.weekday,l.start),text:x.text});
+                        const id = homeworkDocumentId(l.classId || classId,l.lessonId,x.week,blockCourse?.id || null,l.weekday,l.start);
+                        const token = crypto.randomUUID();
+                        await markImportedHomework(id,token);
+                        imported.push({id,text:x.text,token});
                     }
                     if (imported.length) await saveProgressImport(teacherId,classId,subject,blockCourse?.id || null,imported);
                     await refreshHistory();
