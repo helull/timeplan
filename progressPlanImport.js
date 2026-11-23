@@ -3,23 +3,23 @@ import { loadTeacherHomework, saveTeacherHomework } from "./teacherHomeworkServi
 
 const weekdays = ["", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"];
 const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const minutes = t => { const m = /^(\\d{1,2}):(\\d{2})$/.exec(String(t)); return m ? Number(m[1])*60+Number(m[2]) : 9999; };
+const minutes = t => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(t)); return m ? Number(m[1])*60+Number(m[2]) : 9999; };
 
 function parseTable(text, html) {
-    if (html && /<table[\\s>]/i.test(html)) {
+    if (html && /<table[\s>]/i.test(html)) {
         const doc = new DOMParser().parseFromString(html, "text/html");
         const table = doc.querySelector("table");
         if (table) {
             if (table.querySelector("[rowspan]:not([rowspan='1']),[colspan]:not([colspan='1'])")) throw Error("Tabellen inneholder sammenslåtte celler. Bruk en tabell uten sammenslåing.");
             return [...table.rows].map(row => [...row.cells].map(cell => {
                 const clone = cell.cloneNode(true);
-                clone.querySelectorAll("br").forEach(br => br.replaceWith("\\n"));
-                clone.querySelectorAll("p,div").forEach(p => p.append("\\n"));
+                clone.querySelectorAll("br").forEach(br => br.replaceWith("\n"));
+                clone.querySelectorAll("p,div").forEach(p => p.append("\n"));
                 return clone.textContent.trim();
             }));
         }
     }
-    return String(text || "").trim().split(/\\r?\\n/).map(line => line.split("\\t").map(v => v.trim()));
+    return String(text || "").trim().split(/\r?\n/).map(line => line.split("\t").map(v => v.trim()));
 }
 
 export async function openProgressPlanImport({teacherId, classId, subject, blockCourse}) {
@@ -79,7 +79,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                 if (index === 0) continue;
                 if (row.every(v=>!v)) continue;
                 if (row.length !== expected) throw Error(`Rad ${index+1} har ${row.length} kolonner. Forventet ${expected}.`);
-                const raw = row[0].replace(/^uke\\s*/i,"").trim();
+                const raw = row[0].replace(/^uke\s*/i,"").trim();
                 const week = Number(raw);
                 if (!Number.isInteger(week) || week < 1 || week > 53) throw Error(`Ugyldig ukenummer på rad ${index+1}: ${row[0]}`);
                 if (seen.has(week)) throw Error(`Uke ${week} finnes flere ganger.`);
