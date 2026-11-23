@@ -236,7 +236,7 @@ if (trigger) {
         addChoice({id: '__teacher_view__', name: 'Som lærer'}, classChoices, true);
         for (const category of ['ST1', 'ST2', 'ST3', 'BA1', 'BA2']) {
             const items = classItems.filter(item => classCategory(item.id) === category)
-                .sort((a, b) => a.id.localeCompare(b.id, 'nb', {numeric: true}));
+                .sort((a, b) => a.id.localeCompare(b.id, 'en', {numeric: true}));
             if (!items.length) continue;
             const section = document.createElement('section');
             section.className = 'quick-class-section';
