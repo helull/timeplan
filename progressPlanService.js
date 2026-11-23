@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, query, where, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, query, where, serverTimestamp, writeBatch, updateDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const history = collection(db, "progressPlanImports");
 const homework = collection(db, "teacherHomework");
@@ -19,13 +19,17 @@ export async function saveProgressImport(teacherId, classId, subject, blockId, i
     return ref.id;
 }
 
+export async function markImportedHomework(id, token) {
+    await updateDoc(doc(db,"teacherHomework",id), {progressImportToken:token});
+}
+
 export async function undoProgressImport(record) {
     let removed=0, preserved=0;
     // Slett bare dersom teksten fremdeles er identisk med importert tekst.
     for (const item of record.items || []) {
         const ref=doc(db,"teacherHomework",item.id);
         const snap=await getDoc(ref);
-        if (!snap.exists() || snap.data().text !== item.text) {preserved++;continue;}
+        if (!snap.exists() || snap.data().text !== item.text || snap.data().progressImportToken !== item.token) {preserved++;continue;}
         await deleteDoc(ref); removed++;
     }
     await deleteDoc(doc(db,"progressPlanImports",record.id));
