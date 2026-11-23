@@ -36,7 +36,7 @@ const normalizeHomeworkTeacher = value => String(value || "").trim().toLocaleLow
 
 function refreshHomeworkPencils() {
     document.querySelectorAll(".homework-button[data-homework-access]").forEach(button => {
-        const allowed = isAdmin() || (isTeacher() && (
+        const allowed = !isTeacher() || isAdmin() || (isTeacher() && (
             button.dataset.homeworkAccess === "block" ||
             (homeworkAccessName && normalizeHomeworkTeacher(button.dataset.lessonTeacher) === homeworkAccessName)
         ));
@@ -680,7 +680,6 @@ if (teacherLessonData) {
 }
 
 
-                                ${isTeacher() || isAdmin() ? `
                                 <button
                                     class="homework-button"
                                     data-homework-access="${isBlockLesson || lesson.blockCourseId ? 'block' : 'ordinary'}"
@@ -697,7 +696,6 @@ if (teacherLessonData) {
                                     ✏️
 
                                 </button>
-                                ` : ""}
 
                               ${
     teacherHomework
