@@ -1,5 +1,6 @@
 import { loadTeacherSchedule } from "./teacherSchedule.js";
 import { loadTeacherHomework, saveTeacherHomework } from "./teacherHomeworkService.js";
+import { listProgressImports, saveProgressImport, undoProgressImport, homeworkDocumentId } from "./progressPlanService.js";
 
 const weekdays = ["", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"];
 const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -38,9 +39,31 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
         <div style="margin-top:12px"><button id="progressPreview">Forhåndsvis</button>
         <button id="progressClose">Lukk</button></div>
         <div id="progressResult" style="margin-top:12px;max-height:35vh;overflow:auto"></div>
+        <div id="progressHistory" style="margin-top:12px"></div>
     </div>`;
     document.body.appendChild(modal);
     const result = modal.querySelector("#progressResult");
+    const historyBox = modal.querySelector("#progressHistory");
+    async function refreshHistory() {
+        const entries = await listProgressImports(teacherId, classId, subject, blockCourse?.id || null);
+        historyBox.innerHTML = entries.length
+            ? "<h3>Tidligere importer</h3>" + entries.map((entry,i) => `<p>Import ${i+1}: ${entry.items?.length || 0} lekser <button type="button" data-undo="${i}">Angre denne importen</button></p>`).join("")
+            : "<p>Ingen tidligere importer registrert.</p>";
+        historyBox.querySelectorAll("[data-undo]").forEach(button => {
+            button.onclick = async () => {
+                const entry = entries[Number(button.dataset.undo)];
+                if (!confirm("Angre denne importen? Lekser som er endret etter importen, beholdes.")) return;
+                button.disabled = true;
+                try {
+                    const status = await undoProgressImport(entry);
+                    result.textContent = `Angret: ${status.removed} lekser slettet, ${status.preserved} beholdt. Oppdater timeplanen ved behov.`;
+                    await refreshHistory();
+                } catch(error) { result.textContent = "Kunne ikke fullføre angre: " + error.message; button.disabled=false; }
+            };
+        });
+    }
+    refreshHistory().catch(error => { historyBox.textContent = "Kunne ikke hente importhistorikk: " + error.message; });
+
     const close = () => modal.remove();
     modal.querySelector("#progressClose").onclick = close;
     let lessons;
@@ -90,7 +113,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
             if (!data.length) throw Error("Fant ingen utfylte lekser å importere.");
             const existing = await Promise.all(data.map(async item => {
                 const l = item.lesson;
-                const saved = await loadTeacherHomework(l.classId || classId,l.lessonId,item.week,blockCourse?.id || null,l.weekday,l.start);
+                const saved = await loadTeacherHomework(l.classId || classId,l.lessonId,item.week,null,blockCourse?.id || null,l.weekday,l.start);
                 return {...item,existing:String(saved?.text || "").trim()};
             }));
             const filled = existing.filter(x=>x.existing).length;
@@ -103,14 +126,18 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                 if (!confirm(`Importere opptil ${existing.length-filled} nye lærerlekser? Eksisterende blir ikke overskrevet.`)) return;
                 save.disabled = true;
                 let count = 0;
+                const imported = [];
                 try {
                     for (const x of existing.filter(x=>!x.existing)) {
                         const l=x.lesson;
-                        const latest=await loadTeacherHomework(l.classId || classId,l.lessonId,x.week,blockCourse?.id || null,l.weekday,l.start);
+                        const latest=await loadTeacherHomework(l.classId || classId,l.lessonId,x.week,null,blockCourse?.id || null,l.weekday,l.start);
                         if (String(latest?.text||"").trim()) continue;
                         await saveTeacherHomework(l.classId || classId,l.lessonId,x.week,x.text,teacherId,blockCourse?.id || null,l.weekday,l.start);
                         count++;
+                        imported.push({id:homeworkDocumentId(l.classId || classId,l.lessonId,x.week,blockCourse?.id || null,l.weekday,l.start),text:x.text});
                     }
+                    if (imported.length) await saveProgressImport(teacherId,classId,subject,blockCourse?.id || null,imported);
+                    await refreshHistory();
                     result.textContent = `Import fullført: ${count} lærerlekser lagret. Lukk vinduet og oppdater timeplanen ved behov.`;
                 } catch(error) {
                     result.textContent = `Import avbrutt etter ${count} lagrede lekser: ${error.message}. Allerede lagrede lekser er beholdt.`;
