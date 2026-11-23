@@ -238,15 +238,16 @@ teacherButton.addEventListener(
             return;
         }
 
+        const normalizedEmail = email.trim().toLowerCase();
         const approved =
             await teacherApproved(
-                email.trim()
+                normalizedEmail
             );
 
         if (approved) {
 
             loginTeacher(
-                email
+                normalizedEmail
             );
 
             location.reload();
@@ -262,7 +263,7 @@ teacherButton.addEventListener(
 
         await submitTeacherRequest({
             name,
-            email
+            email: normalizedEmail
         });
 
         alert(

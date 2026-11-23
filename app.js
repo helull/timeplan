@@ -589,7 +589,8 @@ async function init(){
     if (userType === "teacher") {
         // Kontroller lagret lærer ved oppstart. En slettet lærerprofil skal
         // ikke kunne gi en aktiv lærermodus med manglende lærernavn.
-        const teacherId = localStorage.getItem("teacherId");
+        const teacherId = String(localStorage.getItem("teacherId") || '').trim().toLowerCase();
+        if (teacherId) localStorage.setItem("teacherId", teacherId);
         let teacherRecord = null;
         try {
             if (teacherId) teacherRecord = await getTeacherLink(teacherId);
@@ -659,19 +660,28 @@ sharedMaps=[homeworkMap,teacherHomeworkMap,examMap,blockExams,tentamens,studentB
 try {
   // Vis klassetimeplanen først, uansett om navnekoblingen mangler.
   await showScheduleView(currentScheduleView());
-  if(isTeacher()) {
+} catch(error){
+  console.error('Lærervisning kunne ikke lastes',error);
+  try { await showScheduleView('class'); } catch(fallbackError) { console.error('Kunne ikke laste klassetimeplan',fallbackError); }
+}
+// Navnevalget må ikke bli hoppet over fordi timeplanvisningen feiler.
+if(isTeacher()) {
+  try {
     const id=localStorage.getItem('teacherId');
     const record=await getTeacherLink(id);
     if(record&&!record.link?.status) {
-      // Første innlogging: vis alltid navnevalg før koblingen lagres.
-      sessionStorage.removeItem('teacherLinkChoicePending:'+id);
       await openTeacherLinkDialog({onSaved: async status => {
         invalidateTeacherScheduleCache();
-        if(status === 'bekreftet') await showScheduleView('teacher',true);
+        if(status === 'bekreftet') {
+          try { await showScheduleView('teacher',true); }
+          catch(error) { console.error('Kunne ikke vise lærertimeplan',error); }
+        }
       }});
     }
+  } catch(error) {
+    console.error('Kunne ikke åpne lærernavndialogen',error);
   }
-} catch(error){console.error('Lærervisning kunne ikke lastes',error);await showScheduleView('class');}
+}
 
     render();
 

@@ -65,7 +65,7 @@ export function loginTeacher(
 
     localStorage.setItem(
         "teacherId",
-        teacherId
+        String(teacherId || '').trim().toLowerCase()
     );
     
     disableAdminMode();

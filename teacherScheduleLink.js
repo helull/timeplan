@@ -120,12 +120,12 @@ export async function openTeacherLinkDialog({force=false,onSaved}={}) {
   backdrop.id='teacherLinkModal';backdrop.className='modal';
   backdrop.style.cssText='position:fixed;inset:0;z-index:2500;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);padding:16px;box-sizing:border-box';
   const panel=document.createElement('div');
-  panel.style.cssText='background:#fff;color:#172033;border-radius:16px;padding:22px;max-width:440px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 15px 45px #0003';
+  panel.style.cssText='background:#fff;color:#172033;border-radius:16px;padding:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 15px 45px #0003';
   const heading=document.createElement('h2');heading.textContent='Knytt deg til timeplanen';heading.style.margin='0 0 12px';panel.append(heading);
   const info=document.createElement('p');info.textContent='Bekreft navnet ditt i skolens timeplan. Dette endrer ikke innloggingen.';panel.append(info);
   const main=document.createElement('div');panel.append(main);
   const status=document.createElement('p');status.setAttribute('role','alert');status.style.cssText='color:#b91c1c;font-size:14px';panel.append(status);
-  const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:16px';panel.append(actions);
+  const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px';panel.append(actions);
   const makeButton=(title,primary=false)=>{const b=document.createElement('button');b.type='button';b.textContent=title;b.style.cssText='padding:10px 14px;border-radius:9px;cursor:pointer;border:1px solid #cbd5e1;background:'+(primary?'#2563eb':'#fff')+';color:'+(primary?'#fff':'#172033')+';font-weight:600';actions.append(b);return b;};
   const label=(text)=>{const l=document.createElement('label');l.textContent=text;l.style.cssText='display:block;margin:10px 0 6px;font-weight:600';main.append(l);return l;};
   const input=(placeholder,value='')=>{const el=document.createElement('input');el.type='text';el.placeholder=placeholder;el.value=value;el.style.cssText='box-sizing:border-box;width:100%;padding:10px;border:1px solid #94a3b8;border-radius:8px';main.append(el);return el;};
@@ -145,7 +145,7 @@ export async function openTeacherLinkDialog({force=false,onSaved}={}) {
     } else if(mode==='search') {
       label('Finn navnet ditt i timeplanen');
       const search=input('Søk etter navn',filter);
-      const select=document.createElement('select');select.size=5;select.style.cssText='box-sizing:border-box;width:100%;padding:8px;margin-top:8px;min-height:115px';main.append(select);
+      const select=document.createElement('select');select.size=4;select.style.cssText='box-sizing:border-box;width:100%;padding:8px;margin-top:8px;min-height:100px';main.append(select);
       const update=()=>{
         const keep=chosen;
         select.replaceChildren();
@@ -174,7 +174,7 @@ export async function openTeacherLinkDialog({force=false,onSaved}={}) {
       confirm.onclick=()=>{if(customValue.trim())save('bekreftet',customValue.trim());};
       if(names.length)makeButton('Velg fra timeplanen').onclick=()=>{mode='search';show();};
     }
-    const secondary=document.createElement('div');secondary.style.cssText='display:flex;gap:14px;flex-wrap:wrap;margin-top:16px';panel.querySelector('#teacherLinkSecondary')?.remove();secondary.id='teacherLinkSecondary';
+    const secondary=document.createElement('div');secondary.style.cssText='display:flex;gap:12px;flex-wrap:wrap;margin-top:12px';panel.querySelector('#teacherLinkSecondary')?.remove();secondary.id='teacherLinkSecondary';
     const later=document.createElement('button');later.type='button';later.textContent='Gjør det senere';later.style.cssText='border:0;background:transparent;color:#475569;text-decoration:underline;cursor:pointer;padding:4px';later.onclick=()=>save('senere');secondary.append(later);
     // Behold eksisterende status 'ingen', men bruk en mer presis tekst i grensesnittet.
     const none=document.createElement('button');none.type='button';none.textContent='Ikke knytt til importert timeplan';none.style.cssText='border:0;background:transparent;color:#475569;text-decoration:underline;cursor:pointer;padding:4px';none.onclick=()=>save('ingen');secondary.append(none);
