@@ -64,6 +64,8 @@ function loadHomeworkAccess() {
     });
 }
 
+window.addEventListener("admin-mode-changed", refreshHomeworkPencils);
+
 window.addEventListener("schedule-view-changed", () => {
     homeworkAccessTeacherId = null;
     loadHomeworkAccess();
@@ -678,6 +680,7 @@ if (teacherLessonData) {
 }
 
 
+                                ${isTeacher() || isAdmin() ? `
                                 <button
                                     class="homework-button"
                                     data-homework-access="${isBlockLesson || lesson.blockCourseId ? 'block' : 'ordinary'}"
@@ -694,6 +697,7 @@ if (teacherLessonData) {
                                     ✏️
 
                                 </button>
+                                ` : ""}
 
                               ${
     teacherHomework
