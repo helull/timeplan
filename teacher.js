@@ -169,12 +169,14 @@ export function enableAdminMode() {
     adminActive = true;
     sessionStorage.removeItem("adminMode");
     applyAdminMode();
+    window.dispatchEvent(new Event("admin-mode-changed"));
 }
 
 export function disableAdminMode() {
     adminActive = false;
     sessionStorage.removeItem("adminMode");
     removeAdminMode();
+    window.dispatchEvent(new Event("admin-mode-changed"));
 }
 
 export function applyAdminMode() {
