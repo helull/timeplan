@@ -31,6 +31,7 @@ import {
 from "./teacherHomeworkService.js";
 
 import { openProgressPlanImport } from "./progressPlanImport.js";
+import { clearBlockCourseHomework, blockCourseSessionsChanged } from "./progressPlanService.js";
 
 import {
     saveTentamen,
@@ -1767,6 +1768,15 @@ ${
 if (
     blockCourse
 ) {
+    if (blockCourseSessionsChanged(blockCourse.sessions, sessions)) {
+        if (!confirm("Strukturendring av blokkfag medfører at fremdriftsplanen og ALLE lærerlekser i dette blokkfaget blir slettet. Vil du fortsette?")) return;
+        try {
+            await clearBlockCourseHomework(blockCourse.id);
+        } catch (error) {
+            alert("Kunne ikke slette lærerleksene. Blokkfaget er ikke endret: " + error.message);
+            return;
+        }
+    }
 
     await updateBlockCourse(
 
@@ -1840,7 +1850,7 @@ else {
 
         if (
             !confirm(
-                "Slette blokkfaget?"
+                "Slette blokkfaget og ALLE tilhørende lærerlekser og importhistorikk?"
             )
         ) {
 
@@ -1848,9 +1858,13 @@ else {
 
         }
 
-        await deleteBlockCourse(
-            blockCourse.id
-        );
+        try {
+            await clearBlockCourseHomework(blockCourse.id);
+            await deleteBlockCourse(blockCourse.id);
+        } catch(error) {
+            alert("Kunne ikke slette blokkfaget og tilhørende lekser: " + error.message);
+            return;
+        }
 
         alert(
             "Blokkfag slettet"
