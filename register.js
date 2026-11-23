@@ -228,48 +228,57 @@ export async function showRegister() {
 teacherButton.addEventListener(
     "click",
     async () => {
-
-        const email =
-            prompt(
-                "AFK e-post"
-            );
-
+        if (teacherButton.disabled) return;
+        const rawEmail = prompt("AFK e-post");
+        if (rawEmail === null) return;
+        const email = rawEmail.trim().toLowerCase();
         if (!email) {
+            alert("Skriv inn AFK-e-postadressen din.");
+            return;
+        }
+        if (!/^[^\s@]+@afk\.no$/.test(email)) {
+            alert("Skriv inn en gyldig e-postadresse som slutter på @afk.no.");
             return;
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
-        const approved =
-            await teacherApproved(
-                normalizedEmail
-            );
+        teacherButton.disabled = true;
+        const previousLabel = teacherButton.textContent;
+        teacherButton.textContent = "Kontrollerer lærer ...";
+        try {
+            let approved;
+            try {
+                approved = await teacherApproved(email);
+            } catch (error) {
+                console.error("Kunne ikke kontrollere lærer i Firestore:", error);
+                alert("Kunne ikke kontrollere lærerregistreringen. Sjekk nettforbindelsen og prøv igjen. Feilkode: " + (error?.code || "ukjent"));
+                return;
+            }
 
-        if (approved) {
+            if (approved) {
+                // Eksisterende lærere skal ikke sende en ny godkjenningsforespørsel.
+                loginTeacher(email);
+                location.reload();
+                return;
+            }
 
-            loginTeacher(
-                normalizedEmail
-            );
-
-            location.reload();
-
-            return;
+            // Nye lærere må oppgi navn før godkjenningsforespørselen sendes.
+            const name = await askTeacherName();
+            if (!name) return;
+            try {
+                await submitTeacherRequest({ name, email });
+                alert("Forespørsel sendt. Du må godkjennes før første innlogging.");
+            } catch (error) {
+                console.error("Kunne ikke sende lærerforespørsel:", error);
+                alert("Kunne ikke sende lærerforespørselen. Prøv igjen. Feilkode: " + (error?.code || error?.message || "ukjent"));
+            }
+        } catch (error) {
+            console.error("Uventet feil i lærerinnlogging:", error);
+            alert("Lærerinnloggingen ble avbrutt av en feil: " + (error?.message || "ukjent feil"));
+        } finally {
+            teacherButton.disabled = false;
+            teacherButton.textContent = previousLabel;
         }
-
-        const name = await askTeacherName();
-
-        if (!name) {
-            return;
-        }
-
-        await submitTeacherRequest({
-            name,
-            email: normalizedEmail
-        });
-
-        alert(
-            "Forespørsel sendt. Du må godkjennes før første innlogging."
-        );
     }
-);    
-    
+);
+
 }
