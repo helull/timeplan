@@ -30,6 +30,8 @@ import {
 }
 from "./teacherHomeworkService.js";
 
+import { openProgressPlanImport } from "./progressPlanImport.js";
+
 import {
     saveTentamen,
     loadTentamens,
@@ -355,6 +357,7 @@ ${teacherHomeworkText}
         Lagre lærerlekse
 
     </button>
+    <button id="importProgressPlan" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled title=\"Opprett blokkfaget først\"" : ""}>Importer fremdriftsplan</button>
 ${
     canCreateBlockCourse
     ?
@@ -635,6 +638,10 @@ document
 
             }
         );
+
+    document.getElementById("importProgressPlan")?.addEventListener("click", () => {
+        openProgressPlanImport({teacherId, classId, subject, blockCourse});
+    });
 
     document
     .getElementById(
