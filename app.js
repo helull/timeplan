@@ -1,4 +1,4 @@
-import {getTeacherLink,ensureInitialTeacherLink,openTeacherLinkDialog} from "./teacherScheduleLink.js";
+import {getTeacherLink,openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {loadTeacherSchedule, invalidateTeacherScheduleCache} from "./teacherSchedule.js";
 import {
     loadStudentsBlockCourseMap
@@ -663,10 +663,12 @@ try {
     const id=localStorage.getItem('teacherId');
     const record=await getTeacherLink(id);
     if(record&&!record.link?.status) {
-      // Førstegangslærere uten sannsynlig treff får sitt eget registrerte navn.
-      // Ved mulig treff utsettes navnevalg til etter første menyåpning.
-      const result=await ensureInitialTeacherLink(id,record);
-      if(result.needsChoice)sessionStorage.setItem('teacherLinkChoicePending:'+id,'1');
+      // Første innlogging: vis alltid navnevalg før koblingen lagres.
+      sessionStorage.removeItem('teacherLinkChoicePending:'+id);
+      await openTeacherLinkDialog({onSaved: async status => {
+        invalidateTeacherScheduleCache();
+        if(status === 'bekreftet') await showScheduleView('teacher',true);
+      }});
     }
   }
 } catch(error){console.error('Lærervisning kunne ikke lastes',error);await showScheduleView('class');}
