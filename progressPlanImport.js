@@ -72,11 +72,12 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
         try {
             const rows = parseTable(area.value, pastedHtml);
             const expected = lessons.length + 1;
-            if (rows.length < 2) throw Error("Tabellen må ha overskrift og minst én uke.");
+            if (!rows.length || rows.every(row => row.every(cell => !cell))) throw Error("Tabellen er tom.");
             const data = [];
             const seen = new Set();
             for (const [index,row] of rows.entries()) {
-                if (index === 0) continue;
+                // Første rad er bare overskrift dersom første celle ikke er et ukenummer.
+                if (index === 0 && !/^(?:uke\s*)?\d{1,2}$/i.test(String(row[0] || "").trim())) continue;
                 if (row.every(v=>!v)) continue;
                 if (row.length !== expected) throw Error(`Rad ${index+1} har ${row.length} kolonner. Forventet ${expected}.`);
                 const raw = row[0].replace(/^uke\s*/i,"").trim();
