@@ -94,3 +94,8 @@ export async function changeExistingPlan(plan, teacherId, text) {
     });
     window.dispatchEvent(new Event("schedule:refresh"));
 }
+
+export async function loadProgressPlansForScope(plan) {
+    const snap = await getDocs(query(plans, where("scopeKey", "==", scopeKey(plan))));
+    return snap.docs.map(d=>d.data()).filter(p=>String(p.text||"").trim());
+}
