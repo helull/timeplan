@@ -1,4 +1,4 @@
-import {loadProgressPlansForWeek, planId, changeExistingPlan} from "./lessonProgressPlanService.js";
+import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope} from "./lessonProgressPlanService.js";
 import {isTeacher} from "./teacher.js";
 const cache=new Map();
 let generation=0;
@@ -30,6 +30,43 @@ function appendText(node,text){
         if(i%2){try{const url=new URL(part);if(!["http:","https:"].includes(url.protocol))throw Error();const a=document.createElement("a");a.href=url.href;a.textContent=part;a.target="_blank";a.rel="noopener noreferrer";node.append(a);return;}catch{}}
         node.append(document.createTextNode(part));
     });
+}
+function currentSchoolWeek(){
+    const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Oslo",year:"numeric",month:"numeric",day:"numeric"}).formatToParts(new Date());
+    const get=k=>Number(parts.find(p=>p.type===k).value);
+    const d=new Date(Date.UTC(get("year"),get("month")-1,get("day")));
+    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+    return Math.ceil(((d-new Date(Date.UTC(d.getUTCFullYear(),0,1)))/86400000+1)/7);
+}
+async function openFullPlan(plan,parent,trigger){
+    if(document.getElementById("fullProgressPlanViewer"))return;
+    const modal=document.createElement("div");modal.id="fullProgressPlanViewer";modal.className="modal";modal.style.zIndex="10040";
+    const card=document.createElement("div");card.className="homework-viewer-card";card.style.cssText="width:min(760px,94vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;";
+    card.setAttribute("role","dialog");card.setAttribute("aria-modal","true");card.setAttribute("aria-label","Hele fremdriftsplanen");
+    const heading=document.createElement("h2");heading.textContent="Hele fremdriftsplanen";
+    const info=document.createElement("p");const week=currentSchoolWeek();info.textContent=[plan.subject,"Fra uke "+week].filter(Boolean).join(" · ");
+    const scroll=document.createElement("div");scroll.style.cssText="overflow-y:auto;min-height:0;flex:1 1 auto;font-size:0.85rem;line-height:1.45;overflow-wrap:anywhere;";scroll.tabIndex=0;scroll.textContent="Henter fremdriftsplan …";
+    const close=document.createElement("button");close.type="button";close.textContent="Tilbake";
+    const previous=parent.style.display;
+    const finish=()=>{modal.remove();if(parent.isConnected){parent.style.display=previous;trigger.focus();}};
+    close.onclick=finish;
+    modal.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();finish();}});
+    card.append(heading,info,scroll,close);modal.append(card);parent.style.display="none";document.body.append(modal);close.focus();
+    try{
+        const entries=await loadProgressPlansForScope(plan);
+        const order=w=>w>=34?w-34:w+20;
+        const sorted=entries.filter(p=>Number.isInteger(p.week)&&p.week>=1&&p.week<=53&&order(p.week)>=order(week)).sort((a,b)=>order(a.week)-order(b.week)||Number(a.weekday||0)-Number(b.weekday||0)||String(a.startTime||"").localeCompare(String(b.startTime||"")));
+        scroll.replaceChildren();
+        if(!sorted.length){scroll.textContent="Ingen fremdriftsplan fra denne uken og fremover.";return;}
+        let previousWeek=null;
+        for(const entry of sorted){
+            if(entry.week!==previousWeek){
+                const h=document.createElement("h3");h.textContent="Uke "+entry.week;h.style.cssText="font-size:1rem;margin:12px 0 5px;border-bottom:1px solid #94a3b8;padding-bottom:3px;";scroll.append(h);previousWeek=entry.week;
+            }
+            const day=document.createElement("div");day.style.cssText="font-weight:600;margin:7px 0 2px;";day.textContent=[days[entry.weekday],entry.startTime].filter(Boolean).join(" · ");
+            const body=document.createElement("div");body.style.cssText="white-space:pre-wrap;margin-bottom:8px;";appendText(body,entry.text);scroll.append(day,body);
+        }
+    }catch(error){scroll.textContent="Kunne ikke hente fremdriftsplanen: "+error.message;}
 }
 export function openPlanViewer(plan,parent=null,teacherText=""){
     if(!plan||document.getElementById("progressPlanViewer"))return;
@@ -91,6 +128,7 @@ export function openPlanViewer(plan,parent=null,teacherText=""){
         };
         remove.onclick=()=>{if(confirm("Vil du slette denne fremdriftsplanen? Leksene påvirkes ikke."))save(null);};
     }
+    const full=document.createElement("button");full.type="button";full.textContent="Se hele planen";full.onclick=()=>openFullPlan(plan,modal,full);card.append(full);
     card.append(close);modal.append(card);if(parent)parent.style.display="none";document.body.append(modal);close.focus();
 }
 export async function attachPlanToModal(modal,id,teacherText=""){
