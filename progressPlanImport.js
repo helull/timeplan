@@ -11,16 +11,27 @@ function parseTable(text, html) {
         const doc = new DOMParser().parseFromString(html, "text/html");
         const table = doc.querySelector("table");
         if (table) {
-            if (table.querySelector("[rowspan]:not([rowspan='1']),[colspan]:not([colspan='1'])")) throw Error("Tabellen inneholder sammenslåtte celler. Bruk en tabell uten sammenslåing.");
-            return [...table.rows].map(row => [...row.cells].map(cell => {
-                const clone = cell.cloneNode(true);
-                clone.querySelectorAll("br").forEach(br => br.replaceWith("\n"));
-                clone.querySelectorAll("p,div").forEach(p => p.append("\n"));
-                return clone.textContent.trim();
-            }));
+            const rows = [];
+            const occupied = [];
+            for (const [r, tr] of [...table.rows].entries()) {
+                const row = rows[r] = [];
+                let c = 0;
+                for (const cell of tr.cells) {
+                    while ((occupied[c] || 0) > r) { row[c++] = ""; }
+                    if (cell.colSpan !== 1) throw Error("Tabellen inneholder horisontalt sammenslåtte celler. Bruk én kolonne per undervisningsdag.");
+                    const clone = cell.cloneNode(true);
+                    clone.querySelectorAll("br").forEach(br => br.replaceWith("\n"));
+                    clone.querySelectorAll("p,div").forEach(p => p.append("\n"));
+                    row[c] = clone.textContent.trim();
+                    occupied[c] = cell.rowSpan === 0 ? table.rows.length : r + cell.rowSpan;
+                    c++;
+                }
+                while ((occupied[c] || 0) > r) row[c++] = "";
+            }
+            return rows;
         }
     }
-    return String(text || "").trim().split(/\r?\n/).map(line => line.split("\t").map(v => v.trim()));
+    return String(text || "").replace(/^[\r\n]+|[\r\n]+$/g,"").split(/\r?\n/).map(line => line.split("\t").map(v => v.trim()));
 }
 
 export async function openProgressPlanImport({teacherId, classId, subject, blockCourse}) {
@@ -44,10 +55,26 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
     document.body.appendChild(modal);
     const result = modal.querySelector("#progressResult");
     const historyBox = modal.querySelector("#progressHistory");
+    function historyLabel(entry) {
+        const weeks = [...new Set((entry.items || []).map(item => {
+            if (Number.isInteger(item.week)) return item.week;
+            const match = entry.blockCourseId ? /_(\d{1,2})_\d+_[^_]+$/.exec(item.id || "") : /_(\d{1,2})$/.exec(item.id || "");
+            return match ? Number(match[1]) : null;
+        }).filter(w => w >= 1 && w <= 53))].sort((a,b)=>a-b);
+        const ranges = [];
+        for (const week of weeks) {
+            const last = ranges[ranges.length-1];
+            if (last && week === last[1]+1) last[1] = week;
+            else ranges.push([week,week]);
+        }
+        const label = ranges.length ? "Uke " + ranges.map(([a,b])=>a===b ? a : a+"–"+b).join(", ") : "Uker ukjent";
+        const date = entry.createdAt?.toDate?.();
+        return label + (date ? " (" + date.toLocaleString("nb-NO",{dateStyle:"short",timeStyle:"short"}) + ")" : "");
+    }
     async function refreshHistory() {
         const entries = await listProgressImports(teacherId, classId, subject, blockCourse?.id || null);
         historyBox.innerHTML = entries.length
-            ? "<h3>Tidligere importer</h3>" + entries.map((entry,i) => `<p>Import ${i+1}: ${entry.items?.length || 0} lekser <button type="button" data-undo="${i}">Angre denne importen</button></p>`).join("")
+            ? "<h3>Tidligere importer</h3>" + entries.map((entry,i) => `<p>${escape(historyLabel(entry))} · ${entry.items?.length || 0} lekser <button type="button" data-undo="${i}">Angre denne importen</button></p>`).join("")
             : "<p>Ingen tidligere importer registrert.</p>";
         historyBox.querySelectorAll("[data-undo]").forEach(button => {
             button.onclick = async () => {
@@ -98,17 +125,28 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
             if (!rows.length || rows.every(row => row.every(cell => !cell))) throw Error("Tabellen er tom.");
             const data = [];
             const seen = new Set();
+            const grouped = new Map();
+            let currentWeek = null;
             for (const [index,row] of rows.entries()) {
-                // Første rad er bare overskrift dersom første celle ikke er et ukenummer.
-                if (index === 0 && !/^(?:uke\s*)?\d{1,2}$/i.test(String(row[0] || "").trim())) continue;
+                if (index === 0 && /^(uke|ukenr\.?|ukenummer|week)$/i.test(String(row[0] || "").trim())) continue;
                 if (row.every(v=>!v)) continue;
-                if (row.length !== expected) throw Error(`Rad ${index+1} har ${row.length} kolonner. Forventet ${expected}.`);
+                if (row.length !== expected) throw Error("Rad " + (index+1) + " har " + row.length + " kolonner. Forventet " + expected + ".");
                 const raw = row[0].replace(/^uke\s*/i,"").trim();
-                const week = Number(raw);
-                if (!Number.isInteger(week) || week < 1 || week > 53) throw Error(`Ugyldig ukenummer på rad ${index+1}: ${row[0]}`);
-                if (seen.has(week)) throw Error(`Uke ${week} finnes flere ganger.`);
-                seen.add(week);
-                for (let j=0;j<lessons.length;j++) if (row[j+1].trim()) data.push({week,lesson:lessons[j],text:row[j+1].trim()});
+                if (raw) {
+                    const week = Number(raw);
+                    if (!/^\d{1,2}$/.test(raw) || week < 1 || week > 53) throw Error("Ugyldig ukenummer på rad " + (index+1) + ": " + row[0]);
+                    if (seen.has(week) && currentWeek !== week) throw Error("Uke " + week + " finnes i flere adskilte grupper.");
+                    currentWeek = week;
+                    seen.add(week);
+                    if (!grouped.has(week)) grouped.set(week, lessons.map(()=>[]));
+                }
+                if (currentWeek === null) throw Error("Første datarad må ha ukenummer.");
+                for (let j=0;j<lessons.length;j++) if (row[j+1].trim()) grouped.get(currentWeek)[j].push(row[j+1].trim());
+            }
+            for (const [week, columns] of grouped) {
+                columns.forEach((parts,j) => {
+                    if (parts.length) data.push({week,lesson:lessons[j],text:parts.join("\n")});
+                });
             }
             if (!data.length) throw Error("Fant ingen utfylte lekser å importere.");
             const existing = await Promise.all(data.map(async item => {
@@ -118,7 +156,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
             }));
             const filled = existing.filter(x=>x.existing).length;
             result.innerHTML = `<p><strong>${existing.length} utfylte celler</strong> fordelt på ${seen.size} uker. ${filled} har allerede lærerlekse og blir hoppet over.</p>
-            <div style="overflow:auto;max-height:180px"><table style="width:100%"><thead><tr><th>Uke</th><th>Dag</th><th>Tekst</th><th>Status</th></tr></thead><tbody>${existing.map(x=>`<tr><td>${x.week}</td><td>${weekdays[x.lesson.weekday]}</td><td>${escape(x.text)}</td><td>${x.existing ? "Finnes fra før" : "Ny"}</td></tr>`).join("")}</tbody></table></div>
+            <div style="overflow:auto;max-height:180px"><table style="width:100%"><thead><tr><th>Uke</th><th>Dag</th><th>Tekst</th><th>Status</th></tr></thead><tbody>${existing.map(x=>`<tr><td>${x.week}</td><td>${weekdays[x.lesson.weekday]}</td><td style="white-space:pre-wrap">${escape(x.text)}</td><td>${x.existing ? "Finnes fra før" : "Ny"}</td></tr>`).join("")}</tbody></table></div>
             <p>Eksisterende lærerlekser overskrives aldri av denne importen.</p><button id="progressSave">Importer ${existing.length-filled} nye lærerlekser</button>`;
             const save = result.querySelector("#progressSave");
             save.disabled = filled === existing.length;
@@ -137,7 +175,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                         const id = homeworkDocumentId(l.classId || classId,l.lessonId,x.week,blockCourse?.id || null,l.weekday,l.start);
                         const token = crypto.randomUUID();
                         await markImportedHomework(id,token);
-                        imported.push({id,text:x.text,token});
+                        imported.push({id,text:x.text,token,week:x.week});
                     }
                     if (imported.length) await saveProgressImport(teacherId,classId,subject,blockCourse?.id || null,imported);
                     await refreshHistory();
