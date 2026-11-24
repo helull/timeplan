@@ -682,7 +682,7 @@ if (teacherLessonData) {
 
                                 <button
                                     class="homework-button"
-                                    data-homework-access="${isBlockLesson || lesson.blockCourseId ? 'block' : 'ordinary'}"
+                                    data-homework-access="${isBlockLesson || lesson.blockCourseId || ["klassens time", "homeroom"].includes(normalizeHomeworkTeacher(lesson.subject)) ? 'block' : 'ordinary'}"
                                     data-lesson-teacher="${escapeHtml(lesson.teacherName)}"
                                     data-lesson="${escapeHtml(lesson.lessonId)}"
                                      data-class-id="${escapeHtml(lessonClassId)}"
