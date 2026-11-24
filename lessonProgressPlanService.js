@@ -75,3 +75,22 @@ export async function undoPlanImport(importId) {
     window.dispatchEvent(new Event("schedule:refresh"));
     return result;
 }
+
+ // Manual changes use a new version so undoing an import cannot erase them.
+export async function changeExistingPlan(plan, teacherId, text) {
+    if (!teacherId || plan.teacherId !== teacherId) throw Error("Du kan bare endre egne fremdriftsplaner.");
+    const ref = doc(plans, planId(plan));
+    await runTransaction(db, async tx => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) throw Error("Planen er allerede slettet.");
+        const current = snap.data();
+        if (current.teacherId !== teacherId || current.version !== plan.version) throw Error("Planen er endret. Lukk vinduet og åpne planen på nytt.");
+        if (text === null) tx.delete(ref);
+        else {
+            const value = String(text).trim();
+            if (!value) throw Error("Skriv inn tekst, eller bruk Slett.");
+            tx.update(ref, {text:value, version:crypto.randomUUID(), updatedAt:serverTimestamp()});
+        }
+    });
+    window.dispatchEvent(new Event("schedule:refresh"));
+}
