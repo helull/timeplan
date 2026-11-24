@@ -254,7 +254,10 @@ export async function openAdminPanel() {
                 </button>
 
                 <button id="changeTeacherScheduleLink">Min tilknytning til timeplanen</button>
-                <label for="progressImportMode" style="display:block;margin-top:12px">Importmodus for fremdriftsplan</label>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                    <label for="progressImportMode">Importmodus for fremdriftsplan</label>
+                    <button type="button" id="progressImportHelp" aria-label="Bruksanvisning for fremdriftsplan" title="Bruksanvisning" style="flex:none;width:26px;height:26px;min-height:0;padding:0;margin:0;border:1px solid #94a3b8;border-radius:50%;background:transparent;color:#475569;box-shadow:none;font-size:15px;line-height:1">?</button>
+                </div>
                 <select id="progressImportMode" style="width:100%">
                     <option value="none">Ingen</option>
                     <option value="standard">Standard</option>
@@ -298,6 +301,7 @@ export async function openAdminPanel() {
         adminModeLogin
     );
     
+    document.getElementById("progressImportHelp").addEventListener("click", openProgressImportHelp);
     const progressMode = document.getElementById("progressImportMode");
     progressMode.value = ["standard","advanced"].includes(localStorage.getItem("progressImportMode")) ? localStorage.getItem("progressImportMode") : "none";
     progressMode.addEventListener("change",()=>localStorage.setItem("progressImportMode",progressMode.value));
@@ -917,4 +921,36 @@ async function adminModeLogin() {
     } finally {
         if (button) button.disabled = false;
     }
+}
+
+function openProgressImportHelp() {
+    if (document.getElementById("progressImportHelpDialog")) return;
+    const trigger = document.getElementById("progressImportHelp");
+    const dialog = document.createElement("dialog");
+    dialog.id = "progressImportHelpDialog";
+    dialog.setAttribute("aria-labelledby", "progressImportHelpTitle");
+    dialog.style.cssText = "box-sizing:border-box;width:min(560px,calc(100% - 24px));max-height:85dvh;overflow:auto;border:1px solid #cbd5e1;border-radius:14px;padding:18px;background:#fff;color:#17243b;font-size:14px;line-height:1.5";
+    dialog.innerHTML = `
+        <h2 id="progressImportHelpTitle" style="font-size:20px;margin:0 0 12px">Import av fremdriftsplan</h2>
+        <p>Importer en eksisterende tabell fra OneNote, Word eller Excel.</p>
+        <h3 style="font-size:16px">1. Aktiver import</h3>
+        <p>Velg importmodus i verktøymenyen:</p>
+        <ul><li><b>Standard:</b> Enkle tabeller med én kolonne per undervisningsdag.</li>
+        <li><b>Avansert:</b> Flere overskriftsrader, sammenslåtte celler og flere kolonner per økt.</li></ul>
+        <p>Valget lagres automatisk på denne enheten.</p>
+        <h3 style="font-size:16px">2. Kopier fremdriftsplanen</h3>
+        <p>Åpne planen i OneNote. Marker hele tabellen, inkludert overskrifter og ukenumre. Kopier med Ctrl + C (Cmd + C på Mac).</p>
+        <h3 style="font-size:16px">3. Importer</h3>
+        <p>Åpne en undervisningstime og velg import av fremdriftsplan. Lim inn tabellen med Ctrl + V (Cmd + V på Mac). Trykk «Forhåndsvis».</p>
+        <p>Ved avansert import: Kontroller antall overskriftsrader og hvilke kolonner som tilhører hver undervisningsdag. Trykk «Forhåndsvis» på nytt. Kontroller resultatet før du godkjenner importen.</p>
+        <h3 style="font-size:16px">4. Se fremdriftsplanen</h3>
+        <p>Lærere og elever kan se planen for den enkelte timen eller velge «Se hele planen» for kommende uker.</p>
+        <h3 style="font-size:16px">Nyttig å vite</h3>
+        <ul><li>Fremdriftsplanen er uavhengig av vanlige lekser.</li><li>Du kan redigere planen og angre en import.</li><li>Endringer i OneNote overføres ikke automatisk.</li><li>Ingen ekstra Microsoft-innlogging eller nettleserutvidelse er nødvendig.</li></ul>
+        <button type="button" id="closeProgressImportHelp" style="padding:8px 16px">Lukk</button>
+    `;
+    document.body.append(dialog);
+    dialog.addEventListener("close", () => { dialog.remove(); trigger?.focus(); }, {once:true});
+    dialog.querySelector("#closeProgressImportHelp").addEventListener("click", () => dialog.close());
+    dialog.showModal();
 }
