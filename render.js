@@ -1002,11 +1002,7 @@ function openHomeworkViewer(
                 </h2>
 
                 <div
-                    class="homework-viewer-text">
-
-                    ${homeworkContent(text)}
-
-                </div>
+                    class="homework-viewer-text">${homeworkContent(String(text ?? "").trim())}</div>
 
                 <button
                     id="closeHomeworkViewer">
@@ -1069,11 +1065,7 @@ function openTeacherHomeworkViewer(
                 </h2>
 
                 <div
-                    class="homework-viewer-text">
-
-                    ${homeworkContent(text)}
-
-                </div>
+                    class="homework-viewer-text">${homeworkContent(String(text ?? "").trim())}</div>
 
                 <button
                     id="closeTeacherHomeworkViewer">
