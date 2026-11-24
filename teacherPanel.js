@@ -120,7 +120,7 @@ const classId =
                   Vis/skjul rom
                 </button>
 
-                <button id="openProveplanTools">Prøveplan</button>
+                <button id="openProveplanTools" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Prøveplan</button>
 
                 <button id="logoutUserFromTools">
                     Logg ut
