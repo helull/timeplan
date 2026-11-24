@@ -1,3 +1,4 @@
+import { refreshPlanIcons, attachCardPlanToModal } from "./progressPlanViewer.js";
 import {
     openHomeworkModal,
     formatTeacherHomework,
@@ -762,6 +763,7 @@ document.getElementById(
   
     refreshHomeworkPencils();
 
+    requestAnimationFrame(()=>refreshPlanIcons());
     /* Lekseknapper */
 
     document
@@ -808,7 +810,7 @@ document.getElementById(
             preview.querySelectorAll(".homework-excerpt").forEach(excerpt => {
                 excerpt.onclick = event => {
                     event.stopPropagation();
-                    openHomeworkViewer(preview.dataset.homework);
+                    openHomeworkViewer(preview.dataset.homework, preview.closest(".lesson"));
                 };
                 excerpt.onkeydown = event => {
                     if (event.key === "Enter" || event.key === " ") {
@@ -831,7 +833,7 @@ document.getElementById(
         preview.querySelectorAll(".homework-excerpt").forEach(excerpt => {
             excerpt.onclick = event => {
                 event.stopPropagation();
-                openTeacherHomeworkViewer(preview.dataset.homework);
+                openTeacherHomeworkViewer(preview.dataset.homework, preview.closest(".lesson"));
             };
             excerpt.onkeydown = event => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -972,7 +974,7 @@ export function renderHomework(homework) {
 }
 
 function openHomeworkViewer(
-    text
+    text, lessonCard = null
 ) {
 
     if (
@@ -1017,6 +1019,8 @@ function openHomeworkViewer(
         `
     );
 
+    attachCardPlanToModal(document.getElementById("homeworkViewer"), lessonCard);
+
     document
         .getElementById(
             "closeHomeworkViewer"
@@ -1035,7 +1039,7 @@ function openHomeworkViewer(
 }
 
 function openTeacherHomeworkViewer(
-    text
+    text, lessonCard = null
 ) {
 
     if (
@@ -1079,6 +1083,8 @@ function openTeacherHomeworkViewer(
         </div>
         `
     );
+
+    attachCardPlanToModal(document.getElementById("teacherHomeworkViewer"), lessonCard);
 
     document
         .getElementById(
@@ -1132,7 +1138,7 @@ export function updateHomeworkCard(change, examMap = {}) {
                 for (const excerpt of preview.querySelectorAll(".homework-excerpt")) {
                     excerpt.onclick = event => {
                         event.stopPropagation();
-                        (kind === "teacher" ? openTeacherHomeworkViewer : openHomeworkViewer)(text);
+                        (kind === "teacher" ? openTeacherHomeworkViewer : openHomeworkViewer)(text, card);
                     };
                     excerpt.onkeydown = event => {
                         if (event.key === "Enter" || event.key === " ") {
