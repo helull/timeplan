@@ -645,8 +645,7 @@ document
         );
 
     document.getElementById("importProgressPlan")?.addEventListener("click", () => {
-        if (progressMode === "advanced") { alert("Avansert import er under utvikling. Velg Standard for å importere nå."); return; }
-        openProgressPlanImport({teacherId, classId, subject, blockCourse});
+        openProgressPlanImport({teacherId, classId, subject, blockCourse, advanced: progressMode === "advanced"});
     });
 
     document
