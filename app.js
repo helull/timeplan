@@ -1,3 +1,4 @@
+import { refreshPlanIcons } from "./progressPlanViewer.js";
 import {getTeacherLink,openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {loadTeacherSchedule, invalidateTeacherScheduleCache} from "./teacherSchedule.js";
 import {
@@ -295,6 +296,7 @@ function render(){
     });
 
     updateDots();
+    refreshPlanIcons();
 
 }
 
