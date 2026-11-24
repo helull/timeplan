@@ -1,0 +1,56 @@
+<!doctype html><html lang="nb"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OneNote – tilgangstest</title><style>body{font:16px system-ui;max-width:850px;margin:24px auto;padding:16px;color:#17243b}label{display:block;margin-top:16px}input,textarea{box-sizing:border-box;width:100%;padding:10px;font:inherit}button{padding:10px;margin:12px 8px 0 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eee;padding:12px}#result{overflow:auto}table{border-collapse:collapse}td,th{border:1px solid #aaa;padding:5px;vertical-align:top}</style><h1>OneNote – tilgangstest</h1><p>Separat test. Ingen data sendes til Firebase eller lagres av testprogrammet. Bruk kun en godkjent appregistrering.</p><label>OneNote-webvisningslenke<textarea id="link" rows="4"></textarea></label><label>Microsoft Application (client) ID<input id="client" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></label><p>Registrer denne adressen som SPA redirect URI: <code id="redirect"></code>. Delegert Microsoft Graph-tillatelse: Notes.Read.All (lesing av tilgjengelige delte notatblokker).</p><button id="parse">Kontroller lenke</button><button id="run">Logg inn og hent tabell</button><pre id="status" role="status"></pre><div id="result"></div><script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script><script>
+const $=id=>document.getElementById(id), redirect=location.origin+location.pathname;
+$('redirect').textContent=redirect;
+const log=s=>$('status').textContent+=s+'\n';
+function parse(){
+ const u=new URL($('link').value.trim().replace(/\\&/g,'&'));
+ if(u.protocol!=='https:'||u.hostname!=='akershusfylke.sharepoint.com')throw Error('Bruk en HTTPS-lenke fra AFK SharePoint.');
+ const site=u.pathname.match(/^\/(sites|teams)\/[^/]+/i)?.[0];
+ const target=u.searchParams.get('wd')||'';
+ const match=target.match(/^target\((.*?)\|([\da-f-]+)\/(.*?)\|([\da-f-]+)\/?\)$/i);
+ if(!site||!match)throw Error('Fant ikke OneNote-side og seksjon i lenken.');
+ return {host:u.hostname,site,section:match[1],sectionId:match[2],title:match[3],pageId:match[4]};
+}
+$('parse').onclick=()=>{ $('status').textContent='';try{const p=parse();log('Nettsted: '+p.site+'\nSeksjon: '+p.section+'\nSide: '+p.title+'\nLenkeformat OK. Tilgang er ikke testet.');}catch(e){log(e.message);}};
+$('run').onclick=async()=>{
+ $('status').textContent='';$('result').replaceChildren();$('run').disabled=true;
+ try{
+ const p=parse(),client=$('client').value.trim();
+ if(!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(client))throw Error('Oppgi klient-ID fra godkjent Microsoft Entra-appregistrering.');
+ if(!window.msal)throw Error('Microsofts innloggingsbibliotek kunne ikke lastes.');
+ const app=new msal.PublicClientApplication({auth:{clientId:client,authority:'https://login.microsoftonline.com/organizations',redirectUri:redirect},cache:{cacheLocation:'memoryStorage'}});
+ const scopes=['Notes.Read.All'];
+ log('Åpner Microsoft-innlogging …');
+ const auth=await app.loginPopup({scopes});
+ const token=await app.acquireTokenSilent({scopes,account:auth.account}).catch(()=>app.acquireTokenPopup({scopes,account:auth.account}));
+ log('Innlogging og token OK.');
+ const base='https://graph.microsoft.com/v1.0';
+ async function get(url,html=false){
+ const u=new URL(url,base);
+ if(u.origin!==base.replace('/v1.0',''))throw Error('Uventet API-adresse.');
+ const r=await fetch(u,{headers:{Authorization:'Bearer '+token.accessToken},redirect:'error'});
+ if(!r.ok){let code='';try{code=(await r.json()).error?.code||''}catch{}throw Error('Graph HTTP '+r.status+' '+code);}
+ return html?r.text():r.json();
+ }
+ async function all(url){const out=[];while(url){const data=await get(url);out.push(...(data.value||[]));url=data['@odata.nextLink'];}return out;}
+ const root=base+'/sites/'+p.host+':'+p.site+':/onenote';
+ // Resolve site ID separately if necessary: site lookup requires Sites.Read.All; use site path form first.
+ log('Søker etter OneNote-siden …');
+ const pages=await all(root+'/pages?$select=id,title,links&$top=100');
+ const norm=s=>String(s||'').replace(/[{}-]/g,'').toLowerCase();
+ const exact=pages.filter(x=>norm(x.id).includes(norm(p.pageId))||norm(JSON.stringify(x.links||{})).includes(norm(p.pageId)));
+ const candidates=exact.length?exact:pages.filter(x=>x.title===p.title);
+ if(candidates.length!==1)throw Error('Fant '+candidates.length+' entydige kandidater. Ingen side hentet.');
+ if(!exact.length&&!confirm('Fant siden etter tittel, men ikke ID. Hente denne siden?'))return;
+ const html=await get(root+'/pages/'+encodeURIComponent(candidates[0].id)+'/content',true);
+ const parsed=new DOMParser().parseFromString(html,'text/html');
+ const tables=[...parsed.querySelectorAll('table')];log('Fant '+tables.length+' tabell(er).');
+ for(const [i,source] of tables.entries()){
+ const h=document.createElement('h2');h.textContent='Tabell '+(i+1);$('result').append(h);
+ const table=document.createElement('table');
+ for(const row of source.rows){const tr=table.insertRow();for(const cell of row.cells){const td=tr.insertCell();td.colSpan=cell.colSpan;td.rowSpan=cell.rowSpan;td.textContent=cell.textContent;}}
+ $('result').append(table);
+ }
+ }catch(e){log('Stopp: '+(e.errorCode||'')+' '+e.message);}finally{$('run').disabled=false;}
+};
+</script></html>
