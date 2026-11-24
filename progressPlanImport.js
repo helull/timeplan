@@ -44,7 +44,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
     modal.innerHTML = `<div class="modal-card" style="max-width:850px;max-height:90vh;overflow:auto">
         <h2>Importer fremdriftsplan</h2>
         <p>${escape(subject)} – ${escape(blockCourse?.subject || classId)}</p>
-        <p>Lim inn tabellen fra Word, Excel eller OneNote. Første kolonne skal inneholde ukenummer. De øvrige kolonnene følger undervisningsdagene i rekkefølge.</p>
+        <p>Lim inn tabellen fra Word, Excel eller OneNote. Første kolonne skal inneholde ukenummer. Med overskrifter som Uke, Mandag, Tirsdag osv. kan programmet velge riktige kolonner automatisk, også fra tabeller med ekstra kolonner. Uten slike overskrifter følger kolonnene undervisningsdagene i rekkefølge.</p>
         <p id="progressDays">Henter undervisningsdager …</p>
         <textarea id="progressPaste" rows="9" style="width:100%" placeholder="Lim inn tabellen her"></textarea>
         <div style="margin-top:12px"><button id="progressPreview">Forhåndsvis</button>
@@ -122,6 +122,17 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
         try {
             const rows = parseTable(area.value, pastedHtml);
             const expected = lessons.length + 1;
+            const header = rows[0] || [];
+            const norm = v => String(v || "").trim().toLowerCase();
+            const weekColumn = header.findIndex(v => /^(uke|ukenr\.?|ukenummer|week)$/.test(norm(v)));
+            const aliases = ["", "man", "tir", "ons", "tor", "fre"];
+            const dayColumns = lessons.map(l => header.map((v,i)=>({v:norm(v),i})).filter(x=>x.v === weekdays[l.weekday].toLowerCase() || x.v === aliases[l.weekday] || x.v === aliases[l.weekday]+".").map(x=>x.i));
+            if (weekColumn >= 0 && dayColumns.every(c=>c.length===1)) {
+                const columns=[weekColumn,...dayColumns.map(c=>c[0])];
+                rows.splice(0,rows.length,...rows.map((row,i)=>i===0?["Uke",...lessons.map(l=>weekdays[l.weekday])]:columns.map(c=>row[c] || "")));
+            } else if (weekColumn >= 0 && header.length !== expected) {
+                throw Error("Fant ikke entydige ukedagsoverskrifter. Bruk Uke og navn på undervisningsdagene.");
+            }
             if (!rows.length || rows.every(row => row.every(cell => !cell))) throw Error("Tabellen er tom.");
             const data = [];
             const seen = new Set();
