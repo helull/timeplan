@@ -41,11 +41,11 @@ function currentSchoolWeek(){
 async function openFullPlan(plan,parent,trigger){
     if(document.getElementById("fullProgressPlanViewer"))return;
     const modal=document.createElement("div");modal.id="fullProgressPlanViewer";modal.className="modal";modal.style.zIndex="10040";
-    const card=document.createElement("div");card.className="homework-viewer-card";card.style.cssText="width:min(760px,94vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;";
+    const card=document.createElement("div");card.className="homework-viewer-card";card.style.cssText="width:min(1100px,94vw);max-width:94vw;box-sizing:border-box;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;";
     card.setAttribute("role","dialog");card.setAttribute("aria-modal","true");card.setAttribute("aria-label","Hele fremdriftsplanen");
     const heading=document.createElement("h2");heading.textContent="Hele fremdriftsplanen";
     const info=document.createElement("p");const week=currentSchoolWeek();info.textContent=[plan.subject,"Fra uke "+week].filter(Boolean).join(" · ");
-    const scroll=document.createElement("div");scroll.style.cssText="overflow-y:auto;min-height:0;flex:1 1 auto;font-size:0.85rem;line-height:1.45;overflow-wrap:anywhere;";scroll.tabIndex=0;scroll.textContent="Henter fremdriftsplan …";
+    const scroll=document.createElement("div");scroll.style.cssText="overflow:auto;min-height:0;flex:1 1 auto;font-size:0.85rem;line-height:1.45;overflow-wrap:anywhere;";scroll.tabIndex=0;scroll.textContent="Henter fremdriftsplan …";
     const close=document.createElement("button");close.type="button";close.textContent="Tilbake";
     const previous=parent.style.display;
     const finish=()=>{modal.remove();if(parent.isConnected){parent.style.display=previous;trigger.focus();}};
@@ -58,14 +58,29 @@ async function openFullPlan(plan,parent,trigger){
         const sorted=entries.filter(p=>Number.isInteger(p.week)&&p.week>=1&&p.week<=53&&order(p.week)>=order(week)).sort((a,b)=>order(a.week)-order(b.week)||Number(a.weekday||0)-Number(b.weekday||0)||String(a.startTime||"").localeCompare(String(b.startTime||"")));
         scroll.replaceChildren();
         if(!sorted.length){scroll.textContent="Ingen fremdriftsplan fra denne uken og fremover.";return;}
-        let previousWeek=null;
-        for(const entry of sorted){
-            if(entry.week!==previousWeek){
-                const h=document.createElement("h3");h.textContent="Uke "+entry.week;h.style.cssText="font-size:1rem;margin:12px 0 5px;border-bottom:1px solid #94a3b8;padding-bottom:3px;";scroll.append(h);previousWeek=entry.week;
-            }
-            const day=document.createElement("div");day.style.cssText="font-weight:600;margin:7px 0 2px;";day.textContent=[days[entry.weekday],entry.startTime].filter(Boolean).join(" · ");
-            const body=document.createElement("div");body.style.cssText="white-space:pre-wrap;margin-bottom:8px;";appendText(body,entry.text);scroll.append(day,body);
+        const columns=[...new Set(entries.map(p=>Number(p.weekday)).filter(d=>d>=1&&d<=5))].sort((a,b)=>a-b);
+        if(sorted.some(p=>!columns.includes(Number(p.weekday))))columns.push(0);
+        const table=document.createElement("table");table.style.cssText="width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:inherit;min-width:"+(55+columns.length*145)+"px;";
+        const head=table.createTHead().insertRow();
+        for(const [i,label] of ["Uke",...columns.map(d=>days[d]||"Ukjent dag")].entries()){
+            const th=document.createElement("th");th.scope="col";th.textContent=label;th.style.cssText="position:sticky;top:0;z-index:1;background:#e2e8f0;color:#172554;text-align:left;padding:7px;border-bottom:1px solid #94a3b8;"+(i===0?"width:48px;":"");head.append(th);
         }
+        const tbody=table.createTBody();
+        for(const w of [...new Set(sorted.map(p=>p.week))]){
+            const row=tbody.insertRow();
+            const weekCell=document.createElement("th");weekCell.scope="row";weekCell.textContent=String(w);weekCell.style.cssText="vertical-align:top;text-align:left;padding:7px;border-bottom:1px solid #cbd5e1;";row.append(weekCell);
+            for(const d of columns){
+                const cell=row.insertCell();cell.style.cssText="vertical-align:top;padding:7px;border-left:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;white-space:pre-wrap;overflow-wrap:anywhere;";
+                const items=sorted.filter(p=>p.week===w&&(columns.includes(Number(p.weekday))?Number(p.weekday):0)===d);
+                for(const [i,entry] of items.entries()){
+                    const body=document.createElement("div");
+                    if(i)body.style.cssText="border-top:1px dashed #94a3b8;margin-top:6px;padding-top:6px;";
+                    if(items.length>1&&entry.startTime){const time=document.createElement("strong");time.textContent=entry.startTime+" ";body.append(time);}
+                    appendText(body,entry.text);cell.append(body);
+                }
+            }
+        }
+        scroll.append(table);
     }catch(error){scroll.textContent="Kunne ikke hente fremdriftsplanen: "+error.message;}
 }
 export function openPlanViewer(plan,parent=null,teacherText=""){
