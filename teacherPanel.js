@@ -254,6 +254,12 @@ export async function openAdminPanel() {
                 </button>
 
                 <button id="changeTeacherScheduleLink">Min tilknytning til timeplanen</button>
+                <label for="progressImportMode" style="display:block;margin-top:12px">Importmodus for fremdriftsplan</label>
+                <select id="progressImportMode" style="width:100%">
+                    <option value="none">Ingen</option>
+                    <option value="standard">Standard</option>
+                    <option value="advanced">Avansert</option>
+                </select>
 
                 <button id="changeClass" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">
                     Bytt klasse
@@ -289,6 +295,10 @@ export async function openAdminPanel() {
         adminModeLogin
     );
     
+    const progressMode = document.getElementById("progressImportMode");
+    progressMode.value = ["standard","advanced"].includes(localStorage.getItem("progressImportMode")) ? localStorage.getItem("progressImportMode") : "none";
+    progressMode.addEventListener("change",()=>localStorage.setItem("progressImportMode",progressMode.value));
+
     document.getElementById("changeTeacherScheduleLink")?.addEventListener("click", async () => {
         document.getElementById("adminModal")?.remove();
         try {
