@@ -75,13 +75,15 @@ export async function refreshPlanIcons(){
                 const plan=plans[key];
                 if(plan?.text){
                     const icon=makeButton(()=>openPlanViewer(plan,null,card.querySelector(".teacher-homework-preview")?.dataset.homework||""));
-                    icon.style.cssText+="vertical-align:middle;flex:0 0 auto;color:white;z-index:2;width:30px;min-width:30px;height:26px;min-height:26px;padding:2px;border:1px solid rgba(255,255,255,.5);border-radius:8px;";
+                    icon.style.cssText="display:inline-flex!important;align-items:center;justify-content:center;vertical-align:middle;flex:0 0 20px;width:20px!important;min-width:20px!important;height:20px!important;min-height:20px!important;padding:0!important;margin:0 3px 0 0!important;background:transparent!important;color:white;border:0!important;box-shadow:none!important;border-radius:0!important;cursor:pointer;position:static!important;";
+                    const svg=icon.querySelector("svg");svg.setAttribute("width","14");svg.setAttribute("height","14");
                     const preview=card.querySelector(".teacher-homework-preview,.lesson-homework-preview");
                     if(preview){
-                        preview.style.display="inline-block";
-                        preview.style.maxWidth="calc(100% - 38px)";
+                        preview.style.setProperty("display","inline-block","important");
+                        preview.style.setProperty("width","auto","important");
+                        preview.style.maxWidth="calc(100% - 48px)";
                         preview.style.verticalAlign="middle";
-                        preview.after(icon);
+                        preview.before(icon);
                     }else card.append(icon);
                 }
             }
