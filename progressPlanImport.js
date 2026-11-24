@@ -33,7 +33,7 @@ function parseTable(text, html) {
     return String(text || "").replace(/^[\r\n]+|[\r\n]+$/g,"").split(/\r?\n/).map(line => line.split("\t").map(v => v.trim()));
 }
 
-export async function openProgressPlanImport({teacherId, classId, subject, blockCourse}) {
+export async function openProgressPlanImport({teacherId, classId, subject, blockCourse, advanced=false}) {
     const scope = {classId, subject, blockCourseId:blockCourse?.id || null};
     const old = document.getElementById("progressPlanImportModal");
     if (old) return;
@@ -42,14 +42,14 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
     modal.id = "progressPlanImportModal";
     modal.style.zIndex = "10020";
     modal.innerHTML = `<div class="modal-card" style="max-width:850px;max-height:90vh;overflow:auto">
-        <h2>Importer fremdriftsplan</h2>
+        <h2>Importer fremdriftsplan${advanced ? " (avansert)" : ""}</h2>
         <p>${escape(subject)} – ${escape(blockCourse?.subject || classId)}</p>
-        <p>Lim inn tabellen fra Word, Excel eller OneNote. Første kolonne skal inneholde ukenummer. Med overskrifter som Uke, Mandag, Tirsdag osv. kan programmet velge riktige kolonner automatisk, også fra tabeller med ekstra kolonner. Uten slike overskrifter følger kolonnene undervisningsdagene i rekkefølge.</p>
+        <p>Lim inn tabellen fra Word, Excel eller OneNote. Første kolonne skal inneholde ukenummer. ${advanced ? "Programmet foreslår kolonner automatisk. Du kan korrigere koblingen før forhåndsvisning." : "De øvrige kolonnene følger undervisningsdagene i rekkefølge."}</p>
         <p id="progressDays">Henter undervisningsdager …</p>
         <textarea id="progressPaste" rows="9" style="width:100%" placeholder="Lim inn tabellen her"></textarea>
         <div style="margin-top:12px"><button id="progressPreview">Forhåndsvis</button>
         <button id="progressClose">Lukk</button></div>
-        <div id="progressResult" style="margin-top:12px;max-height:35vh;overflow:auto"></div>
+        <div id="progressMapping"></div><div id="progressResult" style="margin-top:12px;max-height:35vh;overflow:auto"></div>
         <div id="progressHistory" style="margin-top:12px"></div>
     </div>`;
     document.body.appendChild(modal);
@@ -117,21 +117,45 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
     let pastedHtml = "";
     const area = modal.querySelector("#progressPaste");
     area.addEventListener("paste", e => { pastedHtml = e.clipboardData?.getData("text/html") || ""; });
-    area.addEventListener("input", e => { if (!e.isTrusted) return; /* HTML fra siste innliming brukes ved forhåndsvisning. */ });
+    area.addEventListener("input", e => { if(e.inputType !== "insertFromPaste") pastedHtml=""; result.replaceChildren(); });
     modal.querySelector("#progressPreview").onclick = async () => {
         try {
             const rows = parseTable(area.value, pastedHtml);
             const expected = lessons.length + 1;
-            const header = rows[0] || [];
-            const norm = v => String(v || "").trim().toLowerCase();
-            const weekColumn = header.findIndex(v => /^(uke|ukenr\.?|ukenummer|week)$/.test(norm(v)));
-            const aliases = ["", "man", "tir", "ons", "tor", "fre"];
-            const dayColumns = lessons.map(l => header.map((v,i)=>({v:norm(v),i})).filter(x=>x.v === weekdays[l.weekday].toLowerCase() || x.v === aliases[l.weekday] || x.v === aliases[l.weekday]+".").map(x=>x.i));
-            if (weekColumn >= 0 && dayColumns.every(c=>c.length===1)) {
-                const columns=[weekColumn,...dayColumns.map(c=>c[0])];
-                rows.splice(0,rows.length,...rows.map((row,i)=>i===0?["Uke",...lessons.map(l=>weekdays[l.weekday])]:columns.map(c=>row[c] || "")));
-            } else if (weekColumn >= 0 && header.length !== expected) {
-                throw Error("Fant ikke entydige ukedagsoverskrifter. Bruk Uke og navn på undervisningsdagene.");
+            if (advanced) {
+                const mapping = modal.querySelector("#progressMapping");
+                const signature = JSON.stringify(rows);
+                if (mapping.dataset.signature !== signature) {
+                    mapping.replaceChildren();
+                    mapping.dataset.signature = signature;
+                    const header = rows[0] || [];
+                    const norm = v => String(v || "").trim().toLowerCase();
+                    const width = Math.max(0,...rows.map(r=>r.length));
+                    if (!width) throw Error("Tabellen er tom.");
+                    const week = header.findIndex(v=>/^(uke|ukenr\.?|ukenummer|week)$/.test(norm(v)));
+                    const aliases=["","man","tir","ons","tor","fre"];
+                    const matches=lessons.map(l=>header.findIndex(v=>[weekdays[l.weekday].toLowerCase(),aliases[l.weekday],aliases[l.weekday]+"."].includes(norm(v))));
+                    const hasHeader=week>=0 || matches.some(i=>i>=0);
+                    const skip=document.createElement("input");skip.type="checkbox";skip.checked=hasHeader;skip.id="progressSkipHeader";
+                    const label=document.createElement("label");label.append(skip," Første rad er overskrifter");mapping.append(label);
+                    ["Uke",...lessons.map(l=>weekdays[l.weekday])].forEach((name,i)=>{
+                        const row=document.createElement("div"), label=document.createElement("label"), select=document.createElement("select");
+                        label.textContent=name+" ";select.dataset.mapping=String(i);
+                        const empty=new Option("Velg kolonne","");select.add(empty);
+                        for(let c=0;c<width;c++)select.add(new Option("Kolonne "+(c+1)+(header[c]?" – "+String(header[c]).slice(0,80):""),String(c)));
+                        const guess=i===0?(week>=0?week:0):(matches[i-1]>=0?matches[i-1]:(!hasHeader&&width===expected?i:-1));
+                        select.value=guess>=0?String(guess):"";
+                        label.append(select);row.append(label);mapping.append(row);
+                    });
+                    mapping.addEventListener("change",()=>{result.replaceChildren();});
+                    result.textContent="Kontroller kolonnene og trykk Forhåndsvis igjen.";
+                    return;
+                }
+                const selections=[...mapping.querySelectorAll("select[data-mapping]")].map(s=>s.value);
+                if(selections.some(v=>v==="")||new Set(selections).size!==selections.length)throw Error("Velg forskjellige kolonner for uke og hver undervisningsdag.");
+                const start=mapping.querySelector("#progressSkipHeader").checked?1:0;
+                const selected=rows.slice(start).map(row=>selections.map(c=>row[Number(c)]||""));
+                rows.splice(0,rows.length,...selected);
             }
             if (!rows.length || rows.every(row => row.every(cell => !cell))) throw Error("Tabellen er tom.");
             const data = [];
