@@ -70,8 +70,20 @@ export async function refreshPlanIcons(){
             for(const b of visible.filter(b=>Number(b.dataset.week)===week)){
                 if(!b.isConnected)continue;
                 const card=b.closest(".lesson");card.querySelector(".progress-plan-icon")?.remove();
-                const plan=plans[planId(identity(b))];
-                if(plan?.text)card.append(makeButton(()=>openPlanViewer(plan,null,card.querySelector(".teacher-homework-preview")?.dataset.homework||"")));
+                let key;
+                try {key=planId(identity(b));} catch(e){continue;}
+                const plan=plans[key];
+                if(plan?.text){
+                    const icon=makeButton(()=>openPlanViewer(plan,null,card.querySelector(".teacher-homework-preview")?.dataset.homework||""));
+                    icon.style.cssText+="vertical-align:middle;flex:0 0 auto;color:white;z-index:2;width:30px;min-width:30px;height:26px;min-height:26px;padding:2px;border:1px solid rgba(255,255,255,.5);border-radius:8px;";
+                    const preview=card.querySelector(".teacher-homework-preview,.lesson-homework-preview");
+                    if(preview){
+                        preview.style.display="inline-block";
+                        preview.style.maxWidth="calc(100% - 38px)";
+                        preview.style.verticalAlign="middle";
+                        preview.after(icon);
+                    }else card.append(icon);
+                }
             }
         }catch(e){console.warn("Kunne ikke hente fremdriftsplaner",e);}
     }));
