@@ -1,5 +1,13 @@
 import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope} from "./lessonProgressPlanService.js";
 import {isTeacher} from "./teacher.js";
+import {db} from "./firebase.js";
+import {doc,getDoc} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+async function resolvePlanName(plan){
+    if(plan.blockCourseId){
+        try{const snap=await getDoc(doc(db,"blockCourses",plan.blockCourseId));const name=snap.data()?.subject?.trim();if(name)return name;}catch(error){console.warn("Kunne ikke hente blokkfagnavn",error);}
+    }
+    return plan.subject || "Fremdriftsplan";
+}
 const cache=new Map();
 let generation=0;
 const days=["","Mandag","Tirsdag","Onsdag","Torsdag","Fredag"];
@@ -44,6 +52,7 @@ async function openFullPlan(plan,parent,trigger){
     const card=document.createElement("div");card.className="homework-viewer-card";card.style.cssText="width:min(1100px,100%);max-width:100%;min-width:0;box-sizing:border-box;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;padding:clamp(8px,2vw,20px);";
     card.setAttribute("role","dialog");card.setAttribute("aria-modal","true");card.setAttribute("aria-label",plan.subject || "Fremdriftsplan");
     const heading=document.createElement("h2");heading.textContent=plan.subject || "Fremdriftsplan";heading.style.overflowWrap="anywhere";
+    resolvePlanName(plan).then(name=>{heading.textContent=name;card.setAttribute("aria-label",name);});
     const info=document.createElement("p");const week=currentSchoolWeek();info.textContent="Fra uke "+week;
     const scroll=document.createElement("div");scroll.style.cssText="overflow:auto;min-height:0;min-width:0;width:100%;max-width:100%;flex:1 1 auto;font-size:clamp(11px,2.8vw,0.85rem);line-height:1.4;overflow-wrap:anywhere;";scroll.tabIndex=0;scroll.textContent="Henter fremdriftsplan …";
     const close=document.createElement("button");close.type="button";close.textContent="Tilbake";
@@ -89,6 +98,7 @@ export function openPlanViewer(plan,parent=null,teacherText=""){
     const card=document.createElement("div");card.className="homework-viewer-card";card.style.cssText="max-height:85vh;overflow:auto";
     const h=document.createElement("h2");h.textContent="Fremdriftsplan";
     const info=document.createElement("p");info.textContent=[plan.subject,"Uke "+plan.week,days[plan.weekday]].filter(Boolean).join(" · ");
+    if(plan.blockCourseId)resolvePlanName(plan).then(name=>{info.textContent=[name,"Uke "+plan.week,days[plan.weekday]].filter(Boolean).join(" · ");});
     const body=document.createElement("div");body.className="homework-viewer-text";body.style.whiteSpace="pre-wrap";appendText(body,plan.text);
     card.append(h,info,body);
     if(plan.updatedAt?.toDate){const p=document.createElement("p");p.textContent="Sist oppdatert: "+plan.updatedAt.toDate().toLocaleString("nb-NO");card.append(p);}
