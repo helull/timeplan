@@ -143,6 +143,7 @@ export async function openHomeworkModal(
     null;
    
     var teacherMode = isTeacher();
+    const progressMode = localStorage.getItem("progressImportMode");
 
     const isBlockSubject = subject?.toUpperCase().includes("BLOKK");
     const isBlockRoom = roomName?.toUpperCase().includes("BLOKK");
@@ -358,7 +359,7 @@ ${teacherHomeworkText}
         Lagre lærerlekse
 
     </button>
-    <button id="importProgressPlan" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled title=\"Opprett blokkfaget først\"" : ""}>Importer fremdriftsplan</button>
+    ${["standard","advanced"].includes(progressMode) ? `<button id="importProgressPlan" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled title=\"Opprett blokkfaget først\"" : ""}>${progressMode === "advanced" ? "Importer fremdriftsplan (avansert)" : "Importer fremdriftsplan"}</button>` : ""}
 ${
     canCreateBlockCourse
     ?
@@ -641,6 +642,7 @@ document
         );
 
     document.getElementById("importProgressPlan")?.addEventListener("click", () => {
+        if (progressMode === "advanced") { alert("Avansert import er under utvikling. Velg Standard for å importere nå."); return; }
         openProgressPlanImport({teacherId, classId, subject, blockCourse});
     });
 
