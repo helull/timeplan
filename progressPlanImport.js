@@ -5,7 +5,7 @@ const weekdays = ["", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"];
 const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const minutes = t => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(t)); return m ? Number(m[1])*60+Number(m[2]) : 9999; };
 
-function parseTable(text, html) {
+function parseTable(text, html, advanced=false) {
     if (html && /<table[\s>]/i.test(html)) {
         const doc = new DOMParser().parseFromString(html, "text/html");
         const table = doc.querySelector("table");
@@ -17,13 +17,16 @@ function parseTable(text, html) {
                 let c = 0;
                 for (const cell of tr.cells) {
                     while ((occupied[c] || 0) > r) { row[c++] = ""; }
-                    if (cell.colSpan !== 1) throw Error("Tabellen inneholder horisontalt sammenslåtte celler. Bruk én kolonne per undervisningsdag.");
+                    if (!advanced && cell.colSpan !== 1) throw Error("Tabellen inneholder horisontalt sammenslåtte celler. Bruk én kolonne per undervisningsdag.");
                     const clone = cell.cloneNode(true);
                     clone.querySelectorAll("br").forEach(br => br.replaceWith("\n"));
                     clone.querySelectorAll("p,div").forEach(p => p.append("\n"));
-                    row[c] = clone.textContent.trim();
-                    occupied[c] = cell.rowSpan === 0 ? table.rows.length : r + cell.rowSpan;
-                    c++;
+                    const span = cell.colSpan || 1;
+                    for (let offset=0;offset<span;offset++) {
+                        row[c] = clone.textContent.trim();
+                        occupied[c] = cell.rowSpan === 0 ? table.rows.length : r + cell.rowSpan;
+                        c++;
+                    }
                 }
                 while ((occupied[c] || 0) > r) row[c++] = "";
             }
@@ -120,7 +123,7 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
     area.addEventListener("input", e => { if(e.inputType !== "insertFromPaste") pastedHtml=""; result.replaceChildren(); });
     modal.querySelector("#progressPreview").onclick = async () => {
         try {
-            const rows = parseTable(area.value, pastedHtml);
+            const rows = parseTable(area.value, pastedHtml, advanced);
             const expected = lessons.length + 1;
             if (advanced) {
                 const mapping = modal.querySelector("#progressMapping");
