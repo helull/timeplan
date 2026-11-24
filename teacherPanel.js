@@ -65,6 +65,15 @@ export function renderButton() {
         );
 }
 
+function refreshAdminMenuVisibility() {
+    document.querySelectorAll("[data-admin-menu-only]").forEach(button => {
+        button.hidden = !isAdmin();
+        button.style.display = isAdmin() ? "" : "none";
+    });
+}
+
+window.addEventListener("admin-mode-changed", refreshAdminMenuVisibility);
+
 export function openToolsPanel() {
 
     /* kan  umulig fungere
@@ -103,11 +112,11 @@ const classId =
                     Verktøy - ${studentName} (${classId})
                 </h2>
 
-                <button id="toggleTeacherNames">
+                <button id="toggleTeacherNames" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">
                    Vis/skjul lærer
                 </button>
                 
-                <button id="toggleRooms">
+                <button id="toggleRooms" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">
                   Vis/skjul rom
                 </button>
 
@@ -236,7 +245,9 @@ export async function openAdminPanel() {
                     Administrasjon - ${teacher}  -  (${displayedSchedule})
                 </h2>
                 
-                <button id="openProveplanAdmin">Prøveplan</button>
+                <button id="openProveplanAdmin" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Prøveplan</button>
+                <button id="adminToggleTeacherNames" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Vis/skjul lærer</button>
+                <button id="adminToggleRooms" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Vis/skjul rom</button>
 
                 <button id="logoutUser">
                     Logg ut
@@ -244,7 +255,7 @@ export async function openAdminPanel() {
 
                 <button id="changeTeacherScheduleLink">Min tilknytning til timeplanen</button>
 
-                <button id="changeClass">
+                <button id="changeClass" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">
                     Bytt klasse
                 </button>
 
@@ -330,6 +341,9 @@ export async function openAdminPanel() {
         closeAdminPanel
     );
     
+    document.getElementById("adminToggleTeacherNames")?.addEventListener("click", toggleTeacherNames);
+    document.getElementById("adminToggleRooms")?.addEventListener("click", toggleRooms);
+    refreshAdminMenuVisibility();
     if (isAdmin()) {
         applyAdminMode();
     }
