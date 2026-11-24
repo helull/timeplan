@@ -139,15 +139,27 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                     const aliases=["","man","tir","ons","tor","fre"];
                     const matches=lessons.map(l=>header.findIndex(v=>[weekdays[l.weekday].toLowerCase(),aliases[l.weekday],aliases[l.weekday]+"."].includes(norm(v))));
                     const hasHeader=week>=0 || matches.some(i=>i>=0);
-                    const skip=document.createElement("input");skip.type="checkbox";skip.checked=hasHeader;skip.id="progressSkipHeader";
-                    const label=document.createElement("label");label.append(skip," Første rad er overskrifter");mapping.append(label);
+                    const firstWeek=rows.findIndex(row=>/^\d{1,2}$/.test(norm(row[week>=0?week:0])));
+                    const skip=document.createElement("input");skip.type="number";skip.min="0";skip.max=String(rows.length);skip.value=String(firstWeek>=0?firstWeek:hasHeader?1:0);skip.id="progressSkipHeader";
+                    const label=document.createElement("label");label.append("Antall overskriftsrader: ",skip);mapping.append(label);
+                    const groups=[];
+                    for(let c=0;c<width;c++){
+                        const v=norm(header[c]);
+                        if(/økt|mandag|tirsdag|onsdag|torsdag|fredag/.test(v)&&(!c||v!==norm(header[c-1])))groups.push(c);
+                    }
                     ["Uke",...lessons.map(l=>weekdays[l.weekday])].forEach((name,i)=>{
                         const row=document.createElement("div"), label=document.createElement("label"), select=document.createElement("select");
                         label.textContent=name+" ";select.dataset.mapping=String(i);
-                        const empty=new Option("Velg kolonne","");select.add(empty);
+                        select.add(new Option("Velg kolonne",""));
                         for(let c=0;c<width;c++)select.add(new Option("Kolonne "+(c+1)+(header[c]?" – "+String(header[c]).slice(0,80):""),String(c)));
+                        if(i>0)for(let g=0;g<groups.length;g++){
+                            const start=groups[g],end=(groups[g+1]??width)-1;
+                            if(end>start)select.add(new Option("Hele økta: "+header[start]+" (kolonne "+(start+1)+"–"+(end+1)+")",Array.from({length:end-start+1},(_,j)=>start+j).join(",")));
+                        }
                         const guess=i===0?(week>=0?week:0):(matches[i-1]>=0?matches[i-1]:(!hasHeader&&width===expected?i:-1));
-                        select.value=guess>=0?String(guess):"";
+                        const group=i>0&&groups.length===lessons.length?groups[i-1]:-1;
+                        const end=group>=0?(groups[i]??width)-1:-1;
+                        select.value=group>=0?Array.from({length:end-group+1},(_,j)=>group+j).join(","):guess>=0?String(guess):"";
                         label.append(select);row.append(label);mapping.append(row);
                     });
                     mapping.addEventListener("change",()=>{result.replaceChildren();});
@@ -155,9 +167,10 @@ export async function openProgressPlanImport({teacherId, classId, subject, block
                     return;
                 }
                 const selections=[...mapping.querySelectorAll("select[data-mapping]")].map(s=>s.value);
-                if(selections.some(v=>v==="")||new Set(selections).size!==selections.length)throw Error("Velg forskjellige kolonner for uke og hver undervisningsdag.");
-                const start=mapping.querySelector("#progressSkipHeader").checked?1:0;
-                const selected=rows.slice(start).map(row=>selections.map(c=>row[Number(c)]||""));
+                if(selections.some(v=>v==="")||new Set(selections.flatMap(v=>v.split(","))).size!==selections.flatMap(v=>v.split(",")).length)throw Error("Velg forskjellige kolonner for uke og hver undervisningsdag.");
+                const start=Number(mapping.querySelector("#progressSkipHeader").value);
+                if(!Number.isInteger(start)||start<0||start>=rows.length)throw Error("Ugyldig antall overskriftsrader.");
+                const selected=rows.slice(start).map(row=>selections.map(c=>[...new Set(c.split(",").map(k=>String(row[Number(k)]||"").trim()).filter(Boolean))].join("\n")));
                 rows.splice(0,rows.length,...selected);
             }
             if (!rows.length || rows.every(row => row.every(cell => !cell))) throw Error("Tabellen er tom.");
