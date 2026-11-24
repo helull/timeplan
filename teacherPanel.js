@@ -260,14 +260,13 @@ export async function openAdminPanel() {
                     <option value="standard">Standard</option>
                     <option value="advanced">Avansert</option>
                 </select>
+                <small style="display:block;color:#64748b;font-size:12px;margin:5px 0 12px;">Valget lagres automatisk på denne enheten.</small>
 
                 <button id="changeClass" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">
                     Bytt klasse
                 </button>
 
-                <button id="adminMode">
-                     Admin
-                </button>
+
                
                 <button class="admin-only" disabled id="importSchedule">
                     Lag en timeplan
@@ -276,6 +275,10 @@ export async function openAdminPanel() {
                 <button class="admin-only" disabled  id="howToImport">
                     AI-prompt
                 </button>
+
+                <div style="margin-top:18px;padding-top:10px;border-top:1px solid #cbd5e1;text-align:right;">
+                    <button id="adminMode" style="background:transparent;color:#475569;border:1px solid #94a3b8;box-shadow:none;font-size:12px;font-weight:500;padding:5px 10px;min-height:28px;width:auto;margin:0;border-radius:6px;">Admin</button>
+                </div>
 
                 <button id="closeAdmin">    
                     Lukk
