@@ -682,7 +682,7 @@ if (teacherLessonData) {
 
                                 <button
                                     class="homework-button"
-                                    data-homework-access="${isBlockLesson || lesson.blockCourseId || ["klassens time", "homeroom"].includes(normalizeHomeworkTeacher(lesson.subject)) ? 'block' : 'ordinary'}"
+                                    data-homework-access="${isBlockLesson || lesson.blockCourseId || [lesson.subject, displaySubject].some(value => /(?:klassens[\s\u00a0_-]*time|home[\s\u00a0_-]*room)/iu.test(String(value ?? "").normalize("NFKC").replace(/[\u200b-\u200d\ufeff]/g, ""))) ? 'block' : 'ordinary'}"
                                     data-lesson-teacher="${escapeHtml(lesson.teacherName)}"
                                     data-lesson="${escapeHtml(lesson.lessonId)}"
                                      data-class-id="${escapeHtml(lessonClassId)}"
