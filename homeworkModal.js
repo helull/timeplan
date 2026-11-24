@@ -1,3 +1,4 @@
+import { attachPlanToModal } from "./progressPlanViewer.js";
 import { db } from "./firebase.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
@@ -461,6 +462,8 @@ ${
     );
 
     
+    attachPlanToModal(document.getElementById("homeworkModal"), {classId,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:blockCourse?.id || null}, teacherHomeworkText);
+
     /* Denne blokka tilhører nedtrekksmenyen hvor bruker velger fag dersom bruker er på et blokkurs */
     const blockCourseSelect = document.getElementById("blockCourseSelect");
     if (blockCourseSelect) {
