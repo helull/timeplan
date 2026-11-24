@@ -1,4 +1,5 @@
-import {loadProgressPlansForWeek, planId} from "./lessonProgressPlanService.js";
+import {loadProgressPlansForWeek, planId, changeExistingPlan} from "./lessonProgressPlanService.js";
+import {isTeacher} from "./teacher.js";
 const cache=new Map();
 let generation=0;
 const days=["","Mandag","Tirsdag","Onsdag","Torsdag","Fredag"];
@@ -43,6 +44,53 @@ export function openPlanViewer(plan,parent=null,teacherText=""){
     const close=document.createElement("button");close.type="button";close.textContent=parent?"Tilbake":"Lukk";
     const previousDisplay=parent?.style.display;
     close.onclick=()=>{modal.remove();if(parent?.isConnected)parent.style.display=previousDisplay;};
+    const teacherId = isTeacher() ? localStorage.getItem("teacherId") : null;
+    if (teacherId && teacherId === plan.teacherId) {
+        const controls = document.createElement("div");
+        const edit = document.createElement("button");
+        const remove = document.createElement("button");
+        const status = document.createElement("p");
+        edit.type = remove.type = "button";
+        edit.textContent = "✎ Rediger";
+        remove.textContent = "Slett";
+        status.setAttribute("role","status");
+        controls.append(edit,remove,status);
+        card.append(controls);
+        let busy = false;
+        async function save(value) {
+            if (busy) return;
+            busy = true;
+            controls.querySelectorAll("button").forEach(b=>b.disabled=true);
+            close.disabled=true;
+            try {
+                if (!isTeacher() || localStorage.getItem("teacherId") !== teacherId) throw Error("Logg inn som lærer på nytt.");
+                await changeExistingPlan(plan,teacherId,value);
+                close.onclick();
+            } catch(error) {
+                status.textContent=error.message;
+            } finally {
+                busy=false;
+                controls.querySelectorAll("button").forEach(b=>b.disabled=false);
+                close.disabled=false;
+            }
+        }
+        edit.onclick=()=>{
+            const area=document.createElement("textarea");
+            area.value=plan.text;
+            area.rows=8;
+            area.style.width="100%";
+            const submit=document.createElement("button");
+            submit.type="button";submit.textContent="Lagre";
+            const cancel=document.createElement("button");
+            cancel.type="button";cancel.textContent="Avbryt";
+            body.hidden=true;
+            controls.replaceChildren(area,submit,cancel,status);
+            submit.onclick=()=>save(area.value);
+            cancel.onclick=()=>{body.hidden=false;controls.replaceChildren(edit,remove,status);status.textContent="";};
+            area.focus();
+        };
+        remove.onclick=()=>{if(confirm("Vil du slette denne fremdriftsplanen? Leksene påvirkes ikke."))save(null);};
+    }
     card.append(close);modal.append(card);if(parent)parent.style.display="none";document.body.append(modal);close.focus();
 }
 export async function attachPlanToModal(modal,id,teacherText=""){
