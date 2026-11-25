@@ -26,8 +26,10 @@ import {
 }
 from "./colors.js";
 
-const holidays =
-    await loadHolidays();
+let holidays = [];
+export async function initializeRenderHolidays() {
+    holidays = await loadHolidays();
+}
 
 // Vis bare lekseblyanten for egne fag. Blokkfag og admin er unntak.
 let homeworkAccessTeacherId = null;
