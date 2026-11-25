@@ -1,7 +1,7 @@
 name: Firestore security tests
 on:
   push:
-    branches: [security/firebase-auth, security/teacher-approval]
+    branches: [security/firebase-auth, security/teacher-approval, security/password-recovery]
   workflow_dispatch:
 permissions:
   contents: read
