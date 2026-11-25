@@ -1,10 +1,8 @@
 import { attachPlanToModal } from "./progressPlanViewer.js";
 import { db } from "./firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 import {
-    saveStudentBlockCourse,
-    removeStudentBlockCourse,
     loadStudentsBlockCourseByLesson
 }
 from "./studentBlockCourseService.js";
@@ -204,7 +202,7 @@ export async function openHomeworkModal(
         lessonId,
         week,
         teacherId,
-        blockCourse?.id ?? null,
+        (teacherMode ? blockCourse?.id : savedBlockCourse?.id) ?? null,
         weekday,
         startTime
     );
@@ -273,7 +271,7 @@ const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
                 </h2>
 
                 ${
-    !teacherMode
+    true
     ?
     `
     ${
@@ -303,7 +301,7 @@ const blockCourseHtml = (!teacherMode && availableBlockCourses.length > 0)
         ""
     }
 
-${blockCourseHtml}
+${!teacherMode ? `${blockCourseHtml}
 
     <div
         class="student-homework-title">
@@ -315,7 +313,7 @@ ${blockCourseHtml}
     <textarea
         id="homeworkText"
         rows="8"
-        style="width:100%;">${currentText || ""} </textarea>
+        style="width:100%;">${currentText || ""} </textarea>` : ""}
     `
     :
     ""
@@ -443,40 +441,33 @@ ${
     );
 
     
-    attachPlanToModal(document.getElementById("homeworkModal"), {classId,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:blockCourse?.id || null}, teacherHomeworkText);
+    attachPlanToModal(document.getElementById("homeworkModal"), {classId,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:(teacherMode ? blockCourse?.id : savedBlockCourse?.id) || null}, teacherHomeworkText);
 
-    /* Denne blokka tilhører nedtrekksmenyen hvor bruker velger fag dersom bruker er på et blokkurs */
     const blockCourseSelect = document.getElementById("blockCourseSelect");
-    if (blockCourseSelect) {
-        blockCourseSelect.addEventListener("change", function () {
-            const selectedCourseId = this.value;
-
-            if (selectedCourseId !== "") {
-                saveLessonIds(availableBlockCourses, selectedCourseId);
-            }
-        });
-    }
-    /* SLUTT Denne blokka tilhører nedtrekksmenyen hvor bruker velger fag dersom bruker er på et blokkurs */
-
-    
-   document.getElementById("blockCourseSelect")?.addEventListener("change", async e => {
-        const studentId =  localStorage.getItem("studentId");
-
-        if (!studentId) {
-            return;
+    blockCourseSelect?.addEventListener("change", async () => {
+        const studentId = localStorage.getItem("studentId");
+        const selectedId = blockCourseSelect.value;
+        if (!studentId) { alert("Fant ikke elevprofilen. Logg inn på nytt."); return; }
+        blockCourseSelect.disabled = true;
+        try {
+            const ref = doc(db, "students", studentId);
+            await runTransaction(db, async tx => {
+                const snap = await tx.get(ref);
+                if (!snap.exists()) throw new Error("Elevprofilen finnes ikke.");
+                const availableIds = new Set(availableBlockCourses.map(course => course.id));
+                const ids = (snap.data().selectedBlockCourses || []).filter(id => !availableIds.has(id));
+                if (selectedId && availableIds.has(selectedId)) ids.push(selectedId);
+                tx.update(ref, {selectedBlockCourses: ids});
+            });
+            location.reload();
+        } catch (error) {
+            console.error("Kunne ikke lagre blokkfag", error);
+            alert("Kunne ikke lagre fagvalget: " + error.message);
+            blockCourseSelect.value = savedBlockCourse?.id || "";
+            blockCourseSelect.disabled = false;
         }
-
-        const selectedId =  e.target.value;
-
-        if (!selectedId) {
-            return;
-        }
-
-        await saveStudentBlockCourse(studentId, selectedId);
-
     });
 
-  
     document.getElementById("manageTentamens")?.addEventListener("click", async () => {
             await openTentamenModal(
                 week,
@@ -1866,39 +1857,3 @@ else {
 
 }
 
-function saveLessonIds(availableBlockCourses, ids) {
-
-    const lessonIds = JSON.parse(
-        localStorage.getItem("lessonIds") || "[]"
-    );
-
-    // Sørg for at ids alltid er en array
-    const idsToAdd = Array.isArray(ids)
-        ? ids
-        : [ids];
-
-    // Hent ID-ene til alle tilgjengelige blokkurs
-    const availableIds = availableBlockCourses.map(
-        course => course.id
-    );
-
-    // Fjern eksisterende ID-er som finnes blant blokkursene
-    const updatedLessonIds = lessonIds.filter(
-        id => !availableIds.includes(id)
-    );
-
-    // Legg til de nye ID-ene uten duplikater
-    idsToAdd.forEach(id => {
-        if (!updatedLessonIds.includes(id)) {
-            updatedLessonIds.push(id);
-        }
-    });
-
-    // Lagre den oppdaterte listen
-    localStorage.setItem(
-        "lessonIds",
-        JSON.stringify(updatedLessonIds)
-    );
-    
-    location.reload();
-}
