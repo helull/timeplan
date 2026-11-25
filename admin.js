@@ -113,19 +113,34 @@ recoveryForm.addEventListener("submit", async event => {
         if (!/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig AFK-adresse.");
         if (!document.getElementById("recoveryVerified").checked) throw new Error("Kontroller identiteten først.");
         const roles = await getDocsFromServer(query(collection(db,"userRoles"),where("teacherId","==",teacherId)));
-        if (roles.size !== 1 || roles.docs[0].data().role !== "teacher") throw new Error("Stopp: Fant ikke nøyaktig én lærerrolle. Ingen endringer utført.");
-        const uid = roles.docs[0].id;
-        const roleRef = doc(db,"userRoles",uid);
+        if (roles.size > 1) throw new Error("Stopp: Flere innloggingsroller er knyttet til adressen. Ingen endringer utført.");
+        if (roles.size === 1 && roles.docs[0].data().role !== "teacher") throw new Error("Stopp: Kontoen har ikke lærerrolle. Administratorroller beskyttes.");
         const lockRef = doc(db,"teacherApprovalLocks",teacherId);
         const profileRef = doc(db,"teachers",teacherId);
-        if (!confirm("Fjerne gamle lærerrettigheter for " + teacherId + "? Faglige data beholdes.")) return;
-        await runTransaction(db, async tx => {
-            const [role,lock,profile] = await Promise.all([tx.get(roleRef),tx.get(lockRef),tx.get(profileRef)]);
-            if (!profile.exists() || !role.exists() || role.data().role !== "teacher" || role.data().teacherId !== teacherId || (lock.exists() && lock.data().uid !== uid)) throw new Error("Uventet kontotilknytning. Ingen endringer utført.");
-            tx.delete(roleRef);
-            if (lock.exists()) tx.delete(lockRef);
-        });
-        recoveryStatus.textContent = "Lærerrettigheter fjernet. Lærerprofil og faglige data beholdt.\n\nSlett denne kontoen i Authentication:\nE-post: " + teacherId + "\nUID: " + uid;
+        const storageKey = "teacherRecovery:" + teacherId;
+        let uid = roles.empty ? null : roles.docs[0].id;
+        if (roles.empty) {
+            const [profile,lock] = await Promise.all([getDocFromServer(profileRef),getDocFromServer(lockRef)]);
+            if (!profile.exists()) throw new Error("Ingen eksisterende lærerprofil eller lærerrolle. Bruk vanlig registrering.");
+            if (lock.exists()) throw new Error("Stopp: Lærerrollen mangler, men godkjenningslåsen finnes. Kontakt systemansvarlig. Ingen endringer utført.");
+            try { uid = localStorage.getItem(storageKey); } catch {}
+            recoveryStatus.textContent = "Lærerprofilen finnes. Ingen aktiv lærerrolle eller godkjenningslås funnet. Ingen nye endringer utført.\n\nÅpne Authentication og finn nøyaktig denne e-postadressen: " + teacherId + (uid ? "\nTidligere registrert UID: " + uid : "\nUID må kontrolleres i Authentication. Kontroller også at denne UID-en ikke har en annen rolle i userRoles før sletting.");
+        } else {
+            const roleRef = doc(db,"userRoles",uid);
+            if (!confirm("Fjerne gamle lærerrettigheter for " + teacherId + "? Faglige data beholdes.")) return;
+            await runTransaction(db, async tx => {
+                const [role,lock,profile] = await Promise.all([tx.get(roleRef),tx.get(lockRef),tx.get(profileRef)]);
+                if (!profile.exists() || !role.exists() || role.data().role !== "teacher" || role.data().teacherId !== teacherId || (lock.exists() && lock.data().uid !== uid)) throw new Error("Uventet kontotilknytning. Ingen endringer utført.");
+                tx.delete(roleRef);
+                if (lock.exists()) tx.delete(lockRef);
+            });
+            try { localStorage.setItem(storageKey,uid); } catch {}
+            recoveryStatus.textContent = "Lærerrettigheter fjernet. Lærerprofil og faglige data beholdt.\n\nSlett denne kontoen i Authentication:\nE-post: " + teacherId + "\nUID: " + uid;
+        }
+        if (uid) {
+            const remaining = await getDocFromServer(doc(db,"userRoles",uid));
+            if (remaining.exists()) throw new Error("Stopp: UID har fortsatt en innloggingsrolle. Ikke slett kontoen.");
+        }
         recoveryReply.href = "mailto:" + encodeURIComponent(teacherId) + "?subject=" + encodeURIComponent("Timeplan – nytt passord") + "&body=" + encodeURIComponent("Hei! Den gamle innloggingskontoen er fjernet. Åpne timeplanen, velg lærerinnlogging og Registrer deg med samme e-postadresse og et nytt passord. Jeg godkjenner den nye innloggingen. Dine tidligere faglige data beholdes.");
         recoveryNext.hidden = false;
     } catch(error) { recoveryStatus.textContent = error.message; }
