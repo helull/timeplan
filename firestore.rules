@@ -13,6 +13,18 @@ service cloud.firestore {
     function student() { return anonymous(); }
     function member() { return student() || teacher() || admin(); }
     function staff() { return teacher() || admin(); }
+    match /teacherRequests/{uid} {
+      allow create: if signedIn() && !anonymous() && request.auth.uid == uid &&
+        request.resource.data.keys().hasOnly(['name','email','createdAt','approved']) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 120 &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.email is string &&
+        request.resource.data.email.matches('.*@afk[.]no') &&
+        request.resource.data.approved == false &&
+        request.resource.data.createdAt == request.time;
+      allow get: if signedIn() && request.auth.uid == uid;
+    }
     match /userRoles/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
       allow list, write: if false;
