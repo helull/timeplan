@@ -20,7 +20,7 @@ service cloud.firestore {
     match /{collection}/{id} {
       allow read: if member() && collection in [
         'blockCourses','blockExams','classes','exams','holidays',
-        'lessonProgressPlanImports','lessonProgressPlans','schedules',
+        'tentamens','lessonProgressPlanImports','lessonProgressPlans','schedules',
         'teacherHomework','teachers','students'
       ];
       allow write: if staff() && collection in [
