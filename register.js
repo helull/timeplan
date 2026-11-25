@@ -215,7 +215,6 @@ teacherButton.addEventListener("click", () => {
     const dialog = document.createElement("dialog");
     dialog.id = "staffLoginDialog";
     dialog.style.cssText = "position:fixed;inset:0;margin:auto;width:min(92vw,400px);max-height:90dvh;overflow:auto;box-sizing:border-box;border:0;border-radius:18px;padding:24px;background:white;color:#172033;box-shadow:0 18px 60px #0003";
-    const returning = localStorage.getItem("staffHasLoggedIn") === "true";
     dialog.innerHTML = `
         <form id="staffLoginForm" style="display:grid;gap:12px">
             <button type="button" id="staffClose" aria-label="Avbryt" style="position:absolute;right:12px;top:8px;width:36px;height:36px;margin:0;padding:0;background:transparent;color:#64748b;box-shadow:none;font-size:26px">×</button>
@@ -229,7 +228,7 @@ teacherButton.addEventListener("click", () => {
             <button type="button" id="staffRegister" style="margin:0;padding:12px;box-shadow:none">Registrer lærer</button>
             <button type="button" id="staffForgot" style="margin:0;padding:8px;background:transparent;color:#475569;box-shadow:none;font-size:14px;text-decoration:underline">Glemt passord?</button>
         </form>`;
-    let registering = !returning;
+    let registering = false;
     const login = dialog.querySelector('[type="submit"]');
     const register = dialog.querySelector("#staffRegister");
     function setMode(value) {
@@ -267,6 +266,9 @@ teacherButton.addEventListener("click", () => {
         const controls = [...dialog.querySelectorAll('button')];
         controls.forEach(b => b.disabled = true);
         try {
+            const credential = await signInWithEmailAndPassword(auth, dialog.querySelector("#staffEmail").value.trim(), dialog.querySelector("#staffPassword").value);
+            const role = await getDoc(doc(db, "userRoles", credential.user.uid));
+            if (!role.exists()) { location.reload(); return; }
             const identity = await signInStaff(dialog.querySelector("#staffEmail").value, dialog.querySelector("#staffPassword").value);
             localStorage.setItem("staffHasLoggedIn", "true");
             loginTeacher(identity.teacherId);
@@ -289,6 +291,7 @@ teacherButton.addEventListener("click", () => {
         if (password !== dialog.querySelector("#staffRepeat").value) { status.textContent = "Passordene er ikke like."; return; }
         const controls = [...dialog.querySelectorAll("button")];
         controls.forEach(b => b.disabled = true);
+        let keepSession = false;
         try {
             let credential;
             try { credential = await createUserWithEmailAndPassword(auth, email, password); }
@@ -301,13 +304,16 @@ teacherButton.addEventListener("click", () => {
             if (role.exists()) { status.textContent = "Kontoen er allerede godkjent. Bruk Logg inn."; return; }
             const ref = doc(db, "teacherRequests", uid);
             if (!(await getDoc(ref)).exists()) await setDoc(ref, {name, email:credential.user.email, approved:false, createdAt:serverTimestamp()});
-            status.textContent = "Registreringsforespørselen er sendt. Vent på godkjenning fra administrator.";
+            keepSession = true;
+            location.reload();
         } catch (error) {
             status.textContent = "Registrering mislyktes. Kontroller opplysningene eller kontakt administrator.";
             console.error(error.code || error.message);
         } finally {
-            if (auth.currentUser && !auth.currentUser.isAnonymous) await signOut(auth);
-            await signInStudent();
+            if (!keepSession) {
+                if (auth.currentUser && !auth.currentUser.isAnonymous) await signOut(auth);
+                await signInStudent();
+            }
             dialog.querySelector("#staffPassword").value = "";
             dialog.querySelector("#staffRepeat").value = "";
             controls.forEach(b => b.disabled = false);
