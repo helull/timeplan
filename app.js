@@ -639,6 +639,7 @@ async function init(){
             if (teacherId) sessionStorage.removeItem("teacherLinkChoicePending:" + teacherId);
             removeTeacherMode();
             alert("Lærerregistreringen din finnes ikke lenger. Logg inn som lærer på nytt.");
+            await signOutSecurely();
             await showRegister();
             return;
         }
