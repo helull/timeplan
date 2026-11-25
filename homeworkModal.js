@@ -74,26 +74,7 @@ from "./teacher.js";
 // Dette er en UI-sperre, ikke sikker autentisering (Firestore-reglene er åpne).
 async function bekreftProveTilgang() {
     if (isTeacher()) return true;
-
-    const passord = prompt("Passord for å endre prøve");
-    if (passord === null) return false;
-
-    try {
-        const snapshot = await getDoc(doc(db, "settings", "superAccess"));
-        if (!snapshot.exists() || typeof snapshot.data().password !== "string") {
-            alert("Prøvepassord er ikke konfigurert i Firebase.");
-            return false;
-        }
-        if (passord !== snapshot.data().password) {
-            alert("Feil passord.");
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error("Kunne ikke kontrollere prøvepassord:", error);
-        alert("Kunne ikke kontrollere passordet. Prøv igjen.");
-        return false;
-    }
+    return confirm("Vil du endre den felles prøveplanen?");
 }
 
 export async function openHomeworkModal(
