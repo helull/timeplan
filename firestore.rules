@@ -15,7 +15,13 @@ service cloud.firestore {
     function staff() { return teacher() || admin(); }
     match /userRoles/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
-      allow list, write: if false;
+      allow list, update, delete: if false;
+      // Administrators may grant only a teacher role, tied to a verified request.
+      allow create: if admin() && request.resource.data.keys().hasOnly(['role','teacherId']) &&
+        request.resource.data.role == 'teacher' &&
+        exists(/databases/$(database)/documents/teacherRequests/$(uid)) &&
+        get(/databases/$(database)/documents/teacherRequests/$(uid)).data.email == request.resource.data.teacherId &&
+        exists(/databases/$(database)/documents/teachers/$(request.resource.data.teacherId));
     }
     match /{collection}/{id} {
       allow read: if member() && collection in [
@@ -29,6 +35,55 @@ service cloud.firestore {
       ];
       allow write: if admin() && collection in ['classes','schedules','holidays','homework','teacherRequests'];
       allow read: if admin() && collection in ['homework','teacherRequests'];
+    }
+    match /teacherRequests/{uid} {
+      allow create: if signedIn() && !anonymous() && uid == request.auth.uid &&
+        request.auth.token.email_verified == true &&
+        request.auth.token.email.matches('^[^@]+@afk[.]no
+      allow read: if member() && !(id in ['adminAccess','superAccess']);
+      allow write: if false;
+    }
+    match /students/{uid} {
+      allow create: if student() && uid == request.auth.uid &&
+        request.resource.data.keys().hasOnly(['name','classId','createdAt','selectedBlockCourses']) &&
+        request.resource.data.name is string && request.resource.data.classId is string;
+      allow update: if student() && uid == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['selectedBlockCourses']) &&
+        request.resource.data.selectedBlockCourses is list;
+    }
+    match /homework/{id} {
+      allow get: if student() && id.matches(request.auth.uid + '_.*') &&
+        (resource == null || resource.data.studentId == request.auth.uid);
+      allow list: if student() && resource.data.studentId == request.auth.uid;
+      allow create: if student() && id.matches(request.auth.uid + '_.*') &&
+        request.resource.data.studentId == request.auth.uid;
+      allow update: if student() && id.matches(request.auth.uid + '_.*') &&
+        resource.data.studentId == request.auth.uid &&
+        request.resource.data.studentId == request.auth.uid;
+      allow delete: if student() && resource.data.studentId == request.auth.uid;
+    }
+    match /exams/{id} {
+      allow create: if student() && request.resource.data.teacher == false;
+      allow update: if student() && resource.data.teacher == false &&
+        request.resource.data.teacher == false;
+      allow delete: if student() && resource.data.teacher == false;
+    }
+    match /blockExams/{id} {
+      allow create: if student() && request.resource.data.teacher == false;
+      allow update: if student() && resource.data.teacher == false &&
+        request.resource.data.teacher == false;
+      allow delete: if student() && resource.data.teacher == false;
+    }
+  }
+}
+) &&
+        request.resource.data.keys().hasOnly(['name','email','approved','createdAt']) &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 150 &&
+        request.resource.data.approved == false &&
+        request.resource.data.createdAt == request.time;
+      allow get: if signedIn() && uid == request.auth.uid;
     }
     match /settings/{id} {
       allow read: if member() && !(id in ['adminAccess','superAccess']);
