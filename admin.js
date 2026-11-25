@@ -1,4 +1,4 @@
-import { collection, onSnapshot, doc, getDocFromServer, deleteDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, onSnapshot, doc, getDocFromServer, deleteDoc, getDocsFromServer, query, where, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 import { signInStaff, verifiedIdentity, signOutSecurely } from "./secureAuth.js";
 
@@ -45,7 +45,34 @@ function showRequests() {
                     await deleteDoc(doc(db, "teacherRequests", request.id));
                 } catch (error) { info.textContent = error.message; }
             };
-            card.append(heading, email, info, inspect, dismiss);
+            const approve = document.createElement("button");
+            approve.textContent = "Godkjenn lærer";
+            approve.onclick = async () => {
+                if (!confirm("Har du kontrollert lærerens identitet uavhengig av denne forespørselen?")) return;
+                approve.disabled = true;
+                try {
+                    if ((await verifiedIdentity())?.role !== "admin") throw new Error("Administrator kreves.");
+                    const teacherId = String(data.email || "").trim().toLowerCase();
+                    if (teacherId !== data.email || !/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig adresse.");
+                    const roles = await getDocsFromServer(query(collection(db, "userRoles"), where("teacherId", "==", teacherId)));
+                    if (!roles.empty) throw new Error("Profilen har allerede en innloggingsrolle. Kontroller eksisterende konto i Firebase Console først.");
+                    const roleRef = doc(db, "userRoles", request.id);
+                    const requestRef = doc(db, "teacherRequests", request.id);
+                    const profileRef = doc(db, "teachers", teacherId);
+                    const lockRef = doc(db, "teacherApprovalLocks", teacherId);
+                    await runTransaction(db, async tx => {
+                        const [pending, role, profile, lock] = await Promise.all([tx.get(requestRef), tx.get(roleRef), tx.get(profileRef), tx.get(lockRef)]);
+                        if (!pending.exists() || pending.data().email !== teacherId || pending.data().approved !== false || role.exists()) throw new Error("Forespørselen er endret eller allerede behandlet.");
+                        if (lock.exists()) throw new Error("Profilen har en tidligere godkjenning. Kontroller og fjern gammel godkjenningslås i Firebase Console etter at gammel rolle og konto er fjernet.");
+                        if (!profile.exists()) tx.set(profileRef, {name:pending.data().name,email:teacherId,approved:true,createdAt:serverTimestamp()});
+                        tx.set(lockRef, {uid:request.id});
+                        tx.set(roleRef, {role:"teacher",teacherId});
+                        tx.delete(requestRef);
+                    });
+                } catch (error) { info.textContent = error.message; }
+                finally { approve.disabled = false; }
+            };
+            card.append(heading, email, info, inspect, approve, dismiss);
             container.append(card);
         });
     }, error => { container.textContent = "Kunne ikke hente forespørsler: " + error.code; });
