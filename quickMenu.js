@@ -435,6 +435,7 @@ if (trigger) {
                 <li><strong>Opprette blokkfag</strong> ved å velge klasse og blokkøkt.</li>
                 <li><strong>Registrere prøver</strong> for klassene.</li>
                 <li><strong>Gi lekser</strong> som elevene kan se.</li>
+<li><strong>Importere fremdriftsplaner</strong> for fagene dine, slik at elevene kan se planlagt faglig arbeid i timeplanen.</li>
               </ul><p style="font-size:12px;color:#64748b;margin:0 0 14px">Du finner funksjonene i menyen.</p>`;
             const footer=document.createElement('div');footer.style.cssText='display:flex;justify-content:flex-end';
             const ok=document.createElement('button');ok.type='button';ok.textContent='Forstått';
