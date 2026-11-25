@@ -1,3 +1,4 @@
+import { verifiedIdentity, signInStudent, signOutSecurely } from "./secureAuth.js";
 import { refreshPlanIcons } from "./progressPlanViewer.js";
 import {getTeacherLink,openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {loadTeacherSchedule, invalidateTeacherScheduleCache} from "./teacherSchedule.js";
@@ -7,10 +8,7 @@ import {
 from "./studentBlockCourseService.js";
 
 
-import {
-    finishMagicLogin
-}
-from "./finishMagicLogin.js";
+
 
 import { db }
 from "./firebase.js";
@@ -199,9 +197,41 @@ export async function showScheduleView(view,force=false){
 }
 
 
+// Restore identity before any Firestore reads or privileged UI.
+let identity = await verifiedIdentity();
+if (identity && !["student", "teacher", "admin"].includes(identity.role)) {
+    await signOutSecurely();
+    identity = null;
+}
+if (identity && ["teacher", "admin"].includes(identity.role) && !identity.teacherId) {
+    await signOutSecurely();
+    identity = null;
+}
+if (!identity) identity = await signInStudent();
+if (identity.role === "student") {
+    localStorage.removeItem("teacherId");
+    localStorage.setItem("userType", "student");
+    if (localStorage.getItem("studentId") !== identity.uid) {
+        localStorage.removeItem("studentId");
+        localStorage.removeItem("studentName");
+        localStorage.removeItem("classId");
+        localStorage.removeItem("lessonIds");
+    }
+    const profile = await getDoc(doc(db, "students", identity.uid));
+    if (profile.exists()) {
+        localStorage.setItem("studentId", identity.uid);
+        localStorage.setItem("studentName", profile.data().name);
+        localStorage.setItem("classId", profile.data().classId);
+        localStorage.setItem("lessonIds", JSON.stringify(profile.data().selectedBlockCourses || []));
+    }
+} else {
+    localStorage.setItem("userType", "teacher");
+    localStorage.setItem("teacherId", identity.teacherId);
+    localStorage.removeItem("studentId");
+    localStorage.removeItem("studentName");
+    localStorage.removeItem("lessonIds");
+}
 initializeTeacherMode();
-
-await finishMagicLogin();
 
 const [tentamens, blockExams] = await Promise.all([
     loadTentamens(),
@@ -254,7 +284,7 @@ function updateDots(){
 }
 
     console.log("før render");
-    console.table({ ...localStorage });
+
 
 function render(){
     weeks.forEach(
@@ -609,6 +639,7 @@ async function init(){
             if (teacherId) sessionStorage.removeItem("teacherLinkChoicePending:" + teacherId);
             removeTeacherMode();
             alert("Lærerregistreringen din finnes ikke lenger. Logg inn som lærer på nytt.");
+            await signOutSecurely();
             await showRegister();
             return;
         }

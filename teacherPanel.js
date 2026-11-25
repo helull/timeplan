@@ -1,6 +1,6 @@
 import {openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {showScheduleView, currentScheduleView} from "./app.js";
-import { visLitePassordvindu } from "./litePassordvindu.js";
+import { verifiedIdentity, signOutSecurely } from "./secureAuth.js";
 import { openProveplan } from "./proveplan.js";
 
 import { db }
@@ -178,7 +178,7 @@ const classId =
     
 }
 
-function logoutUser() {
+async function logoutUser() {
     const message = isTeacher()
         ? "Vil du logge ut som lærer?\n\nLærerlekser, blokkfag og andre lagrede opplysninger blir ikke slettet."
         : "Vil du logge ut og velge en annen klasse?\n\nPersonlige lekser på denne enheten kan bli utilgjengelige etter utlogging.";
@@ -198,6 +198,11 @@ function logoutUser() {
         overlay.style.opacity = "1";
     }
     disableAdminMode();
+    try { await signOutSecurely(); } catch (error) {
+        if (overlay) overlay.hidden = true;
+        alert("Kunne ikke logge ut. Prøv igjen.");
+        return;
+    }
     localStorage.clear();
     // Gi nettleseren tid til å vise meldingen før ny innlogging lastes.
     setTimeout(() => location.reload(), 450);
@@ -913,11 +918,11 @@ async function adminModeLogin() {
     const button = document.getElementById("adminMode");
     if (button) button.disabled = true;
     try {
-        const godkjent = await visLitePassordvindu({
-            dokument: "adminAccess",
-            tittel: "Administratormodus"
-        });
-        if (godkjent) enableAdminMode();
+        const identity = await verifiedIdentity();
+        if (identity?.role === "admin") enableAdminMode();
+        else alert("Administratormodus krever en godkjent administratorkonto.");
+    } catch (error) {
+        alert("Kunne ikke kontrollere administratorrettigheter.");
     } finally {
         if (button) button.disabled = false;
     }

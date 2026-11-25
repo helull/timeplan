@@ -1,3 +1,4 @@
+import { verifiedIdentity } from "./secureAuth.js";
 import {
     doc,
     getDoc
@@ -165,7 +166,9 @@ export function isAdmin() {
     return adminActive;
 }
 
-export function enableAdminMode() {
+export async function enableAdminMode() {
+    const identity = await verifiedIdentity();
+    if (identity?.role !== "admin") return false;
     adminActive = true;
     sessionStorage.removeItem("adminMode");
     applyAdminMode();

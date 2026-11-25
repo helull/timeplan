@@ -1,4 +1,4 @@
-import { db }
+import { auth, db }
 from "./firebase.js";
 
 import {
@@ -18,6 +18,8 @@ import {
     addDoc,
     serverTimestamp,
     collection,
+    query,
+    where,
     getDocs,
     deleteDoc
 }
@@ -30,11 +32,9 @@ export async function saveHomework(
     exam = false
 ) {
     
-    const studentId =
-        localStorage.getItem(
-            "studentId"
-        );
+    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
 
+    if (!studentId) throw new Error("Elevinnlogging kreves.");
     const documentId =
         `${studentId}_${lessonId}_${week}`;
 
@@ -70,10 +70,9 @@ export async function loadHomework(
     week
 ) {
 
-    const studentId =
-        localStorage.getItem(
-            "studentId"
-        );
+    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
+
+    if (!studentId) return { text: "", exam: false };
 
     const documentId =
         `${studentId}_${lessonId}_${week}`;
@@ -114,19 +113,10 @@ export async function loadHomework(
 }
 
 export async function loadAllHomework() {
-
-    const snapshot =
-        await getDocs(
-            collection(
-                db,
-                "homework"
-            )
-        );
-
-    const studentId =
-        localStorage.getItem(
-            "studentId"
-        );
+    await auth.authStateReady();
+    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
+    if (!studentId) return {};
+    const snapshot = await getDocs(query(collection(db, "homework"), where("studentId", "==", studentId)));
 
     const homeworkMap = {};
 
