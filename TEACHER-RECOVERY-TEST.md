@@ -24,3 +24,6 @@ Ikke bruk en virkelig lærer eller slett eksisterende faglige data. Bruk en sepa
 
 ## Begrensninger
 Spark-klienten kan ikke slette andre Authentication-kontoer. Bruk Firebase Console for dette. En mailto-lenke krever at læreren selv sender meldingen; automatisk e-post og direkte kontosletting krever en separat betrodd tjeneste. Ingen passord i e-post. Ikke utfør endringer ved GET-lenker. Denne planen er ikke en gjennomført test.
+
+## Praktisk test 25. november 2026
+Brukeren bekreftet utskifting av testkonto med ny UID og samme teacherId. Alle sju UI-kontroller bestått: ingen ny tilknytningsdialog, registrert navn Testlærer, Matematikk 1T, lærerlekse, fremdriftsplan, egen timeplan og elevens blokkfagtilknytning. Dette er brukerbekreftede resultater, ikke en uavhengig databasekontroll. Bekreftet importhistorikk, alternativet med bekreftet importert lærernavn og avvisning av gammel sesjon er ikke separat testet. Automatisk e-post og nullstilling er ikke implementert.
