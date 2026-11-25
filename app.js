@@ -1,3 +1,4 @@
+import { waitForTeacherApproval } from "./pendingTeacher.js";
 import { verifiedIdentity, signInStudent, signOutSecurely } from "./secureAuth.js";
 import { refreshPlanIcons } from "./progressPlanViewer.js";
 import {getTeacherLink,openTeacherLinkDialog} from "./teacherScheduleLink.js";
@@ -200,6 +201,11 @@ export async function showScheduleView(view,force=false){
 
 // Restore identity before any Firestore reads or privileged UI.
 let identity = await verifiedIdentity();
+if (identity?.role === "unassigned") {
+    localStorage.removeItem("teacherId");
+    localStorage.removeItem("userType");
+    identity = await waitForTeacherApproval(identity.uid);
+}
 if (identity && !["student", "teacher", "admin"].includes(identity.role)) {
     await signOutSecurely();
     identity = null;
