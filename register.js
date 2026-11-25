@@ -219,20 +219,35 @@ teacherButton.addEventListener("click", () => {
     dialog.innerHTML = `
         <form id="staffLoginForm" style="display:grid;gap:12px">
             <button type="button" id="staffClose" aria-label="Avbryt" style="position:absolute;right:12px;top:8px;width:36px;height:36px;margin:0;padding:0;background:transparent;color:#64748b;box-shadow:none;font-size:26px">×</button>
-            <h2 style="margin:0 30px 8px 0">Lærerinnlogging</h2>
+            <h2 id="staffTitle" style="margin:0 30px 8px 0">Lærerinnlogging</h2>
+            <label id="staffNameLabel" hidden>Fullt navn<input id="staffName" autocomplete="name" maxlength="120" style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
             <label>E-postadresse<input id="staffEmail" type="email" autocomplete="username" required style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
             <label>Passord<input id="staffPassword" type="password" autocomplete="current-password" required style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
-            <p id="staffStatus" role="status"></p>
+            <label id="staffRepeatLabel" hidden>Gjenta passord<input id="staffRepeat" type="password" autocomplete="new-password" style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
+            <p id="staffStatus" role="status" style="margin:0"></p>
             <button type="submit" style="margin:0;padding:12px;box-shadow:none">Logg inn</button>
             <button type="button" id="staffRegister" style="margin:0;padding:12px;box-shadow:none">Registrer lærer</button>
             <button type="button" id="staffForgot" style="margin:0;padding:8px;background:transparent;color:#475569;box-shadow:none;font-size:14px;text-decoration:underline">Glemt passord?</button>
         </form>`;
-    const primary = dialog.querySelector(returning ? '[type="submit"]' : '#staffRegister');
-    const secondary = dialog.querySelector(returning ? '#staffRegister' : '[type="submit"]');
-    primary.style.cssText += ";background:#2563eb;color:white;border:1px solid #2563eb;font-weight:700;width:100%";
-    secondary.style.cssText += ";background:white;color:#2563eb;border:1px solid #cbd5e1;font-weight:500;width:100%";
-    primary.before(secondary);
-    if (!returning) secondary.before(primary);
+    let registering = !returning;
+    const login = dialog.querySelector('[type="submit"]');
+    const register = dialog.querySelector("#staffRegister");
+    function setMode(value) {
+        registering = value;
+        dialog.querySelector("#staffTitle").textContent = value ? "Registrer lærer" : "Lærerinnlogging";
+        dialog.querySelector("#staffNameLabel").hidden = !value;
+        dialog.querySelector("#staffRepeatLabel").hidden = !value;
+        dialog.querySelector("#staffName").required = value;
+        dialog.querySelector("#staffRepeat").required = value;
+        dialog.querySelector("#staffPassword").autocomplete = value ? "new-password" : "current-password";
+        dialog.querySelector("#staffForgot").hidden = value;
+        dialog.querySelector("#staffStatus").textContent = "";
+        login.textContent = value ? "Send registrering" : "Logg inn";
+        register.textContent = value ? "Allerede registrert? Logg inn" : "Ny lærer? Registrer deg";
+        login.style.cssText += ";background:#2563eb;color:white;border:1px solid #2563eb;width:100%";
+        register.style.cssText += ";background:transparent;color:#2563eb;border:0;font-size:14px;width:100%";
+    }
+    setMode(registering);
     document.body.append(dialog);
     dialog.addEventListener("close", () => dialog.remove());
     dialog.addEventListener("cancel", event => { if (dialog.querySelector('[type="submit"]').disabled) event.preventDefault(); });
@@ -248,7 +263,7 @@ teacherButton.addEventListener("click", () => {
     };
     dialog.querySelector("form").onsubmit = async event => {
         event.preventDefault();
-        const submit = dialog.querySelector('[type="submit"]');
+        if (registering) { await submitRegistration(); return; }
         const controls = [...dialog.querySelectorAll('button')];
         controls.forEach(b => b.disabled = true);
         try {
@@ -261,15 +276,17 @@ teacherButton.addEventListener("click", () => {
             console.error("Lærerinnlogging mislyktes:", error.code || error.message);
         } finally { controls.forEach(b => b.disabled = false); }
     };
-    dialog.querySelector("#staffRegister").onclick = async () => {
+    register.onclick = () => setMode(!registering);
+    async function submitRegistration() {
         const email = dialog.querySelector("#staffEmail").value.trim().toLowerCase();
         const password = dialog.querySelector("#staffPassword").value;
         const status = dialog.querySelector("#staffStatus");
         if (!/^[^\s@]+@afk\.no$/.test(email) || password.length < 6) {
             status.textContent = "Oppgi AFK-adresse og et passord på minst seks tegn."; return;
         }
-        const name = prompt("Ditt fulle navn slik du ønsker det vist i timeplanen")?.trim();
-        if (!name || name.length > 120) return;
+        const name = dialog.querySelector("#staffName").value.trim();
+        if (!name || name.length > 120) { status.textContent = "Oppgi fullt navn."; return; }
+        if (password !== dialog.querySelector("#staffRepeat").value) { status.textContent = "Passordene er ikke like."; return; }
         const controls = [...dialog.querySelectorAll("button")];
         controls.forEach(b => b.disabled = true);
         try {
@@ -292,9 +309,10 @@ teacherButton.addEventListener("click", () => {
             if (auth.currentUser && !auth.currentUser.isAnonymous) await signOut(auth);
             await signInStudent();
             dialog.querySelector("#staffPassword").value = "";
+            dialog.querySelector("#staffRepeat").value = "";
             controls.forEach(b => b.disabled = false);
         }
-    };
+    }
     dialog.showModal();
 });
 }
