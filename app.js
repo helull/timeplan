@@ -88,6 +88,7 @@ import {
 from "./scheduleService.js";
 
 import {
+    initializeRenderHolidays,
     renderSchedule,
     renderHomework,
     updateHomeworkCard
@@ -232,6 +233,7 @@ if (identity.role === "student") {
     localStorage.removeItem("lessonIds");
 }
 initializeTeacherMode();
+await initializeRenderHolidays();
 
 const [tentamens, blockExams] = await Promise.all([
     loadTentamens(),
