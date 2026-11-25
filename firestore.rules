@@ -25,8 +25,16 @@ service cloud.firestore {
         request.resource.data.createdAt == request.time;
       allow get: if signedIn() && request.auth.uid == uid;
     }
+    match /teacherApprovalLocks/{teacherId} {
+      allow get: if admin();
+      allow create: if admin() &&
+        request.resource.data.keys().hasOnly(['uid']) &&
+        request.resource.data.uid is string &&
+        getAfter(/databases/$(database)/documents/userRoles/$(request.resource.data.uid)).data.teacherId == teacherId &&
+        getAfter(/databases/$(database)/documents/userRoles/$(request.resource.data.uid)).data.role == 'teacher';
+    }
     match /userRoles/{uid} {
-      allow get: if signedIn() && request.auth.uid == uid;
+      allow get: if admin() || (signedIn() && request.auth.uid == uid);
       allow list: if admin();
       allow create: if admin() &&
         request.resource.data.keys().hasOnly(['role','teacherId']) &&
@@ -35,6 +43,8 @@ service cloud.firestore {
         get(/databases/$(database)/documents/teacherRequests/$(uid)).data.approved == false &&
         request.resource.data.teacherId == get(/databases/$(database)/documents/teacherRequests/$(uid)).data.email &&
         existsAfter(/databases/$(database)/documents/teachers/$(request.resource.data.teacherId)) &&
+        !exists(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)) &&
+        getAfter(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)).data.uid == uid &&
         !existsAfter(/databases/$(database)/documents/teacherRequests/$(uid));
       allow update, delete: if false;
     }
