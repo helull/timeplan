@@ -1,4 +1,4 @@
-import { db }
+import { auth, db }
 from "./firebase.js";
 
 import {
@@ -31,6 +31,9 @@ export async function createStudent(
     classId
 ){
 
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user?.isAnonymous || user.uid !== studentId) throw new Error("Ugyldig elevidentitet.");
     await setDoc(
 
         doc(
