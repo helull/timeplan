@@ -228,12 +228,13 @@ teacherButton.addEventListener("click", () => {
         </form>`;
     document.body.append(dialog);
     dialog.addEventListener("close", () => dialog.remove());
+    dialog.addEventListener("cancel", event => { if (dialog.querySelector('[type="submit"]').disabled) event.preventDefault(); });
     dialog.querySelector("#staffClose").onclick = () => dialog.close();
     dialog.querySelector("#staffForgot").onclick = () => {
         const email = dialog.querySelector("#staffEmail");
         if (!email.reportValidity()) return;
         const subject = "Timeplan – glemt passord";
-        const body = "Hei! Jeg har glemt passordet til timeplanen.\\n\\nE-postadresse: " + email.value.trim() + "\\nNavn: \\n\\nVennligst hjelp meg med å gjenopprette innloggingen.";
+        const body = "Hei! Jeg har glemt passordet til timeplanen.\n\nE-postadresse: " + email.value.trim() + "\nNavn: \n\nVennligst hjelp meg med å gjenopprette innloggingen.";
         const status = dialog.querySelector("#staffStatus");
         status.textContent = "Send den ferdig utfylte e-posten i e-postprogrammet ditt. Ikke oppgi passord.";
         location.href = "mailto:helge_ullern@yahoo.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
@@ -241,7 +242,8 @@ teacherButton.addEventListener("click", () => {
     dialog.querySelector("form").onsubmit = async event => {
         event.preventDefault();
         const submit = dialog.querySelector('[type="submit"]');
-        submit.disabled = true;
+        const controls = [...dialog.querySelectorAll('button')];
+        controls.forEach(b => b.disabled = true);
         try {
             const identity = await signInStaff(dialog.querySelector("#staffEmail").value, dialog.querySelector("#staffPassword").value);
             loginTeacher(identity.teacherId);
@@ -249,7 +251,7 @@ teacherButton.addEventListener("click", () => {
         } catch (error) {
             dialog.querySelector("#staffStatus").textContent = "Innlogging mislyktes. Kontroller opplysningene eller velg Glemt passord.";
             console.error("Lærerinnlogging mislyktes:", error.code || error.message);
-        } finally { submit.disabled = false; }
+        } finally { controls.forEach(b => b.disabled = false); }
     };
     dialog.querySelector("#staffRegister").onclick = async () => {
         const email = dialog.querySelector("#staffEmail").value.trim().toLowerCase();
