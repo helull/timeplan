@@ -155,7 +155,9 @@
     <section id="adminLogin" class="login-card" aria-label="Administratorinnlogging">
         <h2>Administratorinnlogging</h2>
         <form id="adminLoginForm">
-            <label for="adminPassword">Passord</label>
+            <label for="adminEmail">E-postadresse registrert i Firebase</label>
+            <input id="adminEmail" type="email" autocomplete="username" required>
+            <label for="adminPassword">Personlig passord</label>
             <input id="adminPassword" type="password" autocomplete="current-password" required>
             <button id="adminLoginButton" type="submit">Logg inn</button>
             <p id="adminLoginStatus" role="status" aria-live="polite"></p>
@@ -169,7 +171,7 @@
         <h2 id="schoolyearReminderTitle">Husk ved skoleårsslutt</h2>
         <p>Du kan rydde Firestore manuelt ved å slette samlingene fra det gamle skoleåret.</p>
         <p class="keep">VIKTIG: Behold alltid samlingene <code>teachers</code> og <code>settings</code>!</p>
-        <p>Alle andre samlinger kan slettes når du er sikker på at du ikke trenger dataene lenger. Ta gjerne en sikkerhetskopi først, og kontroller at det nye skoleårets timeplan og klasser legges inn på nytt.</p>
+        <p>Behold også userRoles, timeplaner, klasser og øvrige innstillinger. Ikke slett samlinger uten en særskilt gjennomgang og sikkerhetskopi.</p>
         <p>Elever som har en gammel registrering i nettleseren, skal da få registrere seg på nytt når appen oppdager at de mangler i <code>students</code>.</p>
         <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
     </div>
