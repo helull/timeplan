@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, onSnapshot, doc, getDocFromServer, deleteDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 import { signInStaff, verifiedIdentity, signOutSecurely } from "./secureAuth.js";
 
@@ -23,8 +23,29 @@ function showRequests() {
             const email = document.createElement("p");
             email.textContent = data.email || "";
             const info = document.createElement("p");
-            info.textContent = "Godkjenning er foreløpig deaktivert mens sikker rollefordeling ferdigstilles.";
-            card.append(heading, email, info);
+            info.textContent = "Kontroller identiteten før du tildeler lærerrettigheter.";
+            const inspect = document.createElement("button");
+            inspect.textContent = "Kontroller lærerprofil";
+            inspect.onclick = async () => {
+                try {
+                    const identity = await verifiedIdentity();
+                    if (identity?.role !== "admin") throw new Error("Administrator kreves.");
+                    const teacherId = String(data.email || "").trim().toLowerCase();
+                    if (!/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig adresse.");
+                    const profile = await getDocFromServer(doc(db, "teachers", teacherId));
+                    info.textContent = (profile.exists() ? "Eksisterende profil: " + (profile.data().name || teacherId) + ". Behold profilen uendret." : "Ny lærer. Opprett profil etter identitetskontroll.") + " UID: " + request.id + ". Rolle må foreløpig tildeles i Firebase Console.";
+                } catch (error) { info.textContent = error.message; }
+            };
+            const dismiss = document.createElement("button");
+            dismiss.textContent = "Fjern forespørsel";
+            dismiss.onclick = async () => {
+                if (!confirm("Fjerne bare forespørselen? Dette sletter ikke konto eller lærerprofil.")) return;
+                try {
+                    if ((await verifiedIdentity())?.role !== "admin") throw new Error("Administrator kreves.");
+                    await deleteDoc(doc(db, "teacherRequests", request.id));
+                } catch (error) { info.textContent = error.message; }
+            };
+            card.append(heading, email, info, inspect, dismiss);
             container.append(card);
         });
     }, error => { container.textContent = "Kunne ikke hente forespørsler: " + error.code; });
