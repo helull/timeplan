@@ -22,7 +22,7 @@ export async function signInStaff(email, password) {
     await signInWithEmailAndPassword(auth, email.trim(), password);
     try {
         const identity = await verifiedIdentity();
-        if (!identity || !["admin", "teacher"].includes(identity.role)) {
+        if (!identity || !["admin", "teacher"].includes(identity.role) || !identity.teacherId) {
             throw new Error("Kontoen er ikke godkjent som lærer eller administrator.");
         }
         return identity;
