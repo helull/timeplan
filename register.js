@@ -1,3 +1,4 @@
+import { signInStudent, signInStaff } from "./secureAuth.js";
 import {
     submitTeacherRequest
 }
@@ -87,6 +88,7 @@ export async function showRegister() {
             "classSelect"
         );
 
+    await signInStudent();
     const classes =
         await loadClasses();
 
@@ -146,9 +148,10 @@ export async function showRegister() {
                 )
                 .value;
 
+            try {
             const studentId =
 
-                `${name}_${selectedClass}`;
+                (await signInStudent()).uid;
 
             const exists =
 
@@ -194,6 +197,7 @@ export async function showRegister() {
             );
 
             location.reload();
+            } catch (error) { alert("Kunne ikke registrere elev. Prøv igjen."); }
         }
 
     );
@@ -216,39 +220,19 @@ teacherButton.addEventListener(
             return;
         }
 
-        const approved =
-            await teacherApproved(
-                email.trim()
-            );
-
-        if (approved) {
-
-            loginTeacher(
-                email
-            );
-
+        const password = prompt("Personlig Firebase-passord");
+        if (!password) return;
+        try {
+            const identity = await signInStaff(email, password);
+            if (!identity.teacherId) {
+                alert("Kontoen mangler lærerprofil. Kontakt administrator.");
+                return;
+            }
+            loginTeacher(identity.teacherId);
             location.reload();
-
-            return;
+        } catch (error) {
+            alert("Innlogging mislyktes. Kontroller e-post og passord eller kontakt administrator.");
         }
-
-        const name =
-            prompt(
-                "Navn"
-            );
-
-        if (!name) {
-            return;
-        }
-
-        await submitTeacherRequest({
-            name,
-            email
-        });
-
-        alert(
-            "Forespørsel sendt. Du må godkjennes før første innlogging."
-        );
     }
 );    
     
