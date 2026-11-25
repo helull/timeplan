@@ -151,6 +151,11 @@
         #recoveryPanel summary { cursor:pointer; font-weight:600; color:#1e40af; }
         #recoveryPanel .login-card { box-shadow:none; margin:0 auto; padding:16px 0 0; }
         #requestsHeading { max-width:700px; margin:20px auto 0; padding:0 12px; font-size:20px; }
+     .admin-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .admin-toolbar button { flex:0 1 auto; }
+        #recoveryPanel { max-width:676px; margin:12px auto; }
+        @media(max-width:720px) { #recoveryPanel { margin:12px; } }
+        @media(max-width:480px) { .admin-toolbar { gap:6px; flex-wrap:nowrap; } .admin-toolbar button { flex:1; min-width:0; font-size:13px; padding:9px 6px; overflow-wrap:anywhere; } }
     </style>
 
 </head>
@@ -175,8 +180,9 @@
         </form>
     </section>
     <main id="adminContent" hidden>
-    <section class="schoolyear-info">
+    <section class="schoolyear-info admin-toolbar">
         <button type="button" popovertarget="schoolyearReminder">Info: Avslutte skoleår</button>
+        <button type="button" id="recoveryToggle" aria-controls="recoveryPanel" aria-expanded="false">Passordgjenoppretting</button>
     </section>
     <div id="schoolyearReminder" popover="auto" role="dialog" aria-labelledby="schoolyearReminderTitle">
         <h2 id="schoolyearReminderTitle">Husk ved skoleårsslutt</h2>
@@ -187,7 +193,7 @@
         <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
     </div>
 
-    <details id="recoveryPanel" class="schoolyear-info"><summary>Passordgjenoppretting</summary><section class="login-card" style="max-width:700px">
+    <div id="recoveryPanel" class="schoolyear-info" hidden><section class="login-card" style="max-width:700px">
 
 <form id="recoveryForm">
 <label for="recoveryEmail">Lærerens e-postadresse</label>
@@ -202,7 +208,7 @@
 <label><input type="checkbox" id="recoveryDeleted"> Jeg har slettet riktig Authentication-konto.</label>
 <p><a id="recoveryReply" hidden>Svar læreren med ferdigskrevet e-post</a></p>
 </div>
-</section></details>
+</section></div>
 <h2 id="requestsHeading">Ventende lærergodkjenninger</h2>
 <div id="requests">
 
@@ -220,7 +226,7 @@
         src="./admin.js">
     </script>
 
-<script>if(new URLSearchParams(location.search).has("recovery")) document.getElementById("recoveryPanel").open=true;</script>
+<script>const recoveryPanel = document.getElementById("recoveryPanel"); const recoveryToggle = document.getElementById("recoveryToggle"); function setRecoveryOpen(open) { recoveryPanel.hidden = !open; recoveryToggle.setAttribute("aria-expanded", String(open)); } recoveryToggle.addEventListener("click", () => setRecoveryOpen(recoveryPanel.hidden)); setRecoveryOpen(new URLSearchParams(location.search).has("recovery"));</script>
 </body>
 
 </html>
