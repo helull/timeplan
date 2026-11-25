@@ -257,11 +257,13 @@ teacherButton.addEventListener("click", () => {
         const subject = "Timeplan – glemt passord";
         const body = "Hei! Jeg har glemt passordet til timeplanen.\n\nE-postadresse: " + email.value.trim() + "\nNavn: \n\nVennligst hjelp meg med å gjenopprette innloggingen.";
         const status = dialog.querySelector("#staffStatus");
+        status.style.color = "#475569";
         status.textContent = "Send den ferdig utfylte e-posten i e-postprogrammet ditt. Ikke oppgi passord.";
         location.href = "mailto:helge_ullern@yahoo.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
     };
     dialog.querySelector("form").onsubmit = async event => {
         event.preventDefault();
+        dialog.querySelector("#staffStatus").textContent = "";
         if (registering) { await submitRegistration(); return; }
         const controls = [...dialog.querySelectorAll('button')];
         controls.forEach(b => b.disabled = true);
@@ -274,7 +276,8 @@ teacherButton.addEventListener("click", () => {
             loginTeacher(identity.teacherId);
             location.reload();
         } catch (error) {
-            dialog.querySelector("#staffStatus").textContent = "Innlogging mislyktes. Kontroller opplysningene eller velg Glemt passord.";
+            dialog.querySelector("#staffStatus").style.color = "#b91c1c";
+            dialog.querySelector("#staffStatus").textContent = "Kunne ikke logge inn. Kontroller e-postadresse og passord. Er du ny lærer, velg «Registrer deg».";
             console.error("Lærerinnlogging mislyktes:", error.code || error.message);
         } finally { controls.forEach(b => b.disabled = false); }
     };
