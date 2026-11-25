@@ -213,7 +213,7 @@ teacherButton.addEventListener(
 
         const email =
             prompt(
-                "AFK e-post"
+                "E-postadresse registrert i Firebase"
             );
 
         if (!email) {
@@ -231,7 +231,8 @@ teacherButton.addEventListener(
             loginTeacher(identity.teacherId);
             location.reload();
         } catch (error) {
-            alert("Innlogging mislyktes. Kontroller e-post og passord eller kontakt administrator.");
+            console.error("Lærerinnlogging mislyktes:", error);
+            alert("Innlogging mislyktes: " + (error.code || error.message || "Ukjent feil"));
         }
     }
 );    
