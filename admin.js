@@ -33,7 +33,7 @@ function showRequests() {
                     const teacherId = String(data.email || "").trim().toLowerCase();
                     if (!/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig adresse.");
                     const profile = await getDocFromServer(doc(db, "teachers", teacherId));
-                    info.textContent = (profile.exists() ? "Eksisterende profil: " + (profile.data().name || teacherId) + ". Behold profilen uendret." : "Ny lærer. Opprett profil etter identitetskontroll.") + " UID: " + request.id + ". Rolle må foreløpig tildeles i Firebase Console.";
+                    info.textContent = (profile.exists() ? "Eksisterende profil: " + (profile.data().name || teacherId) + ". Behold profilen uendret." : "Ny lærer. Opprett profil etter identitetskontroll.") + " UID: " + request.id + ". Bruk Godkjenn lærer etter identitetskontroll.";
                 } catch (error) { info.textContent = error.message; }
             };
             const dismiss = document.createElement("button");
@@ -48,7 +48,7 @@ function showRequests() {
             const approve = document.createElement("button");
             approve.textContent = "Godkjenn lærer";
             approve.onclick = async () => {
-                if (!confirm("Har du kontrollert lærerens identitet uavhengig av denne forespørselen?")) return;
+                if (!confirm("Har du kontrollert lærerens identitet uavhengig av denne forespørselen, og at UID tilhører riktig konto i Firebase Authentication?")) return;
                 approve.disabled = true;
                 try {
                     if ((await verifiedIdentity())?.role !== "admin") throw new Error("Administrator kreves.");
