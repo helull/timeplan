@@ -176,7 +176,23 @@
         <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
     </div>
 
-    <div id="requests">
+    <section class="login-card" style="max-width:700px;margin:18px auto">
+<h2>Passordgjenoppretting</h2>
+<form id="recoveryForm">
+<label for="recoveryEmail">Lærerens e-postadresse</label>
+<input id="recoveryEmail" type="email" required>
+<label style="margin-top:12px"><input id="recoveryVerified" type="checkbox" required style="width:auto"> Jeg har kontrollert lærerens identitet uavhengig av e-posten.</label>
+<button id="recoveryButton">Klargjør nytt passord</button>
+</form>
+<p id="recoveryStatus" role="status" style="white-space:pre-wrap;overflow-wrap:anywhere"></p>
+<div id="recoveryNext" hidden>
+<a href="https://console.firebase.google.com/project/timeplan-8c778/authentication/users" target="_blank" rel="noopener">Åpne Firebase Authentication</a>
+<p><strong>Slett kun kontoen med nøyaktig e-postadresse og UID angitt ovenfor. Ikke slett noe i Firestore.</strong></p>
+<label><input type="checkbox" id="recoveryDeleted"> Jeg har slettet riktig Authentication-konto.</label>
+<p><a id="recoveryReply" hidden>Svar læreren med ferdigskrevet e-post</a></p>
+</div>
+</section>
+<div id="requests">
 
         <div class="empty-message">
 

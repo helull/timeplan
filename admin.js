@@ -91,3 +91,43 @@ form.addEventListener("submit", async event => {
 try {
     if ((await verifiedIdentity())?.role === "admin") showRequests();
 } catch (error) { status.textContent = error.code || error.message; }
+
+const recoveryForm = document.getElementById("recoveryForm");
+const recoveryEmail = document.getElementById("recoveryEmail");
+const recoveryStatus = document.getElementById("recoveryStatus");
+const recoveryNext = document.getElementById("recoveryNext");
+const recoveryDeleted = document.getElementById("recoveryDeleted");
+const recoveryReply = document.getElementById("recoveryReply");
+recoveryEmail.value = new URLSearchParams(location.search).get("recovery") || "";
+recoveryDeleted.onchange = () => { recoveryReply.hidden = !recoveryDeleted.checked; };
+recoveryForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const button = document.getElementById("recoveryButton");
+    const teacherId = recoveryEmail.value.trim().toLowerCase();
+    recoveryNext.hidden = true;
+    recoveryDeleted.checked = false;
+    recoveryReply.hidden = true;
+    button.disabled = true;
+    try {
+        if ((await verifiedIdentity())?.role !== "admin") throw new Error("Administrator kreves.");
+        if (!/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig AFK-adresse.");
+        if (!document.getElementById("recoveryVerified").checked) throw new Error("Kontroller identiteten først.");
+        const roles = await getDocsFromServer(query(collection(db,"userRoles"),where("teacherId","==",teacherId)));
+        if (roles.size !== 1 || roles.docs[0].data().role !== "teacher") throw new Error("Stopp: Fant ikke nøyaktig én lærerrolle. Ingen endringer utført.");
+        const uid = roles.docs[0].id;
+        const roleRef = doc(db,"userRoles",uid);
+        const lockRef = doc(db,"teacherApprovalLocks",teacherId);
+        const profileRef = doc(db,"teachers",teacherId);
+        if (!confirm("Fjerne gamle lærerrettigheter for " + teacherId + "? Faglige data beholdes.")) return;
+        await runTransaction(db, async tx => {
+            const [role,lock,profile] = await Promise.all([tx.get(roleRef),tx.get(lockRef),tx.get(profileRef)]);
+            if (!profile.exists() || !role.exists() || role.data().role !== "teacher" || role.data().teacherId !== teacherId || (lock.exists() && lock.data().uid !== uid)) throw new Error("Uventet kontotilknytning. Ingen endringer utført.");
+            tx.delete(roleRef);
+            if (lock.exists()) tx.delete(lockRef);
+        });
+        recoveryStatus.textContent = "Lærerrettigheter fjernet. Lærerprofil og faglige data beholdt.\n\nSlett denne kontoen i Authentication:\nE-post: " + teacherId + "\nUID: " + uid;
+        recoveryReply.href = "mailto:" + encodeURIComponent(teacherId) + "?subject=" + encodeURIComponent("Timeplan – nytt passord") + "&body=" + encodeURIComponent("Hei! Den gamle innloggingskontoen er fjernet. Åpne timeplanen, velg lærerinnlogging og Registrer deg med samme e-postadresse og et nytt passord. Jeg godkjenner den nye innloggingen. Dine tidligere faglige data beholdes.");
+        recoveryNext.hidden = false;
+    } catch(error) { recoveryStatus.textContent = error.message; }
+    finally { button.disabled = false; }
+});

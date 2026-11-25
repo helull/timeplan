@@ -92,3 +92,41 @@ test('teacher registration and atomic approval', async () => {
   await assertFails(setDoc(doc(admin,'userRoles/admin1'),{role:'teacher',teacherId:email}));
  } finally {await env.cleanup();}
 });
+
+test('password recovery preserves data and revokes only teacher access', async () => {
+ const env=await initializeTestEnvironment({projectId:'demo-timeplan-security',firestore:{rules:readFileSync(new URL('../firestore.rules',import.meta.url),'utf8')}});
+ try {
+  await env.clearFirestore();
+  const email='recover@afk.no';
+  const preserved={['teachers/'+email]:{name:'Original'},'teacherHomework/h1':{teacherId:email,text:'Behold'},'lessonProgressPlans/p1':{teacherId:email},'blockCourses/b1':{teacherId:email},'schedules/1STA':{lessons:[]},'classes/1STA':{name:'1STA'},'settings/general':{value:true}};
+  await env.withSecurityRulesDisabled(async ctx=>{
+   const db=ctx.firestore();
+   for(const [path,data] of Object.entries({...preserved,'userRoles/admin1':{role:'admin',teacherId:'admin@afk.no'},'userRoles/old1':{role:'teacher',teacherId:email},'teacherApprovalLocks/recover@afk.no':{uid:'old1'},'userRoles/legacy':{role:'teacher',teacherId:'legacy@afk.no'}})) await setDoc(doc(db,path),data);
+  });
+  const staff=(uid)=>env.authenticatedContext(uid,{firebase:{sign_in_provider:'password'}}).firestore();
+  const admin=staff('admin1'), old=staff('old1');
+  const student=env.authenticatedContext('student',{firebase:{sign_in_provider:'anonymous'}}).firestore();
+  const recover=db=>{const batch=writeBatch(db);batch.delete(doc(db,'userRoles/old1'));batch.delete(doc(db,'teacherApprovalLocks',email));return batch.commit();};
+  await assertFails(recover(old));
+  await assertFails(recover(student));
+  await assertFails(deleteDoc(doc(admin,'userRoles/admin1')));
+  await assertFails(deleteDoc(doc(admin,'userRoles/old1')));
+  await assertFails(deleteDoc(doc(admin,'teacherApprovalLocks',email)));
+  await assertSucceeds(recover(admin));
+  await assertFails(getDoc(doc(old,'classes/1STA')));
+  await assertFails(setDoc(doc(old,'teacherHomework/h1'),{text:'changed'}));
+  await assertSucceeds(deleteDoc(doc(admin,'userRoles/legacy')));
+  for(const [path,data] of Object.entries(preserved)){
+   const snap=await assertSucceeds(getDoc(doc(admin,path)));
+   if(JSON.stringify(snap.data())!==JSON.stringify(data)) throw Error('Data changed: '+path);
+  }
+  const fresh=env.authenticatedContext('fresh',{email,firebase:{sign_in_provider:'password'}}).firestore();
+  await assertSucceeds(setDoc(doc(fresh,'teacherRequests/fresh'),{name:'New',email,approved:false,createdAt:serverTimestamp()}));
+  const batch=writeBatch(admin);
+  batch.set(doc(admin,'teacherApprovalLocks',email),{uid:'fresh'});
+  batch.set(doc(admin,'userRoles/fresh'),{role:'teacher',teacherId:email});
+  batch.delete(doc(admin,'teacherRequests/fresh'));
+  await assertSucceeds(batch.commit());
+  await assertSucceeds(getDoc(doc(fresh,'teachers',email)));
+ } finally {await env.cleanup();}
+});
