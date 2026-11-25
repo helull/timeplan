@@ -139,7 +139,8 @@
         #schoolyearReminder::backdrop { background:rgba(15,23,42,.4); }
         #schoolyearReminder h2 { margin-top:0; }
         #schoolyearReminder .keep { font-weight:bold; }
-        #schoolyearReminder .close-info { margin-top:12px; }
+        #schoolyearReminder .close-info { margin-top:12px; padding:10px 18px; border:1px solid #b7c5db; border-radius:8px; background:#fff; color:#1e40af; font:inherit; font-weight:600; cursor:pointer; }
+        #schoolyearReminder { max-height:85dvh; overflow:auto; }
     
         .request-card button { padding:10px 16px; border:1px solid transparent; border-radius:8px; font:inherit; font-weight:600; cursor:pointer; margin:8px 8px 0 0; }
         .request-card button:first-of-type { background:#15803d; color:white; }
@@ -186,10 +187,24 @@
     </section>
     <div id="schoolyearReminder" popover="auto" role="dialog" aria-labelledby="schoolyearReminderTitle">
         <h2 id="schoolyearReminderTitle">Husk ved skoleårsslutt</h2>
-        <p>Du kan rydde Firestore manuelt ved å slette samlingene fra det gamle skoleåret.</p>
-        <p class="keep">VIKTIG: Behold alltid samlingene <code>teachers</code> og <code>settings</code>!</p>
-        <p>Behold også userRoles, timeplaner, klasser og øvrige innstillinger. Ikke slett samlinger uten en særskilt gjennomgang og sikkerhetskopi.</p>
-        <p>Elever som har en gammel registrering i nettleseren, skal da få registrere seg på nytt når appen oppdager at de mangler i <code>students</code>.</p>
+        <p>Ta sikkerhetskopi og gjennomgå dataene før opprydding. Ikke slett hele samlinger ukritisk.</p>
+        <p class="keep">Disse skal alltid beholdes ved skoleårsslutt:</p>
+        <ul>
+            <li><code>teachers</code> – lærerprofiler og tilknytninger</li>
+            <li><code>settings</code> – systeminnstillinger</li>
+            <li><code>userRoles</code> – innloggingsrettigheter</li>
+            <li><code>teacherApprovalLocks</code> – godkjenningslåser</li>
+            <li><code>classes</code> og <code>schedules</code> – klasser og timeplaner</li>
+            <li>Lærer- og administratorkontoer i Authentication</li>
+        </ul>
+        <p class="keep">Vurder opprydding i gamle skoleårsdata:</p>
+        <ul>
+            <li><code>students</code> og <code>homework</code> – gamle elevregistreringer og egne lekser.</li>
+            <li><code>teacherHomework</code>, <code>exams</code>, <code>blockExams</code> og <code>tentamens</code> – gamle lekser og vurderinger.</li>
+            <li><code>blockCourses</code>, <code>holidays</code>, <code>lessonProgressPlans</code> og <code>lessonProgressPlanImports</code> – gjennomgå og behold det som skal gjenbrukes.</li>
+        </ul>
+        <p>Dette er en sjekkliste, ikke en sletteliste. Behold også ventende lærerforespørsler (<code>teacherRequests</code>) og ukjente samlinger til de er gjennomgått.</p>
+        <p>Elever som mangler sin gamle profil i <code>students</code>, må registrere seg på nytt.</p>
         <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
     </div>
 
