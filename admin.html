@@ -140,6 +140,17 @@
         #schoolyearReminder h2 { margin-top:0; }
         #schoolyearReminder .keep { font-weight:bold; }
         #schoolyearReminder .close-info { margin-top:12px; }
+    
+        .request-card button { padding:10px 16px; border:1px solid transparent; border-radius:8px; font:inherit; font-weight:600; cursor:pointer; margin:8px 8px 0 0; }
+        .request-card button:first-of-type { background:#15803d; color:white; }
+        .request-card button:last-of-type { background:#fff; color:#b91c1c; border-color:#fecaca; }
+        .request-card button:disabled { opacity:.55; cursor:wait; }
+        .request-card button:focus-visible { outline:3px solid #93c5fd; outline-offset:2px; }
+        #recoveryPanel input[type="checkbox"] { width:auto; margin-right:6px; }
+        #recoveryPanel { margin:12px; padding:16px; background:white; border-radius:12px; }
+        #recoveryPanel summary { cursor:pointer; font-weight:600; color:#1e40af; }
+        #recoveryPanel .login-card { box-shadow:none; margin:0 auto; padding:16px 0 0; }
+        #requestsHeading { max-width:700px; margin:20px auto 0; padding:0 12px; font-size:20px; }
     </style>
 
 </head>
@@ -176,8 +187,8 @@
         <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
     </div>
 
-    <section class="login-card" style="max-width:700px;margin:18px auto">
-<h2>Passordgjenoppretting</h2>
+    <details id="recoveryPanel" class="schoolyear-info"><summary>Passordgjenoppretting</summary><section class="login-card" style="max-width:700px">
+
 <form id="recoveryForm">
 <label for="recoveryEmail">Lærerens e-postadresse</label>
 <input id="recoveryEmail" type="email" required>
@@ -191,7 +202,8 @@
 <label><input type="checkbox" id="recoveryDeleted"> Jeg har slettet riktig Authentication-konto.</label>
 <p><a id="recoveryReply" hidden>Svar læreren med ferdigskrevet e-post</a></p>
 </div>
-</section>
+</section></details>
+<h2 id="requestsHeading">Ventende lærergodkjenninger</h2>
 <div id="requests">
 
         <div class="empty-message">
@@ -208,6 +220,7 @@
         src="./admin.js">
     </script>
 
+<script>if(new URLSearchParams(location.search).has("recovery")) document.getElementById("recoveryPanel").open=true;</script>
 </body>
 
 </html>
