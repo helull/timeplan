@@ -1,7 +1,7 @@
 import { initializeTestEnvironment, assertSucceeds, assertFails } from '@firebase/rules-unit-testing';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { doc, getDoc, setDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, collection, query, where, getDocs, writeBatch, serverTimestamp } from 'firebase/firestore';
 
 test('role and ownership matrix', async () => {
  const env = await initializeTestEnvironment({
@@ -55,4 +55,40 @@ test('role and ownership matrix', async () => {
   await assertSucceeds(setDoc(doc(student,'students/student1'),{name:'Test',classId:'1STA'}));
   await assertFails(setDoc(doc(student,'students/student2'),{name:'Test',classId:'1STA'}));
  } finally { await env.cleanup(); }
+});
+
+test('teacher registration and atomic approval', async () => {
+ const env = await initializeTestEnvironment({projectId:'demo-timeplan-security',firestore:{rules:readFileSync(new URL('../firestore.rules',import.meta.url),'utf8')}});
+ try {
+  await env.clearFirestore();
+  const email='test@afk.no';
+  await env.withSecurityRulesDisabled(async ctx=>{
+   const db=ctx.firestore();
+   await setDoc(doc(db,'userRoles/admin1'),{role:'admin',teacherId:'admin@afk.no'});
+   await setDoc(doc(db,'teachers',email),{name:'Bevart navn',approved:true});
+  });
+  const admin=env.authenticatedContext('admin1',{firebase:{sign_in_provider:'password'}}).firestore();
+  const applicant=env.authenticatedContext('new1',{email,firebase:{sign_in_provider:'password'}}).firestore();
+  const data={name:'Nytt navn',email,approved:false,createdAt:serverTimestamp()};
+  await assertFails(setDoc(doc(applicant,'teacherRequests/other'),data));
+  await assertFails(setDoc(doc(applicant,'teacherRequests/new1'),{...data,email:'other@afk.no'}));
+  await assertSucceeds(setDoc(doc(applicant,'teacherRequests/new1'),data));
+  await assertFails(setDoc(doc(applicant,'userRoles/new1'),{role:'teacher',teacherId:email}));
+  await assertFails(setDoc(doc(admin,'userRoles/new1'),{role:'teacher',teacherId:email}));
+  const batch=writeBatch(admin);
+  batch.set(doc(admin,'teacherApprovalLocks',email),{uid:'new1'});
+  batch.set(doc(admin,'userRoles/new1'),{role:'teacher',teacherId:email});
+  batch.delete(doc(admin,'teacherRequests/new1'));
+  await assertSucceeds(batch.commit());
+  const profile=await assertSucceeds(getDoc(doc(applicant,'teachers',email)));
+  if(profile.data().name!=='Bevart navn') throw Error('Profile overwritten');
+  const second=env.authenticatedContext('new2',{email,firebase:{sign_in_provider:'password'}}).firestore();
+  await assertSucceeds(setDoc(doc(second,'teacherRequests/new2'),data));
+  const duplicate=writeBatch(admin);
+  duplicate.set(doc(admin,'teacherApprovalLocks',email),{uid:'new2'});
+  duplicate.set(doc(admin,'userRoles/new2'),{role:'teacher',teacherId:email});
+  duplicate.delete(doc(admin,'teacherRequests/new2'));
+  await assertFails(duplicate.commit());
+  await assertFails(setDoc(doc(admin,'userRoles/admin1'),{role:'teacher',teacherId:email}));
+ } finally {await env.cleanup();}
 });
