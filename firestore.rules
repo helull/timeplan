@@ -13,9 +13,40 @@ service cloud.firestore {
     function student() { return anonymous(); }
     function member() { return student() || teacher() || admin(); }
     function staff() { return teacher() || admin(); }
-    match /userRoles/{uid} {
+    match /teacherRequests/{uid} {
+      allow create: if signedIn() && !anonymous() && request.auth.uid == uid &&
+        request.resource.data.keys().hasOnly(['name','email','createdAt','approved']) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 120 &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.email is string &&
+        request.resource.data.email.matches('.*@afk[.]no') &&
+        request.resource.data.approved == false &&
+        request.resource.data.createdAt == request.time;
       allow get: if signedIn() && request.auth.uid == uid;
-      allow list, write: if false;
+    }
+    match /teacherApprovalLocks/{teacherId} {
+      allow get: if admin();
+      allow create: if admin() &&
+        request.resource.data.keys().hasOnly(['uid']) &&
+        request.resource.data.uid is string &&
+        getAfter(/databases/$(database)/documents/userRoles/$(request.resource.data.uid)).data.teacherId == teacherId &&
+        getAfter(/databases/$(database)/documents/userRoles/$(request.resource.data.uid)).data.role == 'teacher';
+    }
+    match /userRoles/{uid} {
+      allow get: if admin() || (signedIn() && request.auth.uid == uid);
+      allow list: if admin();
+      allow create: if admin() &&
+        request.resource.data.keys().hasOnly(['role','teacherId']) &&
+        request.resource.data.role == 'teacher' &&
+        exists(/databases/$(database)/documents/teacherRequests/$(uid)) &&
+        get(/databases/$(database)/documents/teacherRequests/$(uid)).data.approved == false &&
+        request.resource.data.teacherId == get(/databases/$(database)/documents/teacherRequests/$(uid)).data.email &&
+        existsAfter(/databases/$(database)/documents/teachers/$(request.resource.data.teacherId)) &&
+        !exists(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)) &&
+        getAfter(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)).data.uid == uid &&
+        !existsAfter(/databases/$(database)/documents/teacherRequests/$(uid));
+      allow update, delete: if false;
     }
     match /{collection}/{id} {
       allow read: if member() && collection in [
