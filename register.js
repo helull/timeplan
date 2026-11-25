@@ -207,34 +207,46 @@ export async function showRegister() {
         "teacherLoginButton"
     );
 
-teacherButton.addEventListener(
-    "click",
-    async () => {
-
-        const email =
-            prompt(
-                "E-postadresse registrert i Firebase"
-            );
-
-        if (!email) {
-            return;
-        }
-
-        const password = prompt("Personlig Firebase-passord");
-        if (!password) return;
+teacherButton.addEventListener("click", () => {
+    if (document.getElementById("staffLoginDialog")) return;
+    const dialog = document.createElement("dialog");
+    dialog.id = "staffLoginDialog";
+    dialog.style.cssText = "width:min(90vw,400px);border:0;border-radius:14px;padding:24px";
+    dialog.innerHTML = `
+        <form id="staffLoginForm" style="display:grid;gap:12px">
+            <h2>Lærerinnlogging</h2>
+            <label>E-postadresse<input id="staffEmail" type="email" autocomplete="username" required style="width:100%"></label>
+            <label>Passord<input id="staffPassword" type="password" autocomplete="current-password" required style="width:100%"></label>
+            <p id="staffStatus" role="status"></p>
+            <button type="submit">Logg inn</button>
+            <button type="button" id="staffForgot">Glemt passord?</button>
+            <button type="button" id="staffClose">Avbryt</button>
+        </form>`;
+    document.body.append(dialog);
+    dialog.addEventListener("close", () => dialog.remove());
+    dialog.querySelector("#staffClose").onclick = () => dialog.close();
+    dialog.querySelector("#staffForgot").onclick = () => {
+        const email = dialog.querySelector("#staffEmail");
+        if (!email.reportValidity()) return;
+        const subject = "Timeplan – glemt passord";
+        const body = "Hei! Jeg har glemt passordet til timeplanen.\\n\\nE-postadresse: " + email.value.trim() + "\\nNavn: \\n\\nVennligst hjelp meg med å gjenopprette innloggingen.";
+        const status = dialog.querySelector("#staffStatus");
+        status.textContent = "Send den ferdig utfylte e-posten i e-postprogrammet ditt. Ikke oppgi passord.";
+        location.href = "mailto:helge_ullern@yahoo.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    };
+    dialog.querySelector("form").onsubmit = async event => {
+        event.preventDefault();
+        const submit = dialog.querySelector('[type="submit"]');
+        submit.disabled = true;
         try {
-            const identity = await signInStaff(email, password);
-            if (!identity.teacherId) {
-                alert("Kontoen mangler lærerprofil. Kontakt administrator.");
-                return;
-            }
+            const identity = await signInStaff(dialog.querySelector("#staffEmail").value, dialog.querySelector("#staffPassword").value);
             loginTeacher(identity.teacherId);
             location.reload();
         } catch (error) {
-            console.error("Lærerinnlogging mislyktes:", error);
-            alert("Innlogging mislyktes: " + (error.code || error.message || "Ukjent feil"));
-        }
-    }
-);    
-    
+            dialog.querySelector("#staffStatus").textContent = "Innlogging mislyktes. Kontroller opplysningene eller velg Glemt passord.";
+            console.error("Lærerinnlogging mislyktes:", error.code || error.message);
+        } finally { submit.disabled = false; }
+    };
+    dialog.showModal();
+});
 }
