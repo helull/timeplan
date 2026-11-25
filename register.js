@@ -256,10 +256,12 @@ teacherButton.addEventListener("click", () => {
         if (!email.reportValidity()) return;
         const subject = "Timeplan – glemt passord";
         const body = "Hei! Jeg har glemt passordet til timeplanen.\n\nE-postadresse: " + email.value.trim() + "\nNavn: \n\nVennligst hjelp meg med å gjenopprette innloggingen.";
+        const recoveryUrl = new URL("./admin.html", location.href);
+        recoveryUrl.searchParams.set("recovery", email.value.trim().toLowerCase());
         const status = dialog.querySelector("#staffStatus");
         status.style.color = "#475569";
         status.textContent = "Send den ferdig utfylte e-posten i e-postprogrammet ditt. Ikke oppgi passord.";
-        location.href = "mailto:helge_ullern@yahoo.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        location.href = "mailto:helge_ullern@yahoo.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body + "\n\nAdministrator: " + recoveryUrl.href);
     };
     dialog.querySelector("form").onsubmit = async event => {
         event.preventDefault();
