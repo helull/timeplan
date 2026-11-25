@@ -214,18 +214,25 @@ teacherButton.addEventListener("click", () => {
     if (document.getElementById("staffLoginDialog")) return;
     const dialog = document.createElement("dialog");
     dialog.id = "staffLoginDialog";
-    dialog.style.cssText = "width:min(90vw,400px);border:0;border-radius:14px;padding:24px";
+    dialog.style.cssText = "position:fixed;inset:0;margin:auto;width:min(92vw,400px);max-height:90dvh;overflow:auto;box-sizing:border-box;border:0;border-radius:18px;padding:24px;background:white;color:#172033;box-shadow:0 18px 60px #0003";
+    const returning = localStorage.getItem("staffHasLoggedIn") === "true";
     dialog.innerHTML = `
         <form id="staffLoginForm" style="display:grid;gap:12px">
-            <h2>Lærerinnlogging</h2>
-            <label>E-postadresse<input id="staffEmail" type="email" autocomplete="username" required style="width:100%"></label>
-            <label>Passord<input id="staffPassword" type="password" autocomplete="current-password" required style="width:100%"></label>
+            <button type="button" id="staffClose" aria-label="Avbryt" style="position:absolute;right:12px;top:8px;width:36px;height:36px;margin:0;padding:0;background:transparent;color:#64748b;box-shadow:none;font-size:26px">×</button>
+            <h2 style="margin:0 30px 8px 0">Lærerinnlogging</h2>
+            <label>E-postadresse<input id="staffEmail" type="email" autocomplete="username" required style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
+            <label>Passord<input id="staffPassword" type="password" autocomplete="current-password" required style="display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;font-size:16px"></label>
             <p id="staffStatus" role="status"></p>
-            <button type="submit">Logg inn</button>
-            <button type="button" id="staffRegister">Registrer lærer</button>
-            <button type="button" id="staffForgot">Glemt passord?</button>
-            <button type="button" id="staffClose">Avbryt</button>
+            <button type="submit" style="margin:0;padding:12px;box-shadow:none">Logg inn</button>
+            <button type="button" id="staffRegister" style="margin:0;padding:12px;box-shadow:none">Registrer lærer</button>
+            <button type="button" id="staffForgot" style="margin:0;padding:8px;background:transparent;color:#475569;box-shadow:none;font-size:14px;text-decoration:underline">Glemt passord?</button>
         </form>`;
+    const primary = dialog.querySelector(returning ? '[type="submit"]' : '#staffRegister');
+    const secondary = dialog.querySelector(returning ? '#staffRegister' : '[type="submit"]');
+    primary.style.cssText += ";background:#2563eb;color:white;border:1px solid #2563eb;font-weight:700;width:100%";
+    secondary.style.cssText += ";background:white;color:#2563eb;border:1px solid #cbd5e1;font-weight:500;width:100%";
+    primary.before(secondary);
+    if (!returning) secondary.before(primary);
     document.body.append(dialog);
     dialog.addEventListener("close", () => dialog.remove());
     dialog.addEventListener("cancel", event => { if (dialog.querySelector('[type="submit"]').disabled) event.preventDefault(); });
@@ -246,6 +253,7 @@ teacherButton.addEventListener("click", () => {
         controls.forEach(b => b.disabled = true);
         try {
             const identity = await signInStaff(dialog.querySelector("#staffEmail").value, dialog.querySelector("#staffPassword").value);
+            localStorage.setItem("staffHasLoggedIn", "true");
             loginTeacher(identity.teacherId);
             location.reload();
         } catch (error) {
