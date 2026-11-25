@@ -24,20 +24,17 @@ function showRequests() {
             email.textContent = data.email || "";
             const info = document.createElement("p");
             info.textContent = "Kontroller identiteten før du tildeler lærerrettigheter.";
-            const inspect = document.createElement("button");
-            inspect.textContent = "Kontroller lærerprofil";
-            inspect.onclick = async () => {
-                try {
-                    const identity = await verifiedIdentity();
-                    if (identity?.role !== "admin") throw new Error("Administrator kreves.");
-                    const teacherId = String(data.email || "").trim().toLowerCase();
-                    if (!/^[^\s@/]+@afk\.no$/.test(teacherId)) throw new Error("Ugyldig adresse.");
-                    const profile = await getDocFromServer(doc(db, "teachers", teacherId));
-                    info.textContent = (profile.exists() ? "Eksisterende profil: " + (profile.data().name || teacherId) + ". Behold profilen uendret." : "Ny lærer. Opprett profil etter identitetskontroll.") + " UID: " + request.id + ". Bruk Godkjenn lærer etter identitetskontroll.";
-                } catch (error) { info.textContent = error.message; }
-            };
+            const teacherIdForPreview = String(data.email || "").trim().toLowerCase();
+            info.textContent = "Undersøker lærerprofil…";
+            if (/^[^\s@/]+@afk\.no$/.test(teacherIdForPreview)) {
+                getDocFromServer(doc(db, "teachers", teacherIdForPreview)).then(profile => {
+                    info.textContent = profile.exists()
+                        ? "Eksisterende lærer – tidligere tilknytninger beholdes. Registrert navn: " + (profile.data().name || teacherIdForPreview)
+                        : "Ny lærer – lærerprofil opprettes ved godkjenning.";
+                }).catch(() => { info.textContent = "Kunne ikke hente profilstatus. Godkjenning kontrollerer profilen på nytt."; });
+            } else { info.textContent = "Ugyldig AFK-adresse."; }
             const dismiss = document.createElement("button");
-            dismiss.textContent = "Fjern forespørsel";
+            dismiss.textContent = "Avvis";
             dismiss.onclick = async () => {
                 if (!confirm("Fjerne bare forespørselen? Dette sletter ikke konto eller lærerprofil.")) return;
                 try {
@@ -72,7 +69,7 @@ function showRequests() {
                 } catch (error) { info.textContent = error.message; }
                 finally { approve.disabled = false; }
             };
-            card.append(heading, email, info, inspect, approve, dismiss);
+            card.append(heading, email, info, approve, dismiss);
             container.append(card);
         });
     }, error => { container.textContent = "Kunne ikke hente forespørsler: " + error.code; });
