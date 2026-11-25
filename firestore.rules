@@ -27,6 +27,10 @@ service cloud.firestore {
     }
     match /teacherApprovalLocks/{teacherId} {
       allow get: if admin();
+      allow delete: if admin() &&
+        get(/databases/$(database)/documents/userRoles/$(resource.data.uid)).data.role == 'teacher' &&
+        get(/databases/$(database)/documents/userRoles/$(resource.data.uid)).data.teacherId == teacherId &&
+        !existsAfter(/databases/$(database)/documents/userRoles/$(resource.data.uid));
       allow create: if admin() &&
         request.resource.data.keys().hasOnly(['uid']) &&
         request.resource.data.uid is string &&
@@ -46,7 +50,9 @@ service cloud.firestore {
         !exists(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)) &&
         getAfter(/databases/$(database)/documents/teacherApprovalLocks/$(request.resource.data.teacherId)).data.uid == uid &&
         !existsAfter(/databases/$(database)/documents/teacherRequests/$(uid));
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if admin() && resource.data.role == 'teacher' &&
+        !existsAfter(/databases/$(database)/documents/teacherApprovalLocks/$(resource.data.teacherId));
     }
     match /{collection}/{id} {
       allow read: if member() && collection in [
