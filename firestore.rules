@@ -27,7 +27,16 @@ service cloud.firestore {
     }
     match /userRoles/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;
-      allow list, write: if false;
+      allow list: if admin();
+      allow create: if admin() &&
+        request.resource.data.keys().hasOnly(['role','teacherId']) &&
+        request.resource.data.role == 'teacher' &&
+        exists(/databases/$(database)/documents/teacherRequests/$(uid)) &&
+        get(/databases/$(database)/documents/teacherRequests/$(uid)).data.approved == false &&
+        request.resource.data.teacherId == get(/databases/$(database)/documents/teacherRequests/$(uid)).data.email &&
+        existsAfter(/databases/$(database)/documents/teachers/$(request.resource.data.teacherId)) &&
+        !existsAfter(/databases/$(database)/documents/teacherRequests/$(uid));
+      allow update, delete: if false;
     }
     match /{collection}/{id} {
       allow read: if member() && collection in [
