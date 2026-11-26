@@ -20,12 +20,20 @@ if (trigger) {
     menu.className = 'quick-menu-actions';
     menu.setAttribute('aria-label', 'Hurtigmeny');
     menu.innerHTML = `
+      <button type="button" class="quick-menu-action quick-refresh-action" id="quickRefresh" aria-label="Oppdater timeplanen" title="Oppdater timeplanen"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10a8 8 0 0 0-14-5L3 8M3 3v5h5M4 14a8 8 0 0 0 14 5l3-3m0 5v-5h-5"/></svg></button>
       <button type="button" class="quick-menu-action" id="quickExamPlan">▦ <span>Plan</span></button>
       <button type="button" class="quick-menu-action quick-info-action" id="quickInfo" aria-label="Informasjon" title="Informasjon"><span class="quick-info-mark" aria-hidden="true">?</span></button>
       <button type="button" class="quick-menu-action quick-display-action" id="quickDisplay" title="Endre visning av lærer og rom" aria-label="Endre visning"><span class="quick-display-icon" aria-hidden="true">◉</span><span class="quick-display-label">Begge</span></button>
       <button type="button" class="quick-menu-action quick-class-action" id="quickClass" aria-haspopup="listbox" aria-expanded="false" title="Bytt klasse" hidden>♧ <span class="quick-class-label">Klasse</span>⌄</button>
       <button type="button" class="quick-menu-action" id="quickMore" aria-label="Mer" title="Mer">⋯</button>`;
     trigger.insertAdjacentElement('afterend', menu);
+    const refreshButton = menu.querySelector('#quickRefresh');
+    refreshButton.addEventListener('click', () => {
+        refreshButton.disabled = true;
+        refreshButton.classList.add('is-refreshing');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) location.reload();
+        else setTimeout(() => location.reload(), 180);
+    });
 
     // Bare PC med presis peker, ikke telefon i landskap.
     function isDesktopTimeplanDevice() {
@@ -539,6 +547,16 @@ quickDisplayStyle.textContent = `
   .quick-menu-actions .quick-class-action[hidden] { display:none !important; }
   .quick-class-panel[hidden] { display:none !important; }
   .quick-menu-actions { box-sizing:border-box; }
+  .quick-menu-actions .quick-refresh-action {
+    flex:0 0 34px; min-width:34px!important; padding:0!important;
+    min-height:34px; display:inline-flex; align-items:center; justify-content:center;
+    background:transparent!important; border-color:transparent!important; color:#64748b!important;
+  }
+  .quick-refresh-action svg { flex:none; pointer-events:none; }
+  .quick-menu-actions .quick-refresh-action:hover, .quick-menu-actions .quick-refresh-action.is-refreshing { color:#175c40!important; }
+  .quick-refresh-action.is-refreshing svg { animation:quickRefreshSpin .18s linear; }
+  @keyframes quickRefreshSpin { to { transform:rotate(360deg); } }
+  @media(prefers-reduced-motion:reduce) { .quick-refresh-action.is-refreshing svg { animation:none; } }
   .quick-class-panel {
     position:absolute; right:0; top:calc(100% + 7px);
     width:min(296px, calc(100vw - 12px)); box-sizing:border-box;
