@@ -28,6 +28,7 @@ Lærer:
 - Kan sette opp/bestemme sine fag i blokkøktene.
 - Kan sette opp og slette prøve i et fag i en vanlig økt.  Kan bare slettes av lærer, ikke elev.
 - Kan sette opp og slette prøve i en blokkøkt.  Synlig for hele trinnet som har denne blokka i dette trinnet.
+- Kan lage fremdriftsplan for fagene sine.  Kan også legge inn en lenke til en Onenote-side dersom man har en levende eller statisk fremdriftsplan i Onenote.
 
 Admin:
 - Trenger bare jeg å vite om, som er admin, det er ikke meningen lærere skal ha tilgang!
