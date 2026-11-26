@@ -1,3 +1,4 @@
+import {openStudentPairing} from "./studentPairing.js";
 import {openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {showScheduleView, currentScheduleView} from "./app.js";
 import { verifiedIdentity, signOutSecurely } from "./secureAuth.js";
@@ -122,6 +123,7 @@ const classId =
 
                 <button id="openProveplanTools" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Prøveplan</button>
 
+                <button id="pairStudentDevice">Koble til en annen enhet</button>
                 <button id="logoutUserFromTools">
                     Logg ut
                 </button>
@@ -136,6 +138,7 @@ const classId =
         `
     );
 
+    document.getElementById("pairStudentDevice")?.addEventListener("click",()=>openStudentPairing().catch(()=>alert("Kunne ikke åpne sammenkobling.")));
         document
         .getElementById("openProveplanTools")
         ?.addEventListener("click", openProveplan);

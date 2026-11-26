@@ -13,6 +13,44 @@ service cloud.firestore {
     function student() { return anonymous(); }
     function member() { return student() || teacher() || admin(); }
     function staff() { return teacher() || admin(); }
+    // A device link is immutable and only created atomically with a consumed invitation.
+    function studentProfileId() {
+      return exists(/databases/$(database)/documents/studentDevices/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.studentId
+        : request.auth.uid;
+    }
+    match /studentPairings/{token} {
+      allow get: if student();
+      allow create: if student() && token.matches('[a-f0-9]{64}') &&
+        request.resource.data.keys().hasOnly(['studentId','issuer','createdAt','claimedBy']) &&
+        request.resource.data.issuer == request.auth.uid &&
+        request.resource.data.studentId == request.auth.uid &&
+        exists(/databases/$(database)/documents/students/$(request.auth.uid)) &&
+        !exists(/databases/$(database)/documents/studentDevices/$(request.auth.uid)) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.claimedBy == null;
+      allow update: if student() && resource.data.claimedBy == null &&
+        request.time < resource.data.createdAt + duration.value(30, 's') &&
+        request.auth.uid != resource.data.issuer &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['claimedBy']) &&
+        request.resource.data.claimedBy == request.auth.uid &&
+        !exists(/databases/$(database)/documents/students/$(request.auth.uid)) &&
+        !exists(/databases/$(database)/documents/studentDevices/$(request.auth.uid)) &&
+        exists(/databases/$(database)/documents/students/$(resource.data.studentId)) &&
+        getAfter(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.token == token &&
+        getAfter(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.studentId == resource.data.studentId;
+    }
+    match /studentDevices/{uid} {
+      allow get: if student() && (uid == request.auth.uid || resource.data.studentId == request.auth.uid);
+      allow create: if student() && uid == request.auth.uid &&
+        request.resource.data.keys().hasOnly(['studentId','token']) &&
+        request.resource.data.token is string &&
+        !exists(/databases/$(database)/documents/students/$(uid)) &&
+        get(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.claimedBy == null &&
+        getAfter(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.claimedBy == uid &&
+        getAfter(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.studentId == request.resource.data.studentId;
+      allow delete: if student() && (uid == request.auth.uid || resource.data.studentId == request.auth.uid);
+    }
     match /teacherRequests/{uid} {
       allow create: if signedIn() && !anonymous() && request.auth.uid == uid &&
         request.resource.data.keys().hasOnly(['name','email','createdAt','approved']) &&
@@ -72,23 +110,23 @@ service cloud.firestore {
       allow write: if false;
     }
     match /students/{uid} {
-      allow create: if student() && uid == request.auth.uid &&
+      allow create: if student() && uid == request.auth.uid && studentProfileId() == uid &&
         request.resource.data.keys().hasOnly(['name','classId','createdAt','selectedBlockCourses']) &&
         request.resource.data.name is string && request.resource.data.classId is string;
-      allow update: if student() && uid == request.auth.uid &&
+      allow update: if student() && uid == studentProfileId() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['selectedBlockCourses']) &&
         request.resource.data.selectedBlockCourses is list;
     }
     match /homework/{id} {
-      allow get: if student() && id.matches(request.auth.uid + '_.*') &&
-        (resource == null || resource.data.studentId == request.auth.uid);
-      allow list: if student() && resource.data.studentId == request.auth.uid;
-      allow create: if student() && id.matches(request.auth.uid + '_.*') &&
-        request.resource.data.studentId == request.auth.uid;
-      allow update: if student() && id.matches(request.auth.uid + '_.*') &&
-        resource.data.studentId == request.auth.uid &&
-        request.resource.data.studentId == request.auth.uid;
-      allow delete: if student() && resource.data.studentId == request.auth.uid;
+      allow get: if student() && id.matches(studentProfileId() + '_.*') &&
+        (resource == null || resource.data.studentId == studentProfileId());
+      allow list: if student() && resource.data.studentId == studentProfileId();
+      allow create: if student() && id.matches(studentProfileId() + '_.*') &&
+        request.resource.data.studentId == studentProfileId();
+      allow update: if student() && id.matches(studentProfileId() + '_.*') &&
+        resource.data.studentId == studentProfileId() &&
+        request.resource.data.studentId == studentProfileId();
+      allow delete: if student() && resource.data.studentId == studentProfileId();
     }
     match /exams/{id} {
       allow create: if student() && request.resource.data.teacher == false;

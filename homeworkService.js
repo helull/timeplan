@@ -1,3 +1,4 @@
+import {resolveStudentId} from "./studentPairing.js";
 import { auth, db }
 from "./firebase.js";
 
@@ -32,7 +33,7 @@ export async function saveHomework(
     exam = false
 ) {
     
-    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
+    const studentId = await resolveStudentId();
 
     if (!studentId) throw new Error("Elevinnlogging kreves.");
     const documentId =
@@ -70,7 +71,7 @@ export async function loadHomework(
     week
 ) {
 
-    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
+    const studentId = await resolveStudentId();
 
     if (!studentId) return { text: "", exam: false };
 
@@ -114,7 +115,7 @@ export async function loadHomework(
 
 export async function loadAllHomework() {
     await auth.authStateReady();
-    const studentId = auth.currentUser?.isAnonymous ? auth.currentUser.uid : null;
+    const studentId = await resolveStudentId();
     if (!studentId) return {};
     const snapshot = await getDocs(query(collection(db, "homework"), where("studentId", "==", studentId)));
 

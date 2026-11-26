@@ -1,3 +1,4 @@
+import {resolveStudentId,redeemStudentPairing} from "./studentPairing.js";
 import { waitForTeacherApproval } from "./pendingTeacher.js";
 import { verifiedIdentity, signInStudent, signOutSecurely } from "./secureAuth.js";
 import { refreshPlanIcons } from "./progressPlanViewer.js";
@@ -216,17 +217,19 @@ if (identity && ["teacher", "admin"].includes(identity.role) && !identity.teache
 }
 if (!identity) identity = await signInStudent();
 if (identity.role === "student") {
+    await redeemStudentPairing();
+    const profileId = await resolveStudentId();
     localStorage.removeItem("teacherId");
     localStorage.setItem("userType", "student");
-    if (localStorage.getItem("studentId") !== identity.uid) {
+    if (localStorage.getItem("studentId") !== profileId) {
         localStorage.removeItem("studentId");
         localStorage.removeItem("studentName");
         localStorage.removeItem("classId");
         localStorage.removeItem("lessonIds");
     }
-    const profile = await getDoc(doc(db, "students", identity.uid));
+    const profile = await getDoc(doc(db, "students", profileId));
     if (profile.exists()) {
-        localStorage.setItem("studentId", identity.uid);
+        localStorage.setItem("studentId", profileId);
         localStorage.setItem("studentName", profile.data().name);
         localStorage.setItem("classId", profile.data().classId);
         localStorage.setItem("lessonIds", JSON.stringify(profile.data().selectedBlockCourses || []));
