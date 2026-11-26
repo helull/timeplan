@@ -130,3 +130,53 @@ test('password recovery preserves data and revokes only teacher access', async (
   await assertSucceeds(getDoc(doc(fresh,'teachers',email)));
  } finally {await env.cleanup();}
 });
+
+test('student device pairing: atomic, expiring, single use, isolated', async()=>{
+ const env=await initializeTestEnvironment({projectId:'demo-timeplan-security',firestore:{rules:readFileSync(new URL('../firestore.rules',import.meta.url),'utf8')}});
+ try {
+  await env.clearFirestore();
+  const anon=uid=>env.authenticatedContext(uid,{firebase:{sign_in_provider:'anonymous'}}).firestore();
+  const owner=anon('owner'), phone=anon('phone'), stranger=anon('stranger'), existing=anon('existing');
+  const teacher=env.authenticatedContext('teacher',{firebase:{sign_in_provider:'password'}}).firestore();
+  const token='a'.repeat(64), expired='b'.repeat(64), other='c'.repeat(64);
+  await env.withSecurityRulesDisabled(async ctx=>{
+   const db=ctx.firestore();
+   await setDoc(doc(db,'students/owner'),{name:'Elev',classId:'1STA',selectedBlockCourses:[]});
+   await setDoc(doc(db,'students/existing'),{name:'Annen',classId:'1STA'});
+   await setDoc(doc(db,'homework/owner_l1_1'),{studentId:'owner',text:'Behold'});
+   await setDoc(doc(db,'studentPairings',expired),{studentId:'owner',issuer:'owner',createdAt:new Date(Date.now()-60000),claimedBy:null});
+   await setDoc(doc(db,'userRoles/teacher'),{role:'teacher',teacherId:'teacher@afk.no'});
+  });
+  const invite={studentId:'owner',issuer:'owner',createdAt:serverTimestamp(),claimedBy:null};
+  const claim=(db,uid,key,studentId='owner')=>{
+   const batch=writeBatch(db);
+   batch.update(doc(db,'studentPairings',key),{claimedBy:uid});
+   batch.set(doc(db,'studentDevices',uid),{studentId,token:key});
+   return batch.commit();
+  };
+  await assertFails(setDoc(doc(stranger,'studentPairings',token),invite));
+  await assertFails(setDoc(doc(teacher,'studentPairings',token),invite));
+  await assertSucceeds(setDoc(doc(owner,'studentPairings',token),invite));
+  await assertFails(getDocs(collection(stranger,'studentPairings')));
+  await assertFails(getDoc(doc(teacher,'studentPairings',token)));
+  await assertFails(setDoc(doc(phone,'studentDevices/phone'),{studentId:'owner',token}));
+  await assertFails(claim(phone,'phone',expired));
+  await assertFails(claim(existing,'existing',token));
+  await assertFails(claim(phone,'phone',token,'existing'));
+  await assertFails(getDoc(doc(phone,'homework/owner_l1_1')));
+  await assertSucceeds(claim(phone,'phone',token));
+  await assertFails(claim(stranger,'stranger',token));
+  await assertSucceeds(getDoc(doc(phone,'homework/owner_l1_1')));
+  await assertSucceeds(getDocs(query(collection(phone,'homework'),where('studentId','==','owner'))));
+  await assertSucceeds(setDoc(doc(phone,'homework/owner_l2_1'),{studentId:'owner',text:'Mobil'}));
+  await assertSucceeds(getDoc(doc(owner,'homework/owner_l2_1')));
+  await assertSucceeds(setDoc(doc(phone,'students/owner'),{selectedBlockCourses:['b1']},{merge:true}));
+  await assertFails(setDoc(doc(phone,'students/phone'),{name:'Ny',classId:'1STA'}));
+  await assertFails(getDoc(doc(stranger,'homework/owner_l1_1')));
+  await assertSucceeds(setDoc(doc(owner,'studentPairings',other),invite));
+  await assertFails(claim(phone,'phone',other));
+  await assertSucceeds(deleteDoc(doc(owner,'studentDevices/phone')));
+  await assertFails(getDoc(doc(phone,'homework/owner_l1_1')));
+  await assertFails(claim(phone,'phone',token));
+ } finally {await env.cleanup();}
+});
