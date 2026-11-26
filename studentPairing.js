@@ -51,7 +51,7 @@ export async function openStudentPairing() {
     const status=dialog.querySelector("#pairStatus");
     try {
         // QR rendering must be local; never send the secret to an external QR service.
-        const {default:QRCode}=await import("./vendor/qrcode.mjs");
+        const {default:QRCode}=await import("https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm");
         const token=Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,"0")).join("");
         const url=new URL(location.href);url.hash="pair="+token;
         const canvas=await QRCode.toCanvas(url.href,{width:240,margin:4});
