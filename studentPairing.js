@@ -29,11 +29,11 @@ export async function redeemStudentPairing() {
             tx.update(invite,{claimedBy:user.uid});
             tx.set(link,{studentId:data.studentId,token:match[1]});
         });
-        const id=await resolveStudentId();
-        const profile=await getDocFromServer(doc(db,"students",id));
+        let name="elev";
+        try { const id=await resolveStudentId(); const profile=await getDocFromServer(doc(db,"students",id)); name=profile.data()?.name||name; } catch {}
         let countText="";
-        try { countText="\n\n"+await studentDeviceCount()+" registrerte enheter er knyttet til denne profilen."; } catch {}
-        alert("Enheten er tilkoblet!\n\nDu er nå logget inn som "+(profile.data()?.name||"elev")+"."+countText+"\n\nRegistrerer du deg på nytt fra hovedmenyen, opprettes en ny elevprofil, selv om du bruker samme navn.");
+        try { const n=await studentDeviceCount(); countText="\n\n"+n+(n===1?" registrert enhet er":" registrerte enheter er")+" knyttet til denne profilen."; } catch {}
+        alert("Enheten er tilkoblet!\n\nDu er nå logget inn som "+name+"."+countText+"\n\nRegistrerer du deg på nytt fra hovedmenyen, opprettes en ny elevprofil, selv om du bruker samme navn.");
     } catch(error) {
         alert(error.code==="permission-denied"?"Sammenkobling avvist. QR-koden kan ha utløpt (30 sekunder). Lag en ny kode.":error.message);
     }
@@ -72,10 +72,12 @@ export async function studentDeviceCount() {
     const id=await resolveStudentId();
     if(!id) throw Error("Kun elever");
     const links=await getDocsFromServer(query(collection(db,"studentDevices"),where("studentId","==",id)));
-    return links.size+1;
+    const root=await getDocFromServer(doc(db,"studentRootDevices",id));
+    return links.size+(root.exists()?0:1);
 }
 export async function detachCurrentStudentDevice() {
     const id=await resolveStudentId();
     const uid=auth.currentUser?.uid;
     if(id && uid && id!==uid) await deleteDoc(doc(db,"studentDevices",uid));
+    else if(id && uid) { const profile=await getDocFromServer(doc(db,"students",id)); if(profile.exists()) await setDoc(doc(db,"studentRootDevices",id),{detached:true}); }
 }
