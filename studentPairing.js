@@ -1,5 +1,5 @@
 import {auth, db} from "./firebase.js";
-import {doc,getDocFromServer,runTransaction,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {doc,getDocFromServer,runTransaction,setDoc,serverTimestamp,collection,query,where,getDocsFromServer,deleteDoc} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 export async function resolveStudentId() {
     await auth.authStateReady();
@@ -29,7 +29,11 @@ export async function redeemStudentPairing() {
             tx.update(invite,{claimedBy:user.uid});
             tx.set(link,{studentId:data.studentId,token:match[1]});
         });
-        alert("Enheten er tilkoblet!");
+        const id=await resolveStudentId();
+        const profile=await getDocFromServer(doc(db,"students",id));
+        let countText="";
+        try { countText="\n\n"+await studentDeviceCount()+" registrerte enheter er knyttet til denne profilen."; } catch {}
+        alert("Enheten er tilkoblet!\n\nDu er nå logget inn som "+(profile.data()?.name||"elev")+"."+countText+"\n\nRegistrerer du deg på nytt fra hovedmenyen, opprettes en ny elevprofil, selv om du bruker samme navn.");
     } catch(error) {
         alert(error.code==="permission-denied"?"Sammenkobling avvist. QR-koden kan ha utløpt (30 sekunder). Lag en ny kode.":error.message);
     }
@@ -38,7 +42,7 @@ export async function redeemStudentPairing() {
 export async function openStudentPairing() {
     if(document.getElementById("studentPairDialog")) return;
     const uid=await resolveStudentId();
-    if(!uid||uid!==auth.currentUser?.uid){alert("Bruk den opprinnelige enheten til sammenkobling.");return;}
+    if(!uid)return;
     const dialog=document.createElement("dialog");
     dialog.id="studentPairDialog";
     dialog.style.cssText="width:min(90vw,360px);box-sizing:border-box;border:0;border-radius:16px;padding:20px;text-align:center";
@@ -56,10 +60,22 @@ export async function openStudentPairing() {
         const url=new URL(location.href);url.hash="pair="+token;
         const canvas=await QRCode.toCanvas(url.href,{width:240,margin:4});
         const started=performance.now();
-        await setDoc(doc(db,"studentPairings",token),{studentId:uid,issuer:uid,createdAt:serverTimestamp(),claimedBy:null});
+        await setDoc(doc(db,"studentPairings",token),{studentId:uid,issuer:auth.currentUser.uid,createdAt:serverTimestamp(),claimedBy:null});
         if(!dialog.open)return;
         dialog.querySelector("#pairQR").append(canvas);
         const tick=()=>{const left=Math.max(0,Math.ceil((30000-(performance.now()-started))/1000));status.textContent=left?left+" sekunder igjen":"QR-koden har utløpt (30 sekunder).";if(!left){canvas.remove();clearInterval(timer);}};
         tick();timer=setInterval(tick,200);
     } catch(error){status.textContent="Kunne ikke lage QR-kode. Prøv igjen.";console.error(error.code||error.name);}
+}
+
+export async function studentDeviceCount() {
+    const id=await resolveStudentId();
+    if(!id) throw Error("Kun elever");
+    const links=await getDocsFromServer(query(collection(db,"studentDevices"),where("studentId","==",id)));
+    return links.size+1;
+}
+export async function detachCurrentStudentDevice() {
+    const id=await resolveStudentId();
+    const uid=auth.currentUser?.uid;
+    if(id && uid && id!==uid) await deleteDoc(doc(db,"studentDevices",uid));
 }
