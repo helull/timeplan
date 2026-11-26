@@ -143,7 +143,7 @@ const classId =
     if(isTeacher()){countButton?.remove();document.getElementById("pairStudentDevice")?.remove();}
     else if(countButton){
         studentDeviceCount().then(n=>{countButton.textContent="Mine tilknyttede enheter ("+n+")";}).catch(()=>{});
-        countButton.onclick=async()=>{try{const n=await studentDeviceCount();alert(n+" registrerte enheter er knyttet til elevprofilen. Antallet inkluderer den opprinnelige enheten, selv om den er logget ut. QR-koden er personlig.");}catch{alert("Kunne ikke hente antall enheter.");}};
+        countButton.onclick=async()=>{try{const n=await studentDeviceCount();alert(n+(n===1?" registrert enhet er":" registrerte enheter er")+" knyttet til elevprofilen. Antallet viser registrerte tilknytninger, ikke aktive nettlesere. QR-koden er personlig.");}catch{alert("Kunne ikke hente antall enheter.");}};
     }
     document.getElementById("pairStudentDevice")?.addEventListener("click",()=>openStudentPairing().catch(()=>alert("Kunne ikke åpne sammenkobling.")));
         document
