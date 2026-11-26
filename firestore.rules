@@ -105,6 +105,24 @@ service cloud.firestore {
       allow write: if admin() && collection in ['classes','schedules','holidays','homework','teacherRequests'];
       allow read: if admin() && collection in ['homework','teacherRequests'];
     }
+    match /progressPlanLinks/{id} {
+      function owner(data) {
+        return staff() && data.teacherId == get(/databases/$(database)/documents/userRoles/$(request.auth.uid)).data.teacherId;
+      }
+      function valid() {
+        return request.resource.data.keys().hasOnly(['scopeKey','teacherId','url','updatedAt']) &&
+          request.resource.data.scopeKey is string &&
+          request.resource.data.url is string &&
+          request.resource.data.url.size() <= 8192 &&
+          request.resource.data.url.matches('https://[^ ]+') &&
+          request.resource.data.updatedAt == request.time;
+      }
+      allow read: if member();
+      allow create: if owner(request.resource.data) && valid();
+      allow update: if owner(resource.data) && owner(request.resource.data) && valid() &&
+        request.resource.data.scopeKey == resource.data.scopeKey;
+      allow delete: if owner(resource.data);
+    }
     match /settings/{id} {
       allow read: if member() && !(id in ['adminAccess','superAccess']);
       allow write: if false;
