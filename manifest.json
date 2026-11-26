@@ -1,0 +1,19 @@
+{
+  "name": "Min Timeplan",
+  "short_name": "Min Timeplan",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "nb",
+  "theme_color": "#175c40",
+  "background_color": "#f5f7fb",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
