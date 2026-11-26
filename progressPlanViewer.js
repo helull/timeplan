@@ -1,4 +1,4 @@
-import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope, loadOneNoteLink, validateOneNoteUrl} from "./lessonProgressPlanService.js";
+import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope, loadOneNoteLink, validateOneNoteUrl, loadOneNoteLinks, scopeKey} from "./lessonProgressPlanService.js";
 import {isTeacher} from "./teacher.js";
 import {db} from "./firebase.js";
 import {doc,getDoc} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -21,7 +21,7 @@ function weekPlans(week){
 }
 function identity(button){
     const d=button.dataset;
-    return {classId:d.classId,lessonId:d.lesson,week:Number(d.week),weekday:Number(d.weekday),startTime:d.startTime,blockCourseId:d.blockCourseId||null};
+    return {classId:d.classId,subject:d.subject,lessonId:d.lesson,week:Number(d.week),weekday:Number(d.weekday),startTime:d.startTime,blockCourseId:d.blockCourseId||null};
 }
 function makeButton(action){
     const b=document.createElement("button");
@@ -188,6 +188,7 @@ export async function refreshPlanIcons(){
     const active=document.querySelector(".week.active")||[...document.querySelectorAll(".week")].find(w=>w.classList.contains("active-week"));
     const visible=active?buttons.filter(b=>active.contains(b)):buttons;
     const weeks=[...new Set(visible.map(b=>Number(b.dataset.week)))];
+    const links=await loadOneNoteLinks().catch(error=>{console.warn('Kunne ikke hente OneNote-lenker',error);return new Map();});
     await Promise.all(weeks.map(async week=>{
         try{
             const plans=await weekPlans(week);
@@ -197,7 +198,9 @@ export async function refreshPlanIcons(){
                 const card=b.closest(".lesson");card.querySelector(".progress-plan-icon")?.remove();
                 let key;
                 try {key=planId(identity(b));} catch(e){continue;}
-                const plan=plans[key];
+                const id=identity(b);
+                let plan=plans[key];
+                if(!plan?.text && (id.subject || id.blockCourseId) && links.has(scopeKey(id))) plan={...id,text:'Fremdriftsplanen ligger i OneNote.'};
                 if(plan?.text){
                     const icon=makeButton(()=>openPlanViewer(plan,null,card.querySelector(".teacher-homework-preview")?.dataset.homework||""));
                     icon.style.cssText="display:inline-flex!important;align-items:center;justify-content:center;vertical-align:middle;flex:0 0 20px;width:20px!important;min-width:20px!important;height:20px!important;min-height:20px!important;padding:0!important;margin:0 3px 0 0!important;background:transparent!important;color:white;border:0!important;box-shadow:none!important;border-radius:0!important;cursor:pointer;position:static!important;";
