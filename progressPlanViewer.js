@@ -1,4 +1,4 @@
-import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope} from "./lessonProgressPlanService.js";
+import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope, loadOneNoteLink, validateOneNoteUrl} from "./lessonProgressPlanService.js";
 import {isTeacher} from "./teacher.js";
 import {db} from "./firebase.js";
 import {doc,getDoc} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -32,6 +32,17 @@ function makeButton(action){
     b.onclick=e=>{e.stopPropagation();action();};
     return b;
 }
+async function addOneNoteButton(card,plan){
+    try {
+        const url=await loadOneNoteLink(plan);
+        if(!url || !card.isConnected)return;
+        const a=document.createElement("a");
+        a.href=validateOneNoteUrl(url);a.target="_blank";a.rel="noopener noreferrer";
+        a.textContent="▣ Åpne OneNote ↗";
+        a.style.cssText="display:inline-block;color:#8039a5;border:1px solid #8039a5;border-radius:6px;padding:8px 12px;margin:6px 0;text-decoration:none;align-self:flex-start";
+        card.querySelector("h2")?.after(a);
+    }catch(error){console.warn("Kunne ikke hente OneNote-lenke",error);}
+}
 function appendText(node,text){
     const parts=String(text||"").split(/(https?:\/\/[^\s<>]+)/gi);
     parts.forEach((part,i)=>{
@@ -61,6 +72,7 @@ async function openFullPlan(plan,parent,trigger){
     close.onclick=finish;
     modal.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();finish();}});
     card.append(heading,info,scroll,close);modal.append(card);parent.style.display="none";document.body.append(modal);close.focus();
+    addOneNoteButton(card,plan);
     try{
         const entries=await loadProgressPlansForScope(plan);
         const order=w=>w>=34?w-34:w+20;
@@ -155,10 +167,12 @@ export function openPlanViewer(plan,parent=null,teacherText=""){
     }
     const full=document.createElement("button");full.type="button";full.textContent="Se hele planen";full.onclick=()=>openFullPlan(plan,modal,full);card.append(full);
     card.append(close);modal.append(card);if(parent)parent.style.display="none";document.body.append(modal);close.focus();
+    addOneNoteButton(card,plan);
 }
 export async function attachPlanToModal(modal,id,teacherText=""){
     try{
-        const plan=(await weekPlans(id.week))[planId(id)];
+        let plan=(await weekPlans(id.week))[planId(id)];
+        if(!plan?.text && (id.subject || id.blockCourseId) && await loadOneNoteLink(id)) plan={...id,text:"Fremdriftsplanen ligger i OneNote."};
         if(!modal?.isConnected||!plan?.text)return;
         const h=modal.querySelector("h2");
         if(h&&!h.querySelector(".progress-plan-icon"))h.append(makeButton(()=>openPlanViewer(plan,modal,teacherText)));
