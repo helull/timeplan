@@ -31,7 +31,7 @@ service cloud.firestore {
       allow update: if student() && resource.data.claimedBy == null &&
         request.time < resource.data.createdAt + duration.value(30, 's') &&
         request.auth.uid != resource.data.issuer &&
-        (resource.data.issuer == resource.data.studentId || (exists(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)) && get(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)).data.studentId == resource.data.studentId)) &&
+        ((resource.data.issuer == resource.data.studentId && !exists(/databases/$(database)/documents/studentRootDevices/$(resource.data.studentId))) || (exists(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)) && get(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)).data.studentId == resource.data.studentId)) &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['claimedBy']) &&
         request.resource.data.claimedBy == request.auth.uid &&
         !exists(/databases/$(database)/documents/students/$(request.auth.uid)) &&
@@ -39,6 +39,14 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/students/$(resource.data.studentId)) &&
         getAfter(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.token == token &&
         getAfter(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.studentId == resource.data.studentId;
+    }
+    match /studentRootDevices/{uid} {
+      allow get: if student() && uid == studentProfileId();
+      allow create, update: if student() && uid == request.auth.uid &&
+        studentProfileId() == uid &&
+        exists(/databases/$(database)/documents/students/$(uid)) &&
+        request.resource.data.keys().hasOnly(['detached']) &&
+        request.resource.data.detached == true;
     }
     match /studentDevices/{uid} {
       allow get: if student() && (uid == request.auth.uid || resource.data.studentId == studentProfileId());
@@ -105,6 +113,24 @@ service cloud.firestore {
       ];
       allow write: if admin() && collection in ['classes','schedules','holidays','homework','teacherRequests'];
       allow read: if admin() && collection in ['homework','teacherRequests'];
+    }
+    match /progressPlanLinks/{id} {
+      function owner(data) {
+        return staff() && data.teacherId == get(/databases/$(database)/documents/userRoles/$(request.auth.uid)).data.teacherId;
+      }
+      function valid() {
+        return request.resource.data.keys().hasOnly(['scopeKey','teacherId','url','updatedAt']) &&
+          request.resource.data.scopeKey is string &&
+          request.resource.data.url is string &&
+          request.resource.data.url.size() <= 8192 &&
+          request.resource.data.url.matches('https://[^ ]+') &&
+          request.resource.data.updatedAt == request.time;
+      }
+      allow read: if member();
+      allow create: if owner(request.resource.data) && valid();
+      allow update: if owner(resource.data) && owner(request.resource.data) && valid() &&
+        request.resource.data.scopeKey == resource.data.scopeKey;
+      allow delete: if owner(resource.data);
     }
     match /settings/{id} {
       allow read: if member() && !(id in ['adminAccess','superAccess']);
