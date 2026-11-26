@@ -1,3 +1,4 @@
+import { loadOneNoteLink, saveOneNoteLink, validateOneNoteUrl } from "./lessonProgressPlanService.js";
 import { attachPlanToModal } from "./progressPlanViewer.js";
 import { db } from "./firebase.js";
 import { doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -339,6 +340,7 @@ ${teacherHomeworkText}
         Lagre lærerlekse
 
     </button>
+    <button id="editOneNoteLink" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled" : ""}>OneNote-lenke</button>
     ${["standard","advanced"].includes(progressMode) ? `<button id="importProgressPlan" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled title=\"Opprett blokkfaget først\"" : ""}>${progressMode === "advanced" ? "Importer fremdriftsplan (avansert)" : "Importer fremdriftsplan"}</button>` : ""}
 ${
     canCreateBlockCourse
@@ -441,7 +443,7 @@ ${
     );
 
     
-    attachPlanToModal(document.getElementById("homeworkModal"), {classId,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:(teacherMode ? blockCourse?.id : savedBlockCourse?.id) || null}, teacherHomeworkText);
+    attachPlanToModal(document.getElementById("homeworkModal"), {classId,subject,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:(teacherMode ? blockCourse?.id : savedBlockCourse?.id) || null}, teacherHomeworkText);
 
     const blockCourseSelect = document.getElementById("blockCourseSelect");
     blockCourseSelect?.addEventListener("change", async () => {
@@ -616,6 +618,17 @@ document
             }
         );
 
+    document.getElementById("editOneNoteLink")?.addEventListener("click", async () => {
+        const scope = {classId, subject, blockCourseId:blockCourse?.id || null};
+        try {
+            const old = await loadOneNoteLink(scope);
+            const value = prompt("OneNote-lenke (valgfritt). Tøm feltet for å fjerne lenken.", old);
+            if(value === null) return;
+            if(value.trim()) validateOneNoteUrl(value);
+            await saveOneNoteLink(scope, teacherId, value);
+            alert(value.trim() ? "OneNote-lenken er lagret." : "OneNote-lenken er fjernet.");
+        } catch(error) { alert("Kunne ikke lagre OneNote-lenken: "+error.message); }
+    });
     document.getElementById("importProgressPlan")?.addEventListener("click", () => {
         openProgressPlanImport({teacherId, classId, subject, blockCourse, advanced: progressMode === "advanced"});
     });
