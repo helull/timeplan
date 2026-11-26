@@ -1,4 +1,4 @@
-import {openStudentPairing} from "./studentPairing.js";
+import {openStudentPairing,studentDeviceCount,detachCurrentStudentDevice} from "./studentPairing.js";
 import {openTeacherLinkDialog} from "./teacherScheduleLink.js";
 import {showScheduleView, currentScheduleView} from "./app.js";
 import { verifiedIdentity, signOutSecurely } from "./secureAuth.js";
@@ -124,6 +124,7 @@ const classId =
                 <button id="openProveplanTools" data-admin-menu-only style="display:${isAdmin() ? "" : "none"}">Prøveplan</button>
 
                 <button id="pairStudentDevice">Koble til en annen enhet</button>
+                <button id="studentDeviceCount">Mine tilknyttede enheter</button>
                 <button id="logoutUserFromTools">
                     Logg ut
                 </button>
@@ -138,6 +139,12 @@ const classId =
         `
     );
 
+    const countButton=document.getElementById("studentDeviceCount");
+    if(isTeacher()){countButton?.remove();document.getElementById("pairStudentDevice")?.remove();}
+    else if(countButton){
+        studentDeviceCount().then(n=>{countButton.textContent="Mine tilknyttede enheter ("+n+")";}).catch(()=>{});
+        countButton.onclick=async()=>{try{const n=await studentDeviceCount();alert(n+(n===1?" registrert enhet er":" registrerte enheter er")+" knyttet til elevprofilen. Antallet viser registrerte tilknytninger, ikke aktive nettlesere. QR-koden er personlig.");}catch{alert("Kunne ikke hente antall enheter.");}};
+    }
     document.getElementById("pairStudentDevice")?.addEventListener("click",()=>openStudentPairing().catch(()=>alert("Kunne ikke åpne sammenkobling.")));
         document
         .getElementById("openProveplanTools")
@@ -184,7 +191,7 @@ const classId =
 async function logoutUser() {
     const message = isTeacher()
         ? "Vil du logge ut som lærer?\n\nLærerlekser, blokkfag og andre lagrede opplysninger blir ikke slettet."
-        : "Vil du logge ut og velge en annen klasse?\n\nPersonlige lekser på denne enheten kan bli utilgjengelige etter utlogging.";
+        : "Er du sikker på at du vil logge ut?\n\nElevprofilen og leksene slettes ikke, men du mister tilgangen på denne enheten. Registrerer du deg på nytt, får du en ny profil, selv med samme navn. Har du en annen tilknyttet enhet, kan du koble deg til igjen med QR-kode. Logger du ut på alle enheter, kan du miste tilgangen permanent.";
     let svar = confirm(message);
     if (!svar) {
          return;
@@ -201,7 +208,7 @@ async function logoutUser() {
         overlay.style.opacity = "1";
     }
     disableAdminMode();
-    try { await signOutSecurely(); } catch (error) {
+    try { if(!isTeacher()) await detachCurrentStudentDevice(); await signOutSecurely(); } catch (error) {
         if (overlay) overlay.hidden = true;
         alert("Kunne ikke logge ut. Prøv igjen.");
         return;

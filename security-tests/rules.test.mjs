@@ -165,6 +165,16 @@ test('student device pairing: atomic, expiring, single use, isolated', async()=>
   await assertFails(claim(phone,'phone',token,'existing'));
   await assertFails(getDoc(doc(phone,'homework/owner_l1_1')));
   await assertSucceeds(claim(phone,'phone',token));
+  await assertSucceeds(getDocs(query(collection(phone,'studentDevices'),where('studentId','==','owner'))));
+  await assertFails(getDocs(query(collection(stranger,'studentDevices'),where('studentId','==','owner'))));
+  await assertFails(setDoc(doc(phone,'studentRootDevices/owner'),{detached:true}));
+  await assertSucceeds(setDoc(doc(owner,'studentRootDevices/owner'),{detached:true}));
+  await assertSucceeds(getDoc(doc(phone,'studentRootDevices/owner')));
+  await assertSucceeds(getDoc(doc(phone,'homework/owner_l1_1')));
+  const linkedToken='d'.repeat(64);
+  await assertSucceeds(setDoc(doc(phone,'studentPairings',linkedToken),{...invite,issuer:'phone'}));
+  await assertSucceeds(claim(stranger,'stranger',linkedToken));
+  await assertSucceeds(deleteDoc(doc(stranger,'studentDevices/stranger')));
   await assertFails(claim(stranger,'stranger',token));
   await assertSucceeds(getDoc(doc(phone,'homework/owner_l1_1')));
   await assertSucceeds(getDocs(query(collection(phone,'homework'),where('studentId','==','owner'))));
