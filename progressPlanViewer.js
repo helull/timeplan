@@ -1,4 +1,4 @@
-import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope} from "./lessonProgressPlanService.js";
+import {loadProgressPlansForWeek, planId, changeExistingPlan, loadProgressPlansForScope, loadOneNoteLink, validateOneNoteUrl, loadOneNoteLinks, scopeKey} from "./lessonProgressPlanService.js";
 import {isTeacher} from "./teacher.js";
 import {db} from "./firebase.js";
 import {doc,getDoc} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -21,7 +21,7 @@ function weekPlans(week){
 }
 function identity(button){
     const d=button.dataset;
-    return {classId:d.classId,lessonId:d.lesson,week:Number(d.week),weekday:Number(d.weekday),startTime:d.startTime,blockCourseId:d.blockCourseId||null};
+    return {classId:d.classId,subject:d.subject,lessonId:d.lesson,week:Number(d.week),weekday:Number(d.weekday),startTime:d.startTime,blockCourseId:d.blockCourseId||null};
 }
 function makeButton(action){
     const b=document.createElement("button");
@@ -31,6 +31,17 @@ function makeButton(action){
     b.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h8M8 17h5"/></svg>';
     b.onclick=e=>{e.stopPropagation();action();};
     return b;
+}
+async function addOneNoteButton(card,plan){
+    try {
+        const url=await loadOneNoteLink(plan);
+        if(!url || !card.isConnected)return;
+        const a=document.createElement("a");
+        a.href=validateOneNoteUrl(url);a.target="_blank";a.rel="noopener noreferrer";
+        a.textContent="▣ Åpne OneNote ↗";
+        a.style.cssText="display:inline-block;color:#8039a5;border:1px solid #8039a5;border-radius:6px;padding:8px 12px;margin:6px 0;text-decoration:none;align-self:flex-start";
+        card.querySelector("h2")?.after(a);
+    }catch(error){console.warn("Kunne ikke hente OneNote-lenke",error);}
 }
 function appendText(node,text){
     const parts=String(text||"").split(/(https?:\/\/[^\s<>]+)/gi);
@@ -61,6 +72,7 @@ async function openFullPlan(plan,parent,trigger){
     close.onclick=finish;
     modal.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();finish();}});
     card.append(heading,info,scroll,close);modal.append(card);parent.style.display="none";document.body.append(modal);close.focus();
+    addOneNoteButton(card,plan);
     try{
         const entries=await loadProgressPlansForScope(plan);
         const order=w=>w>=34?w-34:w+20;
@@ -155,10 +167,12 @@ export function openPlanViewer(plan,parent=null,teacherText=""){
     }
     const full=document.createElement("button");full.type="button";full.textContent="Se hele planen";full.onclick=()=>openFullPlan(plan,modal,full);card.append(full);
     card.append(close);modal.append(card);if(parent)parent.style.display="none";document.body.append(modal);close.focus();
+    addOneNoteButton(card,plan);
 }
 export async function attachPlanToModal(modal,id,teacherText=""){
     try{
-        const plan=(await weekPlans(id.week))[planId(id)];
+        let plan=(await weekPlans(id.week))[planId(id)];
+        if(!plan?.text && (id.subject || id.blockCourseId) && await loadOneNoteLink(id)) plan={...id,text:"Fremdriftsplanen ligger i OneNote."};
         if(!modal?.isConnected||!plan?.text)return;
         const h=modal.querySelector("h2");
         if(h&&!h.querySelector(".progress-plan-icon"))h.append(makeButton(()=>openPlanViewer(plan,modal,teacherText)));
@@ -174,6 +188,7 @@ export async function refreshPlanIcons(){
     const active=document.querySelector(".week.active")||[...document.querySelectorAll(".week")].find(w=>w.classList.contains("active-week"));
     const visible=active?buttons.filter(b=>active.contains(b)):buttons;
     const weeks=[...new Set(visible.map(b=>Number(b.dataset.week)))];
+    const links=await loadOneNoteLinks().catch(error=>{console.warn('Kunne ikke hente OneNote-lenker',error);return new Map();});
     await Promise.all(weeks.map(async week=>{
         try{
             const plans=await weekPlans(week);
@@ -183,7 +198,9 @@ export async function refreshPlanIcons(){
                 const card=b.closest(".lesson");card.querySelector(".progress-plan-icon")?.remove();
                 let key;
                 try {key=planId(identity(b));} catch(e){continue;}
-                const plan=plans[key];
+                const id=identity(b);
+                let plan=plans[key];
+                if(!plan?.text && (id.subject || id.blockCourseId) && links.has(scopeKey(id))) plan={...id,text:'Fremdriftsplanen ligger i OneNote.'};
                 if(plan?.text){
                     const icon=makeButton(()=>openPlanViewer(plan,null,card.querySelector(".teacher-homework-preview")?.dataset.homework||""));
                     icon.style.cssText="display:inline-flex!important;align-items:center;justify-content:center;vertical-align:middle;flex:0 0 20px;width:20px!important;min-width:20px!important;height:20px!important;min-height:20px!important;padding:0!important;margin:0 3px 0 0!important;background:transparent!important;color:white;border:0!important;box-shadow:none!important;border-radius:0!important;cursor:pointer;position:static!important;";

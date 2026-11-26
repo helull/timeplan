@@ -180,3 +180,30 @@ test('student device pairing: atomic, expiring, single use, isolated', async()=>
   await assertFails(claim(phone,'phone',token));
  } finally {await env.cleanup();}
 });
+
+test('OneNote links: member read, owner write, no student writes', async()=>{
+ const env=await initializeTestEnvironment({projectId:'demo-timeplan-security',firestore:{rules:readFileSync(new URL('../firestore.rules',import.meta.url),'utf8')}});
+ try {
+  await env.clearFirestore();
+  await env.withSecurityRulesDisabled(async ctx=>{
+   await setDoc(doc(ctx.firestore(),'userRoles/owner'),{role:'teacher',teacherId:'owner@afk.no'});
+   await setDoc(doc(ctx.firestore(),'userRoles/other'),{role:'teacher',teacherId:'other@afk.no'});
+  });
+  const staff=uid=>env.authenticatedContext(uid,{firebase:{sign_in_provider:'password'}}).firestore();
+  const owner=staff('owner'),other=staff('other'),student=env.authenticatedContext('student',{firebase:{sign_in_provider:'anonymous'}}).firestore(),outsider=env.unauthenticatedContext().firestore();
+  const ref=db=>doc(db,'progressPlanLinks/example');
+  const data={scopeKey:'example',teacherId:'owner@afk.no',url:'https://onenote.com/example',updatedAt:serverTimestamp()};
+  await assertFails(setDoc(ref(student),data));
+  await assertFails(setDoc(ref(other),data));
+  await assertFails(setDoc(ref(owner),{...data,url:'javascript:alert(1)'}));
+  await assertSucceeds(setDoc(ref(owner),data));
+  await assertSucceeds(getDoc(ref(student)));
+  await assertSucceeds(getDocs(collection(student,'progressPlanLinks')));
+  await assertFails(getDoc(ref(outsider)));
+  await assertFails(setDoc(ref(other),{...data,teacherId:'other@afk.no'}));
+  await assertFails(deleteDoc(ref(student)));
+  await assertFails(deleteDoc(ref(other)));
+  await assertSucceeds(setDoc(ref(owner),{...data,url:'https://onenote.com/updated'}));
+  await assertSucceeds(deleteDoc(ref(owner)));
+ } finally {await env.cleanup();}
+});

@@ -99,3 +99,31 @@ export async function loadProgressPlansForScope(plan) {
     const snap = await getDocs(query(plans, where("scopeKey", "==", scopeKey(plan))));
     return snap.docs.map(d=>d.data()).filter(p=>String(p.text||"").trim());
 }
+
+const oneNoteLinks = collection(db, "progressPlanLinks");
+export function validateOneNoteUrl(value) {
+    const url = new URL(String(value).trim());
+    if (url.protocol !== "https:" || url.username || url.password) throw Error("Bruk en gyldig HTTPS-lenke.");
+    return url.href;
+}
+export async function loadOneNoteLinks() {
+    const snap = await getDocs(oneNoteLinks);
+    return new Map(snap.docs.map(d=>[d.data().scopeKey,d.data().url]));
+}
+export async function loadOneNoteLink(scope) {
+    const snap = await getDoc(doc(oneNoteLinks,encodeURIComponent(scopeKey(scope))));
+    return snap.exists() ? snap.data().url : "";
+}
+export async function saveOneNoteLink(scope, teacherId, value) {
+    const key = scopeKey(scope);
+    const url = String(value).trim() ? validateOneNoteUrl(value) : "";
+    const ref = doc(oneNoteLinks,encodeURIComponent(key));
+    await runTransaction(db, async tx=>{
+        const old = await tx.get(ref);
+        if(old.exists() && old.data().teacherId !== teacherId) throw Error("Lenken tilhører en annen lærer.");
+        if(url) tx.set(ref,{scopeKey:key,teacherId,url,updatedAt:serverTimestamp()});
+        else if(old.exists()) tx.delete(ref);
+    });
+    window.dispatchEvent(new Event("schedule:refresh"));
+}
+export {scopeKey};

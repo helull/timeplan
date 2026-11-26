@@ -1,3 +1,4 @@
+import { loadOneNoteLink, saveOneNoteLink, validateOneNoteUrl } from "./lessonProgressPlanService.js";
 import { attachPlanToModal } from "./progressPlanViewer.js";
 import { db } from "./firebase.js";
 import { doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -339,6 +340,7 @@ ${teacherHomeworkText}
         Lagre lærerlekse
 
     </button>
+    <button id="editOneNoteLink" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled" : ""}>OneNote-lenke</button>
     ${["standard","advanced"].includes(progressMode) ? `<button id="importProgressPlan" type="button" ${((isBlockSubject || isBlockRoom) && !blockCourse?.id) ? "disabled title=\"Opprett blokkfaget først\"" : ""}>${progressMode === "advanced" ? "Importer fremdriftsplan (avansert)" : "Importer fremdriftsplan"}</button>` : ""}
 ${
     canCreateBlockCourse
@@ -441,7 +443,7 @@ ${
     );
 
     
-    attachPlanToModal(document.getElementById("homeworkModal"), {classId,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:(teacherMode ? blockCourse?.id : savedBlockCourse?.id) || null}, teacherHomeworkText);
+    attachPlanToModal(document.getElementById("homeworkModal"), {classId,subject,lessonId,week:Number(week),weekday:Number(weekday),startTime,blockCourseId:(teacherMode ? blockCourse?.id : savedBlockCourse?.id) || null}, teacherHomeworkText);
 
     const blockCourseSelect = document.getElementById("blockCourseSelect");
     blockCourseSelect?.addEventListener("change", async () => {
@@ -616,6 +618,32 @@ document
             }
         );
 
+    document.getElementById("editOneNoteLink")?.addEventListener("click", async () => {
+        if(document.getElementById("oneNoteEditor")) return;
+        const scope = {classId, subject, blockCourseId:blockCourse?.id || null};
+        const dialog=document.createElement("dialog");
+        dialog.id="oneNoteEditor";
+        dialog.style.cssText="width:min(90vw,480px);box-sizing:border-box;border:0;border-radius:12px;padding:20px";
+        dialog.innerHTML='<h2>OneNote-lenke</h2><p>Valgfritt. Elevene kan åpne lenken fra fremdriftsplanen. Kontroller at elevene har tilgang i OneNote.</p><label for="oneNoteUrl">Lenke</label><input id="oneNoteUrl" type="url" placeholder="https://…" style="width:100%;box-sizing:border-box"><p role="status"></p><div style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" data-test>Test lenke</button><button type="button" data-save>Lagre</button><button type="button" data-remove>Fjern lenke</button><button type="button" data-close>Lukk</button></div>';
+        document.body.append(dialog);
+        dialog.addEventListener("close",()=>dialog.remove());
+        const input=dialog.querySelector("input"),status=dialog.querySelector('[role="status"]');
+        const save=dialog.querySelector("[data-save]"),remove=dialog.querySelector("[data-remove]"),test=dialog.querySelector("[data-test]");
+        const busy=value=>{input.disabled=save.disabled=remove.disabled=test.disabled=value;};
+        dialog.querySelector("[data-close]").onclick=()=>dialog.close();
+        dialog.showModal();busy(true);
+        try {input.value=await loadOneNoteLink(scope);busy(false);}
+        catch(error){status.textContent="Kunne ikke hente lenken: "+error.message;return;}
+        test.onclick=()=>{try{window.open(validateOneNoteUrl(input.value),"_blank","noopener,noreferrer");}catch(error){status.textContent=error.message;}};
+        async function store(value){
+            busy(true);
+            try{await saveOneNoteLink(scope,teacherId,value);input.value=value;status.textContent=value?"Lenken er lagret.":"Lenken er fjernet.";}
+            catch(error){status.textContent=error.message;}
+            finally{busy(false);}
+        }
+        save.onclick=()=>store(input.value.trim());
+        remove.onclick=()=>{if(confirm("Fjerne OneNote-lenken?"))store("");};
+    });
     document.getElementById("importProgressPlan")?.addEventListener("click", () => {
         openProgressPlanImport({teacherId, classId, subject, blockCourse, advanced: progressMode === "advanced"});
     });
