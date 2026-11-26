@@ -125,6 +125,7 @@ const classId =
 
                 <button id="pairStudentDevice">Koble til en annen enhet</button>
                 <button id="studentDeviceCount">Mine tilknyttede enheter</button>
+                <button id="installTimeplan">Installer Min Timeplan</button>
                 <button id="logoutUserFromTools">
                     Logg ut
                 </button>
@@ -139,6 +140,9 @@ const classId =
         `
     );
 
+    const installButton=document.getElementById("installTimeplan");
+    if(window.isTimeplanInstalled?.()) installButton?.remove();
+    else installButton?.addEventListener("click",()=>window.installTimeplan?.());
     const countButton=document.getElementById("studentDeviceCount");
     if(isTeacher()){countButton?.remove();document.getElementById("pairStudentDevice")?.remove();}
     else if(countButton){
