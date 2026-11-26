@@ -24,14 +24,14 @@ service cloud.firestore {
       allow create: if student() && token.matches('[a-f0-9]{64}') &&
         request.resource.data.keys().hasOnly(['studentId','issuer','createdAt','claimedBy']) &&
         request.resource.data.issuer == request.auth.uid &&
-        request.resource.data.studentId == request.auth.uid &&
-        exists(/databases/$(database)/documents/students/$(request.auth.uid)) &&
-        !exists(/databases/$(database)/documents/studentDevices/$(request.auth.uid)) &&
+        request.resource.data.studentId == studentProfileId() &&
+        exists(/databases/$(database)/documents/students/$(request.resource.data.studentId)) &&
         request.resource.data.createdAt == request.time &&
         request.resource.data.claimedBy == null;
       allow update: if student() && resource.data.claimedBy == null &&
         request.time < resource.data.createdAt + duration.value(30, 's') &&
         request.auth.uid != resource.data.issuer &&
+        (resource.data.issuer == resource.data.studentId || (exists(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)) && get(/databases/$(database)/documents/studentDevices/$(resource.data.issuer)).data.studentId == resource.data.studentId)) &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['claimedBy']) &&
         request.resource.data.claimedBy == request.auth.uid &&
         !exists(/databases/$(database)/documents/students/$(request.auth.uid)) &&
@@ -41,11 +41,12 @@ service cloud.firestore {
         getAfter(/databases/$(database)/documents/studentDevices/$(request.auth.uid)).data.studentId == resource.data.studentId;
     }
     match /studentDevices/{uid} {
-      allow get: if student() && (uid == request.auth.uid || resource.data.studentId == request.auth.uid);
+      allow get: if student() && (uid == request.auth.uid || resource.data.studentId == studentProfileId());
+      allow list: if student() && resource.data.studentId == studentProfileId();
       allow create: if student() && uid == request.auth.uid &&
         request.resource.data.keys().hasOnly(['studentId','token']) &&
         request.resource.data.token is string &&
-        !exists(/databases/$(database)/documents/students/$(uid)) &&
+        !existsAfter(/databases/$(database)/documents/students/$(uid)) &&
         get(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.claimedBy == null &&
         getAfter(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.claimedBy == uid &&
         getAfter(/databases/$(database)/documents/studentPairings/$(request.resource.data.token)).data.studentId == request.resource.data.studentId;
@@ -111,6 +112,7 @@ service cloud.firestore {
     }
     match /students/{uid} {
       allow create: if student() && uid == request.auth.uid && studentProfileId() == uid &&
+        !existsAfter(/databases/$(database)/documents/studentDevices/$(uid)) &&
         request.resource.data.keys().hasOnly(['name','classId','createdAt','selectedBlockCourses']) &&
         request.resource.data.name is string && request.resource.data.classId is string;
       allow update: if student() && uid == studentProfileId() &&
