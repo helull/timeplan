@@ -191,7 +191,7 @@ const classId =
 async function logoutUser() {
     const message = isTeacher()
         ? "Vil du logge ut som lærer?\n\nLærerlekser, blokkfag og andre lagrede opplysninger blir ikke slettet."
-        : "Er du sikker på at du vil logge ut?\n\nElevprofilen og leksene slettes ikke, men du mister tilgangen på denne enheten. Registrerer du deg på nytt, får du en ny profil, selv med samme navn. Har du en annen tilknyttet enhet, kan du koble deg til igjen med QR-kode. Logger du ut på alle enheter, kan du miste tilgangen permanent.";
+        : "Vil du logge ut?\n\nHvis du har andre enheter knyttet til elevprofilen din, beholder du tilgangen til dine personlige lekser på disse. Du kan koble til denne enheten igjen med QR-kode.\n\nHvis dette er din siste tilknyttede enhet, mister du tilgangen til dine personlige lekser.\n\nRegistrerer du deg på nytt, opprettes en ny elevprofil, selv om du bruker samme navn.";
     let svar = confirm(message);
     if (!svar) {
          return;
