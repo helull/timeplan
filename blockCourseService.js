@@ -7,7 +7,8 @@ import {
     deleteDoc,
     doc,
     query,
-    where
+    where,
+    writeBatch
 }
 from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
@@ -201,15 +202,13 @@ export async function deleteBlockCourse(
     id
 ) {
 
-    await deleteDoc(
-
-        doc(
-            db,
-            "blockCourses",
-            id
-        )
-
-    );
+    const exams = await getDocs(query(collection(db, "blockExams"), where("blockCourseId", "==", id)));
+    if (exams.size >= 500) throw new Error("For mange prøver til én sikker sletting.");
+    const batch = writeBatch(db);
+    exams.docs.forEach(exam => batch.delete(exam.ref));
+    batch.delete(doc(db, "blockCourses", id));
+    await batch.commit();
+    exams.docs.forEach(exam => window.dispatchEvent(new CustomEvent("schedule:exam-data-changed", {detail:{type:"block-deleted",id:exam.id}})));
 
 }
 
