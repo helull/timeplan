@@ -1,0 +1,21 @@
+.proveplan-overlay { z-index: 2100; }
+.proveplan-card { width: min(96vw, 1050px); max-height: 92vh; display:flex; flex-direction:column; gap:10px; padding:14px; }
+.proveplan-header { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.proveplan-header h2 { font-size:1.2rem; margin:0; }
+.proveplan-header button { margin:0 !important; }
+.proveplan-choice { display:flex; align-items:center; gap:10px; font-size:.9rem; }
+.proveplan-choice select { padding:7px; border-radius:8px; border:1px solid #cbd5e1; background:white; }
+.proveplan-scroll { overflow:auto; min-height:80px; }
+.proveplan-table { border-collapse:collapse; width:100%; table-layout:fixed; font-size:clamp(.68rem, 1.6vw, .9rem); }
+.proveplan-table th, .proveplan-table td { border:1px solid #dbe3ee; padding:7px 4px; vertical-align:top; overflow-wrap:anywhere; }
+.proveplan-table thead th { background:#e9f0fc; position:sticky; top:0; z-index:1; }
+.proveplan-table th:first-child { width:56px; text-align:center; }
+.proveplan-table tbody tr:nth-child(even) { background:#f6f8fc; }
+.proveplan-table tbody th { font-weight:700; color:#334155; }
+.proveplan-table small { display:block; font-size:.65rem; color:#64748b; }
+.proveplan-subject { display:block; padding:3px 5px; margin:0 0 3px; border-radius:5px; background:#dbeafe; color:#1e3a8a; font-weight:600; }
+@media(max-width:550px){ .proveplan-card{padding:8px;} .proveplan-table th,.proveplan-table td{padding:5px 2px;} .proveplan-table th:first-child{width:39px;} .proveplan-subject{padding:2px;} }
+
+/* Diskret opphav: fylt prikk = lærer, åpen prikk = elev */
+.proveplan-origin { font-size:.72em; margin-right:3px; vertical-align:1px; }
+.proveplan-efp { background:#e9e4f8; color:#49377c; }

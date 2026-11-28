@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Timeplan</title>
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/svg+xml" href="./app-icon.svg">
+<meta name="theme-color" content="#175c40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Min Timeplan">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="modern_modals.css">
+<link rel="stylesheet" href="dato_i_timeplan.css">
+<link rel="stylesheet" href="ukeovergang.css">
+<link rel="stylesheet" href="polert_modaler.css">
+<link rel="stylesheet" href="lekse_lenker.css">
+<link rel="stylesheet" href="infoModal.css">
+<link rel="stylesheet" href="sveipeveiledning.css">
+</head>
+<body>
+<button class="menu-button" id="menuButton" type="button">☰</button>
+<div class="weeks"></div>
+<div id="loadingOverlay" role="status" aria-live="polite">
+  <div class="swipe-guide" aria-label="Slik navigerer du i timeplanen">
+    <div class="swipe-guide-brand">TIMEPLAN</div>
+    <div class="swipe-guide-stage" aria-hidden="true">
+      <div class="swipe-guide-card"><span></span><span></span><span></span></div>
+      <div class="swipe-guide-hand">☝</div>
+      <div class="swipe-guide-horizontal">↔</div>
+      <div class="swipe-guide-vertical">↕</div>
+    </div>
+    <div class="swipe-guide-instructions">
+      <div class="swipe-guide-instruction swipe-guide-instruction-h">Sveip sidelengs <small>for å bytte dag</small></div>
+      <div class="swipe-guide-instruction swipe-guide-instruction-v">Sveip opp eller ned <small>for å bytte uke</small></div>
+    </div>
+    <div id="loadingText">Laster timeplanen …</div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+</div>
+<div class="dots">
+  <span class="dot active"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
+<script type="module" src="app.js"></script>
+<script type="module" src="quickMenu.js"></script>
+<script defer src="modalClose.js"></script>
+<script defer src="sveipeveiledning.js"></script>
+<script defer src="./installApp.js"></script>
+<script type="module">
+if(new URLSearchParams(location.search).get("presis")!=="0") import("./presis-preview.js?v=20261128-7");
+</script>
+</body>
+</html>

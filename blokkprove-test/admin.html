@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Lærergodkjenning</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f3f4f6;
+        }
+
+        header {
+
+            background: #1e40af;
+
+            color: white;
+
+            padding: 16px;
+
+            text-align: center;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 2px 6px
+                rgba(0,0,0,.15);
+        }
+
+        #requests {
+
+            max-width: 700px;
+
+            margin: auto;
+
+            padding: 12px;
+        }
+
+        .request-card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 16px;
+
+            margin-bottom: 12px;
+
+            box-shadow:
+                0 2px 6px
+                rgba(0,0,0,.1);
+        }
+
+        .request-card h3 {
+
+            margin: 0 0 8px 0;
+
+            font-size: 18px;
+        }
+
+        .request-card p {
+
+            margin: 6px 0;
+
+            color: #555;
+
+            word-break: break-word;
+        }
+
+        .approve-button {
+
+            margin-top: 12px;
+
+            width: 100%;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #16a34a;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .approve-button:active {
+
+            opacity: 0.8;
+        }
+
+        .empty-message {
+
+            text-align: center;
+
+            margin-top: 40px;
+
+            color: #777;
+
+            font-size: 18px;
+        }
+
+        .login-card { max-width: 390px; margin: 48px auto; padding: 24px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.10); }
+        .login-card h2 { margin-top: 0; font-size: 20px; }
+        .login-card label { display: block; margin-bottom: 7px; }
+        .login-card input { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; }
+        .login-card button { width: 100%; margin-top: 14px; padding: 12px; border: 0; border-radius: 7px; background: #1e40af; color: white; font: inherit; font-weight: bold; cursor: pointer; }
+        .login-card button:disabled { opacity: .55; cursor: wait; }
+        #adminLoginStatus { color: #9b1c1c; font-size: 14px; min-height: 1.2em; }
+        [hidden] { display: none !important; }
+
+        .schoolyear-info { max-width:700px; margin:18px auto 0; padding:0 12px; }
+        .schoolyear-info button { border:1px solid #b7c5db; border-radius:8px; background:#fff; color:#1e40af; padding:11px 15px; font:inherit; font-weight:600; cursor:pointer; }
+        #schoolyearReminder { max-width:min(480px, calc(100vw - 32px)); padding:24px; border:1px solid #d1d5db; border-radius:12px; box-shadow:0 12px 32px #0003; line-height:1.55; }
+        #schoolyearReminder::backdrop { background:rgba(15,23,42,.4); }
+        #schoolyearReminder h2 { margin-top:0; }
+        #schoolyearReminder .keep { font-weight:bold; }
+        #schoolyearReminder .close-info { margin-top:12px; padding:10px 18px; border:1px solid #b7c5db; border-radius:8px; background:#fff; color:#1e40af; font:inherit; font-weight:600; cursor:pointer; }
+        #schoolyearReminder { max-height:85dvh; overflow:auto; }
+    
+        .request-card button { padding:10px 16px; border:1px solid transparent; border-radius:8px; font:inherit; font-weight:600; cursor:pointer; margin:8px 8px 0 0; }
+        .request-card button:first-of-type { background:#15803d; color:white; }
+        .request-card button:last-of-type { background:#fff; color:#b91c1c; border-color:#fecaca; }
+        .request-card button:disabled { opacity:.55; cursor:wait; }
+        .request-card button:focus-visible { outline:3px solid #93c5fd; outline-offset:2px; }
+        #recoveryPanel input[type="checkbox"] { width:auto; margin-right:6px; }
+        #recoveryPanel { margin:12px; padding:16px; background:white; border-radius:12px; }
+        #recoveryPanel summary { cursor:pointer; font-weight:600; color:#1e40af; }
+        #recoveryPanel .login-card { box-shadow:none; margin:0 auto; padding:16px 0 0; }
+        #requestsHeading { max-width:700px; margin:20px auto 0; padding:0 12px; font-size:20px; }
+     .admin-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .admin-toolbar button { flex:0 1 auto; }
+        #recoveryPanel { max-width:676px; margin:12px auto; }
+        @media(max-width:720px) { #recoveryPanel { margin:12px; } }
+        @media(max-width:480px) { .admin-toolbar { gap:6px; flex-wrap:nowrap; } .admin-toolbar button { flex:1; min-width:0; font-size:13px; padding:9px 6px; overflow-wrap:anywhere; } }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        Lærergodkjenning
+
+    </header>
+
+    <section id="adminLogin" class="login-card" aria-label="Administratorinnlogging">
+        <h2>Administratorinnlogging</h2>
+        <form id="adminLoginForm">
+            <label for="adminEmail">E-postadresse registrert i Firebase</label>
+            <input id="adminEmail" type="email" autocomplete="username" required>
+            <label for="adminPassword">Personlig passord</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" required>
+            <button id="adminLoginButton" type="submit">Logg inn</button>
+            <p id="adminLoginStatus" role="status" aria-live="polite"></p>
+        </form>
+    </section>
+    <main id="adminContent" hidden>
+    <section class="schoolyear-info admin-toolbar">
+        <button type="button" popovertarget="schoolyearReminder">Info: Avslutte skoleår</button>
+        <button type="button" id="recoveryToggle" aria-controls="recoveryPanel" aria-expanded="false">Passordgjenoppretting</button>
+    </section>
+    <div id="schoolyearReminder" popover="auto" role="dialog" aria-labelledby="schoolyearReminderTitle">
+        <h2 id="schoolyearReminderTitle">Husk ved skoleårsslutt</h2>
+        <p>Ta sikkerhetskopi og gjennomgå dataene før opprydding. Ikke slett hele samlinger ukritisk.</p>
+        <p class="keep">Disse skal alltid beholdes ved skoleårsslutt:</p>
+        <ul>
+            <li><code>teachers</code> – lærerprofiler og tilknytninger</li>
+            <li><code>settings</code> – systeminnstillinger</li>
+            <li><code>userRoles</code> – innloggingsrettigheter</li>
+            <li><code>teacherApprovalLocks</code> – godkjenningslåser</li>
+            <li><code>classes</code> og <code>schedules</code> – klasser og timeplaner</li>
+            <li>Lærer- og administratorkontoer i Authentication</li>
+        </ul>
+        <p class="keep">Vurder opprydding i gamle skoleårsdata:</p>
+        <ul>
+            <li><code>students</code> og <code>homework</code> – gamle elevregistreringer og egne lekser.</li>
+            <li><code>teacherHomework</code>, <code>exams</code>, <code>blockExams</code> og <code>tentamens</code> – gamle lekser og vurderinger.</li>
+            <li><code>blockCourses</code>, <code>holidays</code>, <code>lessonProgressPlans</code> og <code>lessonProgressPlanImports</code> – gjennomgå og behold det som skal gjenbrukes.</li>
+        </ul>
+        <p>Dette er en sjekkliste, ikke en sletteliste. Behold også ventende lærerforespørsler (<code>teacherRequests</code>) og ukjente samlinger til de er gjennomgått.</p>
+        <p>Elever som mangler sin gamle profil i <code>students</code>, må registrere seg på nytt.</p>
+        <button type="button" class="close-info" popovertarget="schoolyearReminder" popovertargetaction="hide">Lukk</button>
+    </div>
+
+    <div id="recoveryPanel" class="schoolyear-info" hidden><section class="login-card" style="max-width:700px">
+
+<form id="recoveryForm">
+<label for="recoveryEmail">Lærerens e-postadresse</label>
+<input id="recoveryEmail" type="email" required>
+<label style="margin-top:12px"><input id="recoveryVerified" type="checkbox" required style="width:auto"> Jeg har kontrollert lærerens identitet uavhengig av e-posten.</label>
+<button id="recoveryButton">Klargjør nytt passord</button>
+</form>
+<p id="recoveryStatus" role="status" style="white-space:pre-wrap;overflow-wrap:anywhere"></p>
+<div id="recoveryNext" hidden>
+<a href="https://console.firebase.google.com/project/timeplan-8c778/authentication/users" target="_blank" rel="noopener">Åpne Firebase Authentication</a>
+<p><strong>Slett kun kontoen med nøyaktig e-postadresse og UID angitt ovenfor. Ikke slett noe i Firestore.</strong></p>
+<label><input type="checkbox" id="recoveryDeleted"> Jeg har slettet riktig Authentication-konto.</label>
+<p><a id="recoveryReply" hidden>Svar læreren med ferdigskrevet e-post</a></p>
+</div>
+</section></div>
+<h2 id="requestsHeading">Ventende lærergodkjenninger</h2>
+<div id="requests">
+
+        <div class="empty-message">
+
+            Laster forespørsler ...
+
+        </div>
+
+    </div>
+
+    </main>
+    <script
+        type="module"
+        src="./admin.js">
+    </script>
+
+<script>const recoveryPanel = document.getElementById("recoveryPanel"); const recoveryToggle = document.getElementById("recoveryToggle"); function setRecoveryOpen(open) { recoveryPanel.hidden = !open; recoveryToggle.setAttribute("aria-expanded", String(open)); } recoveryToggle.addEventListener("click", () => setRecoveryOpen(recoveryPanel.hidden)); setRecoveryOpen(new URLSearchParams(location.search).has("recovery"));</script>
+</body>
+
+</html>

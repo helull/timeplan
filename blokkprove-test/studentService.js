@@ -1,0 +1,53 @@
+import { auth, db }
+from "./firebase.js";
+
+import {
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+export async function studentExists(
+    studentId
+){
+
+    const snap =
+        await getDoc(
+            doc(
+                db,
+                "students",
+                studentId
+            )
+        );
+
+    return snap.exists();
+}
+
+export async function createStudent(
+    studentId,
+    name,
+    classId
+){
+
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user?.isAnonymous || user.uid !== studentId) throw new Error("Ugyldig elevidentitet.");
+    await setDoc(
+
+        doc(
+            db,
+            "students",
+            studentId
+        ),
+
+        {
+            name,
+            classId,
+            createdAt:
+                serverTimestamp()
+        }
+
+    );
+}
