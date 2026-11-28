@@ -1,3 +1,4 @@
+import { applicableBlockExams } from "./homeworkService.js";
 // Last inn stilarket automatisk, uten endringer i index.html.
 if (!document.querySelector('link[data-proveplan-style]')) {
     const link = document.createElement('link');
@@ -55,7 +56,7 @@ function courseMatchesExam(exam, course) {
     // Eksisterende blokkprøver lagrer bare fritekst i title, ikke blokkurs-ID.
     return norm(exam.title) === norm(course.subject);
 }
-function makeCells(weeks, schedule, examMap, blockExams, tentamens, grade, personalHomework = {}) {
+function makeCells(weeks, schedule, examMap, blockExams, tentamens, grade, personalHomework = {}, courseMap = new Map()) {
     const lessons = schedule.lessons ?? [];
     const classId = localStorage.getItem('classId') || '';
     const excludeEfp = /^(?:1B|2B|2I|3I|2R|2T)/i.test(String(classId).trim());
@@ -90,13 +91,15 @@ function makeCells(weeks, schedule, examMap, blockExams, tentamens, grade, perso
                 /blokk/i.test(String(lesson.subject ?? '')) ||
                 /blokk/i.test(String(lesson.roomName ?? ''))
             );
-            for (const exam of blockExams) {
+            for (const lesson of blockLessons) {
+            const matching = blockExams.filter(e => Number(e.week) === week && Number(e.day) === day && e.grade === grade && String(e.examTime) === String(lesson.start));
+            for (const exam of applicableBlockExams(matching, courseMap.get(`${grade}_${day}_${lesson.start}`)?.id)) {
                 if (Number(exam.week) !== week ||
                     Number(exam.day) !== day ||
                     exam.grade !== grade ||
                     !blockLessons.some(lesson => String(lesson.start) === String(exam.examTime))) continue;
                 add(exam.title || 'Blokkprøve', exam.teacher);
-            }
+            }}
 
             for (const t of (excludeEfp ? [] : tentamens)) {
                 if (Number(t.week) !== week ||
@@ -141,15 +144,15 @@ export async function openProveplan() {
         select.appendChild(opt);
     }
     try {
-        const [schedule, exams, blockExams, tentamens, personalHomework] = await Promise.all([
+        const [schedule, exams, blockExams, tentamens, personalHomework, courseMap] = await Promise.all([
             loadSchedule(classId), loadAllExamFlags(), loadAllBlockExams(), loadTentamens(),
-            isTeacher() ? Promise.resolve({}) : loadAllHomework()
+            isTeacher() ? Promise.resolve({}) : loadAllHomework(), loadStudentsBlockCourseMap()
         ]);
         if (!modal.isConnected) return;
         const body = modal.querySelector('#proveplanBody');
         const draw = () => {
             const [year, week] = select.value.split('-').map(Number);
-            const rows = makeCells(weeksBetween(current, {year,week}), schedule, exams, blockExams, tentamens, grade, personalHomework);
+            const rows = makeCells(weeksBetween(current, {year,week}), schedule, exams, blockExams, tentamens, grade, personalHomework, courseMap);
             body.innerHTML = `<table class="proveplan-table"><thead><tr><th>Uke</th>${DAYS.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>${rows.map(r =>
                 `<tr><th scope="row">${r.week}${r.year !== current.year ? `<small> ${r.year}</small>` : ''}</th>${r.cells.map(c=>`<td>${c.map(item => {
                     const origin = item.teacher === true ? 'Lærer' : item.teacher === false ? 'Elev' : 'Ukjent opphav';
