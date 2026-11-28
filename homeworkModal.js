@@ -213,7 +213,10 @@ export async function openHomeworkModal(
     
     console.log("teacherHomeworkText råverdi",JSON.stringify(teacherHomeworkText));
     
-    let examEnabled = examInfo.exam;
+    const blockSession = !!(isBlockSubject || isBlockRoom || sourceBlockCourseId);
+    const examCourse = teacherMode ? blockCourse : savedBlockCourse;
+    const scopedExams = blockSession ? (await loadBlockExams(week, weekday, startTime, classId)).filter(e => (e.blockCourseId || null) === (examCourse?.id || null)) : [];
+    let examEnabled = blockSession ? scopedExams.length > 0 : examInfo.exam;
 
 //feilsøking 12.11.2026
     console.table(
@@ -719,76 +722,36 @@ document
         ?.addEventListener(
             "click",
             async () => {
-                if (!await bekreftProveTilgang()) return;
-
-                const isBlockSubject =
-                    subject
-                        ?.toUpperCase()
-                        .includes(
-                            "BLOKK"
-                        );
-                const isBlockRoom =
-                    roomName
-                        ?.toUpperCase()
-                        .includes(
-                            "BLOKK"
-                        );
-                
-
-                /* BLOKKFAG */
-                console.log("subject, roomName og startTime er ", subject, roomName, startTime);
-
-                if (isBlockSubject || isBlockRoom) {
-
-                    const blockText =
-                        await openBlockExamModal(week, weekday, startTime, classId);
-
-                    if (
-                        blockText === null
-                    ) {
-                        return;
-                    }
-
-                    const success =
-                        await saveBlockExam(
-                            lessonId,
-                            week,
-                            weekday,
-                            blockText,
-                            startTime,
-                            classId
-                        );
-
-                    if (!success) {
-                        return;
-                    }
-
-                    alert(
-                        "Blokkprøve lagret"
-                    );
-
-                    document
-                        .getElementById(
-                            "homeworkModal"
-                        )
-                        ?.remove();
-
+                if (blockSession && teacherMode && !examCourse) {
+                    const notice = document.createElement("div");
+                    notice.className = "modal";
+                    notice.innerHTML = '<div class="modal-card"><h3>Blokkfag mangler</h3><p>Du må etablere blokkfag først før du kan registrere en prøve i denne timen.</p><button>OK</button></div>';
+                    document.body.append(notice);
+                    notice.querySelector("button").onclick = () => notice.remove();
                     return;
                 }
-
-                /* VANLIG FAG */
-
-                const newState =
-                    !examEnabled;
-
-                const success =
-                    await saveExamFlag(
-                        lessonId,
-                        week,
-                        newState,
-                        subject,
-                        classId
-                    );
+                if (!await bekreftProveTilgang()) return;
+                const newState = !examEnabled;
+                const toggle = document.getElementById("toggleExam");
+                toggle.disabled = true;
+                let success = false;
+                try {
+                    if (blockSession) {
+                        const current = (await loadBlockExams(week, weekday, startTime, classId)).filter(e => (e.blockCourseId || null) === (examCourse?.id || null));
+                        if (newState) {
+                            success = current.length > 0 || await saveBlockExam(lessonId, week, weekday, examCourse?.subject || "Blokkprøve", startTime, classId, examCourse?.id || null);
+                        } else {
+                            if (!teacherMode && current.some(e => e.teacher)) {
+                                alert("Du kan ikke fjerne en prøve registrert av lærer.");
+                                return;
+                            }
+                            for (const exam of current) await deleteBlockExam(exam.id);
+                            success = true;
+                        }
+                    } else success = await saveExamFlag(lessonId, week, newState, subject, classId);
+                } catch(error) {
+                    alert("Kunne ikke endre prøven: " + error.message);
+                } finally { toggle.disabled = false; }
 
                 if (!success) {
                     return;
@@ -1854,7 +1817,7 @@ else {
 
         if (
             !confirm(
-                "Slette blokkfaget og ALLE tilhørende lærerlekser og importhistorikk?"
+                "Slette blokkfaget og ALLE tilhørende prøver, lærerlekser og importhistorikk?"
             )
         ) {
 
