@@ -51,5 +51,8 @@
 <script defer src="modalClose.js"></script>
 <script defer src="sveipeveiledning.js"></script>
 <script defer src="./installApp.js"></script>
+<script type="module">
+if(new URLSearchParams(location.search).get("presis")==="1") import("./presis-preview.js");
+</script>
 </body>
 </html>
