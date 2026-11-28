@@ -453,5 +453,5 @@ export async function loadAllBlockExams() {
 
 export function applicableBlockExams(exams, courseId) {
  const exact = courseId ? exams.filter(e => e.blockCourseId === courseId) : [];
- return exact.length ? exact : exams.filter(e => !e.blockCourseId);
+ return courseId ? exact : exams.filter(e => !e.blockCourseId);
 }
