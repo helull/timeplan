@@ -38,17 +38,18 @@ export async function undoProgressImport(record) {
 }
 
 export async function clearBlockCourseHomework(blockId) {
-    const [lessonSnap, importSnap] = await Promise.all([
+    const [lessonSnap, importSnap, planSnap] = await Promise.all([
         getDocs(query(homework,where("blockCourseId","==",blockId))),
-        getDocs(query(history,where("blockCourseId","==",blockId)))
+        getDocs(query(collection(db,"lessonProgressPlanImports"),where("blockCourseId","==",blockId))),
+        getDocs(query(collection(db,"lessonProgressPlans"),where("blockCourseId","==",blockId)))
     ]);
-    const refs=[...lessonSnap.docs,...importSnap.docs].map(d=>d.ref);
+    const refs=[...lessonSnap.docs,...importSnap.docs,...planSnap.docs].map(d=>d.ref);
     for(let i=0;i<refs.length;i+=400) {
         const batch=writeBatch(db);
         refs.slice(i,i+400).forEach(ref=>batch.delete(ref));
         await batch.commit();
     }
-    return {homework:lessonSnap.size,imports:importSnap.size};
+    return {homework:lessonSnap.size,imports:importSnap.size,plans:planSnap.size};
 }
 
 export function blockCourseSessionsChanged(previous,next) {
