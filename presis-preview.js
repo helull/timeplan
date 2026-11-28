@@ -52,6 +52,12 @@ css.textContent+=`
 .presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row .teacher-homework-preview{width:19px!important;max-width:19px!important}
 .presis-preview .day>.lesson[data-precise].precise-small .lesson-homework-preview{left:5px}
 `;
+css.textContent+=`
+.presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row{height:20px!important;min-height:20px!important;max-height:20px!important;display:flex!important;align-items:center!important;bottom:3px!important;top:auto!important}
+.presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row .teacher-homework-preview,.presis-preview .day>.lesson[data-precise].precise-small .lesson-homework-preview{box-sizing:border-box!important;display:block!important;flex:0 0 19px!important;width:19px!important;min-width:19px!important;max-width:19px!important;height:16px!important;min-height:16px!important;max-height:16px!important;padding:0!important;border:0!important;line-height:16px!important;align-self:center!important;transform:none!important}
+.presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row .teacher-homework-preview{position:relative!important;inset:auto!important}
+.presis-preview .day>.lesson[data-precise].precise-small .teacher-homework-preview::before,.presis-preview .day>.lesson[data-precise].precise-small .lesson-homework-preview::before{position:absolute!important;inset:0!important;display:block!important;content:"▤"!important;font-size:12px!important;line-height:16px!important;text-align:center!important}
+`;
 document.head.append(css);
 const colors=["#60a5fa","#34d399","#f87171","#a78bfa","#fbbf24","#22d3ee","#fb7185","#4ade80","#c084fc","#f97316"]; const dark=["#2563eb","#059669","#dc2626","#7c3aed","#d97706","#0891b2","#be123c","#15803d","#9333ea","#c2410c"];
 const minutes=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(s);return m?+m[1]*60 + +m[2]:NaN};
@@ -70,7 +76,7 @@ function layout(){
    const b=card.querySelector(".homework-button[data-start-time]"),t=card.querySelector(".time");if(!b||!t)continue;
    if(!card.dataset.preciseEnd){const times=t.textContent.match(/\d{1,2}:\d{2}/g);if(!times||times.length<2)continue;card.dataset.preciseEnd=times[1];t.textContent=times[0]}
    const start=minutes(b.dataset.startTime),end=minutes(card.dataset.preciseEnd);if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start||start<495||end>960)continue;
-   const h=(end-start)/465*height;card.dataset.precise="1";card.style.setProperty("--pt",(top+(start-495)/465*height)+"px");card.style.setProperty("--ph",h+"px");const n=Number([...card.classList].find(c=>/^color-\d+$/.test(c))?.split("-")[1]||1);card.style.setProperty("--pc","linear-gradient(135deg,"+(colors[(n-1)%10]||colors[0])+"d9,"+(dark[(n-1)%10]||dark[0])+"d9)");card.classList.toggle("precise-small",h<90);
+   const h=(end-start)/465*height;card.dataset.precise="1";card.style.setProperty("--pt",(top+(start-495)/465*height)+"px");card.style.setProperty("--ph",h+"px");const n=Number([...card.classList].find(c=>/^color-\d+$/.test(c))?.split("-")[1]||1);card.style.setProperty("--pc","linear-gradient(135deg,"+(colors[(n-1)%10]||colors[0])+"d9,"+(dark[(n-1)%10]||dark[0])+"d9)");card.classList.toggle("precise-small",h<90 || matchMedia("(orientation:landscape) and (max-width:900px)").matches);
    let row=card.querySelector(":scope > .precise-plan-row");
    const icon=card.querySelector(".progress-plan-icon"), teacher=card.querySelector(".teacher-homework-preview");
    if(icon||teacher){
