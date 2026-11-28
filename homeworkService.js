@@ -332,7 +332,8 @@ export async function saveBlockExam(
     day,
     title,
     startTime,
-    sourceClassId = null
+    sourceClassId = null,
+    blockCourseId = null
 ) {
 
     const classId = sourceClassId || localStorage.getItem("classId") || "";
@@ -348,7 +349,9 @@ export async function saveBlockExam(
     if (classId.startsWith("3")) grade = "VG3";
     if (classId.startsWith("4")) grade = "VG4";
 
+    if (isTeacher() && !blockCourseId) return false;
     const blockExamData = {
+        blockCourseId,
         lessonId, week, day, grade, title,
         teacher: isTeacher(),
         createdAt: serverTimestamp(),
@@ -358,7 +361,7 @@ export async function saveBlockExam(
     window.dispatchEvent(new CustomEvent("schedule:exam-data-changed", {
         detail: {type:"block-added", exam:{
             id:saved.id, lessonId, week, day, grade, title,
-            teacher:blockExamData.teacher, examTime:startTime
+            teacher:blockExamData.teacher, examTime:startTime, blockCourseId
         }}
     }));
     return true;
@@ -447,3 +450,8 @@ export async function loadAllBlockExams() {
 
 }
 
+
+export function applicableBlockExams(exams, courseId) {
+ const exact = courseId ? exams.filter(e => e.blockCourseId === courseId) : [];
+ return exact.length ? exact : exams.filter(e => !e.blockCourseId);
+}
