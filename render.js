@@ -1,3 +1,4 @@
+import { applicableBlockExams as filterBlockExams } from "./homeworkService.js";
 import { refreshPlanIcons, attachCardPlanToModal } from "./progressPlanViewer.js";
 import {
     openHomeworkModal,
@@ -580,7 +581,7 @@ export function renderSchedule(
                     ] || [];
 
                         // Blokkprøver gjelder bare timer som faktisk er merket som blokk i timeplanen.
-                        const applicableBlockExams = isBlockLesson ? matchingBlockExams : [];
+                        const applicableBlockExams = isBlockLesson ? filterBlockExams(matchingBlockExams, teacherView ? lesson.blockCourseId : selectedBlockCourse?.id) : [];
                         const isBlockExam = applicableBlockExams.length > 0;
                         const hasExam = isExam || isBlockExam;
                         // Personlig vurdering fra elevens egen lekse. Offisiell prøve har forrang.
@@ -667,13 +668,13 @@ if (teacherLessonData) {
 
 
  ${
-    isBlockExam
+    isBlockExam && applicableBlockExams.some(exam => !exam.blockCourseId)
     ? `
         <div class="exam-title">
             ${
                 applicableBlockExams
                     .map(
-                        exam => `📌 ${exam.title}`
+                        exam => escapeHtml(exam.title || "Blokkprøve")
                     )
                     .join("<br>")
             }
