@@ -44,6 +44,14 @@ css.textContent+=`
 .presis-preview .day>.lesson[data-precise].precise-small .teacher-homework-preview::before,.presis-preview .day>.lesson[data-precise].precise-small .lesson-homework-preview::before{content:"▤";display:block;text-align:center;font-size:12px;line-height:15px;pointer-events:none}
 .presis-preview .day>.lesson[data-precise].precise-small .progress-plan-icon{left:53px!important;right:auto!important;bottom:1px!important}
 `;
+css.textContent+=`
+.presis-preview .day>.lesson[data-precise] .precise-plan-row{display:flex;align-items:center;justify-content:flex-end;gap:4px;min-width:0;flex:none;margin-right:25px;min-height:20px}
+.presis-preview .day>.lesson[data-precise] .precise-plan-row .teacher-homework-preview{position:relative!important;left:auto!important;bottom:auto!important;margin:0!important;max-width:calc(100% - 24px)!important;min-width:0;align-self:center}
+.presis-preview .day>.lesson[data-precise] .precise-plan-row .progress-plan-icon{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;flex:0 0 20px!important;margin:0!important}
+.presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row{position:absolute;bottom:3px;right:28px;margin:0;min-height:20px}
+.presis-preview .day>.lesson[data-precise].precise-small .precise-plan-row .teacher-homework-preview{width:19px!important;max-width:19px!important}
+.presis-preview .day>.lesson[data-precise].precise-small .lesson-homework-preview{left:5px}
+`;
 document.head.append(css);
 const colors=["#60a5fa","#34d399","#f87171","#a78bfa","#fbbf24","#22d3ee","#fb7185","#4ade80","#c084fc","#f97316"]; const dark=["#2563eb","#059669","#dc2626","#7c3aed","#d97706","#0891b2","#be123c","#15803d","#9333ea","#c2410c"];
 const minutes=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(s);return m?+m[1]*60 + +m[2]:NaN};
@@ -63,6 +71,14 @@ function layout(){
    if(!card.dataset.preciseEnd){const times=t.textContent.match(/\d{1,2}:\d{2}/g);if(!times||times.length<2)continue;card.dataset.preciseEnd=times[1];t.textContent=times[0]}
    const start=minutes(b.dataset.startTime),end=minutes(card.dataset.preciseEnd);if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start||start<495||end>960)continue;
    const h=(end-start)/465*height;card.dataset.precise="1";card.style.setProperty("--pt",(top+(start-495)/465*height)+"px");card.style.setProperty("--ph",h+"px");const n=Number([...card.classList].find(c=>/^color-\d+$/.test(c))?.split("-")[1]||1);card.style.setProperty("--pc","linear-gradient(135deg,"+(colors[(n-1)%10]||colors[0])+"d9,"+(dark[(n-1)%10]||dark[0])+"d9)");card.classList.toggle("precise-small",h<90);
+   let row=card.querySelector(":scope > .precise-plan-row");
+   const icon=card.querySelector(".progress-plan-icon"), teacher=card.querySelector(".teacher-homework-preview");
+   if(icon||teacher){
+    if(!row){row=document.createElement("div");row.className="precise-plan-row";const own=card.querySelector(":scope > .lesson-homework-preview");card.insertBefore(row,own||null)}
+    if(teacher&&teacher.parentNode!==row)row.prepend(teacher);
+    if(icon&&(icon.parentNode!==row||row.lastElementChild!==icon))row.append(icon);
+   }else if(row)row.remove();
+
   }
  }
 }
