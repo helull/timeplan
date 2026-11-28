@@ -731,6 +731,12 @@ document
                     return;
                 }
                 if (!await bekreftProveTilgang()) return;
+                if (blockSession && !teacherMode && !examCourse) {
+                    const title = await openBlockExamModal(week, weekday, startTime, classId);
+                    if (title !== null) await saveBlockExam(lessonId, week, weekday, title, startTime, classId, null);
+                    document.getElementById('homeworkModal')?.remove();
+                    return;
+                }
                 const newState = !examEnabled;
                 const toggle = document.getElementById("toggleExam");
                 toggle.disabled = true;
@@ -829,13 +835,13 @@ async function openBlockExamModal(
     classId
 ) {
 
-    const exams =
+    const exams = (
         await loadBlockExams(
             week,
             day,
             startTime,
             classId
-        );
+        )).filter(exam => !exam.blockCourseId);
 
     return new Promise(
         resolve => {
