@@ -63,6 +63,14 @@ css.textContent+=`
 .presis-preview .day>.lesson[data-precise].exam-student .precise-exam-label{background:#a65313}
 @media(orientation:landscape) and (max-width:900px){.presis-preview .day>.lesson[data-precise] .precise-exam-label{font-size:8px!important;line-height:10px!important}}
 `;
+css.textContent+=`
+.presis-preview .day>.lesson[data-precise].exam-lesson{overflow:visible!important}
+.presis-preview .day>.lesson[data-precise] .precise-exam-label{position:absolute!important;top:-7px;left:8px;z-index:4;margin:0!important;line-height:12px!important;padding:0 4px}
+.presis-preview .day>.lesson[data-precise].exam-lesson .lesson-top{margin-top:4px}
+.presis-preview .day>.lesson[data-precise] .lesson-top>.room{font-size:10px!important;font-style:italic;white-space:nowrap;flex:none;margin:0!important}
+.presis-preview .day>.lesson[data-precise] .room-teacher:empty{display:none}
+@media(orientation:landscape) and (max-width:900px){.presis-preview .day>.lesson[data-precise] .precise-exam-label{top:-5px;line-height:10px!important;font-size:8px!important}.presis-preview .day>.lesson[data-precise] .lesson-top>.room{font-size:8px!important}}
+`;
 document.head.append(css);
 const colors=["#60a5fa","#34d399","#f87171","#a78bfa","#fbbf24","#22d3ee","#fb7185","#4ade80","#c084fc","#f97316"]; const dark=["#2563eb","#059669","#dc2626","#7c3aed","#d97706","#0891b2","#be123c","#15803d","#9333ea","#c2410c"];
 const minutes=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(s);return m?+m[1]*60 + +m[2]:NaN};
@@ -82,6 +90,7 @@ function layout(){
    if(!card.dataset.preciseEnd){const times=t.textContent.match(/\d{1,2}:\d{2}/g);if(!times||times.length<2)continue;card.dataset.preciseEnd=times[1];t.textContent=times[0]}
    const start=minutes(b.dataset.startTime),end=minutes(card.dataset.preciseEnd);if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start||start<495||end>960)continue;
    const h=(end-start)/465*height;card.dataset.precise="1";card.style.setProperty("--pt",(top+(start-495)/465*height)+"px");card.style.setProperty("--ph",h+"px");const n=Number([...card.classList].find(c=>/^color-\d+$/.test(c))?.split("-")[1]||1);card.style.setProperty("--pc","linear-gradient(135deg,"+(colors[(n-1)%10]||colors[0])+"d9,"+(dark[(n-1)%10]||dark[0])+"d9)");card.classList.toggle("precise-small",h<90 || matchMedia("(orientation:landscape) and (max-width:900px)").matches);
+   const room=card.querySelector(".room"), time=card.querySelector(".lesson-top .time");if(room&&time&&room.parentNode!==time.parentNode)time.before(room);
    let badge=card.querySelector(":scope > .precise-exam-label");
    const label=card.classList.contains("personal-assessment-lesson")?"Annen vurdering":card.classList.contains("exam-teacher")?"Prøve":card.classList.contains("exam-student")?"Prøve (elev)":card.classList.contains("exam-lesson")?"Prøve":"";
    if(label){if(!badge){badge=document.createElement("span");badge.className="precise-exam-label";card.querySelector(".lesson-top").after(badge)}if(badge.textContent!==label)badge.textContent=label}else if(badge)badge.remove();
